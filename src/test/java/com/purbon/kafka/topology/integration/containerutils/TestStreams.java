@@ -11,6 +11,8 @@ import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.errors.StreamsUncaughtExceptionHandler;
 
+import static org.apache.kafka.streams.errors.StreamsUncaughtExceptionHandler.StreamThreadExceptionResponse.SHUTDOWN_CLIENT;
+
 public final class TestStreams implements Closeable {
 
   private final KafkaStreams streams;
@@ -52,7 +54,7 @@ public final class TestStreams implements Closeable {
         t -> {
           topicAuthorizationExceptionThrown =
               ExceptionUtils.indexOfType(t, TopicAuthorizationException.class) > 0;
-          return null;
+          return SHUTDOWN_CLIENT;
         });
     streams.start();
   }
