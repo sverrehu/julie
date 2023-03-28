@@ -39,7 +39,7 @@ public class ConnectContainer extends GenericContainer<ConnectContainer> {
     withEnv("CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR", "1");
     withEnv("CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR", "1");
     withEnv("CONNECT_STATUS_STORAGE_REPLICATION_FACTOR", "1");
-    withEnv("CONNECT_PLUGIN_PATH", "/usr/share/java");
+    withEnv("CONNECT_PLUGIN_PATH", "/usr/share/java,/usr/share/filestream-connectors");
     withEnv(
         "CONNECT_LISTENERS",
         "http://0.0.0.0:" + CONNECT_PORT + ", https://0.0.0.0:" + CONNECT_SSL_PORT);
