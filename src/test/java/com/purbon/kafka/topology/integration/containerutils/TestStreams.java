@@ -1,7 +1,6 @@
 package com.purbon.kafka.topology.integration.containerutils;
 
 import java.io.Closeable;
-import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.Map;
 import java.util.Properties;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -10,6 +9,7 @@ import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.Topology;
+import org.apache.kafka.streams.errors.StreamsUncaughtExceptionHandler;
 
 public final class TestStreams implements Closeable {
 
@@ -49,9 +49,11 @@ public final class TestStreams implements Closeable {
 
   public void start() {
     setUncaughtExceptionHandler(
-        (t, e) ->
-            topicAuthorizationExceptionThrown =
-                ExceptionUtils.indexOfType(e, TopicAuthorizationException.class) > 0);
+        t -> {
+          topicAuthorizationExceptionThrown =
+              ExceptionUtils.indexOfType(t, TopicAuthorizationException.class) > 0;
+          return null;
+        });
     streams.start();
   }
 
@@ -60,7 +62,7 @@ public final class TestStreams implements Closeable {
     streams.close();
   }
 
-  public void setUncaughtExceptionHandler(UncaughtExceptionHandler eh) {
+  public void setUncaughtExceptionHandler(StreamsUncaughtExceptionHandler eh) {
     streams.setUncaughtExceptionHandler(eh);
   }
 
