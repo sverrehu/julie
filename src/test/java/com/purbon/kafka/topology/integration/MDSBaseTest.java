@@ -17,7 +17,7 @@ public class MDSBaseTest {
   }
 
   protected String getKafkaClusterID() {
-    /* TODO: This method is the only reason this JulieOps depends on zookeeper,
+    /* TODO: This method is the only reason JulieOps depends on zookeeper,
      * a component that is about to be retired. Figure out a more modern way
      * to get the custer id, and remove the zookeeper stuff from the code. */
     try {
