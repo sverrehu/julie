@@ -546,7 +546,7 @@
     <!-- dependencies -->
     <assertj.version>3.24.2</assertj.version>
     <avro.version>1.11.2</avro.version>
-    <aws.java.sdk.version>2.20.33</aws.java.sdk.version>
+    <aws.java.sdk.version>2.20.144</aws.java.sdk.version>
     <commons.version>1.5.0</commons.version>
     <confluent-ce.version>7.3.2-ce</confluent-ce.version>
     <confluent.version>7.3.2</confluent.version>
@@ -710,7 +710,7 @@
     <dependency>
       <groupId>com.google.cloud</groupId>
       <artifactId>google-cloud-storage</artifactId>
-      <version>2.20.2</version>
+      <version>2.26.1</version>
     </dependency>
     <dependency>
       <groupId>org.hamcrest</groupId>
