@@ -546,7 +546,7 @@
     <!-- dependencies -->
     <assertj.version>3.25.3</assertj.version>
     <avro.version>1.11.3</avro.version>
-    <aws.java.sdk.version>2.24.5</aws.java.sdk.version>
+    <aws.java.sdk.version>2.24.10</aws.java.sdk.version>
     <commons.version>1.6.0</commons.version>
     <confluent-ce.version>7.6.0-ce</confluent-ce.version>
     <confluent.version>7.6.0</confluent.version>
