@@ -565,7 +565,7 @@
     <slf4j.version>2.0.12</slf4j.version>
     <testcontainers.version>1.19.7</testcontainers.version>
     <typesafe.version>1.4.3</typesafe.version>
-    <zookeeper.version>3.9.1</zookeeper.version>
+    <zookeeper.version>3.9.2</zookeeper.version>
   </properties>
 
   <dependencies>
