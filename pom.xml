@@ -153,7 +153,7 @@
       <plugin>
         <groupId>com.spotify.fmt</groupId>
         <artifactId>fmt-maven-plugin</artifactId>
-        <version>2.23</version>
+        <version>2.24</version>
         <configuration>
           <style>google</style>
         </configuration>
@@ -179,7 +179,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
-        <version>3.6.0</version>
+        <version>3.7.1</version>
         <configuration>
           <descriptors>
             <descriptor>assembly.xml</descriptor>
@@ -327,7 +327,7 @@
       <plugin>
         <groupId>org.vafer</groupId>
         <artifactId>jdeb</artifactId>
-        <version>1.10</version>
+        <version>1.11</version>
         <executions>
           <execution>
             <phase>package</phase>
@@ -394,7 +394,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
-        <version>3.3.0</version>
+        <version>3.3.1</version>
         <executions>
           <execution>
             <id>attach-sources</id>
@@ -408,7 +408,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.6.3</version>
+        <version>3.10.0</version>
         <executions>
           <execution>
             <id>attach-javadocs</id>
@@ -428,7 +428,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>3.5.2</version>
+        <version>3.6.0</version>
         <configuration>
           <filters>
             <filter>
@@ -475,7 +475,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-gpg-plugin</artifactId>
-        <version>3.1.0</version>
+        <version>3.2.5</version>
         <executions>
           <execution>
             <id>sign-artifacts</id>
@@ -534,38 +534,38 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <!-- plugins -->
-    <jacoco-maven-plugin.version>0.8.11</jacoco-maven-plugin.version>
-    <maven-compiler-plugin.version>3.12.1</maven-compiler-plugin.version>
-    <maven-failsafe-plugin.version>3.2.5</maven-failsafe-plugin.version>
-    <maven-pmd-plugin.version>3.21.2</maven-pmd-plugin.version>
-    <maven-project-info-reports-plugin.version>3.5.0</maven-project-info-reports-plugin.version>
-    <maven-site-plugin.version>3.12.1</maven-site-plugin.version>
-    <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
+    <jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
+    <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
+    <maven-failsafe-plugin.version>3.5.0</maven-failsafe-plugin.version>
+    <maven-pmd-plugin.version>3.25.0</maven-pmd-plugin.version>
+    <maven-project-info-reports-plugin.version>3.7.0</maven-project-info-reports-plugin.version>
+    <maven-site-plugin.version>3.20.0</maven-site-plugin.version>
+    <maven-surefire-plugin.version>3.5.0</maven-surefire-plugin.version>
     <rpm-maven-plugin.version>2.3.0</rpm-maven-plugin.version>
-    <spotbugs-maven-plugin.version>4.8.3.1</spotbugs-maven-plugin.version>
+    <spotbugs-maven-plugin.version>4.8.6.3</spotbugs-maven-plugin.version>
     <!-- dependencies -->
-    <assertj.version>3.25.3</assertj.version>
-    <avro.version>1.11.3</avro.version>
-    <aws.java.sdk.version>2.25.6</aws.java.sdk.version>
-    <commons.version>1.6.0</commons.version>
-    <confluent-ce.version>7.6.0-ce</confluent-ce.version>
-    <confluent.version>7.6.0</confluent.version>
-    <gcp.java.sdk.version>26.34.0</gcp.java.sdk.version>
-    <hamcrest.version>2.2</hamcrest.version>
-    <jackson.version>2.16.2</jackson.version>
-    <jedis.version>4.4.7</jedis.version>
-    <jersey.version>3.1.5</jersey.version>
+    <assertj.version>3.26.3</assertj.version>
+    <avro.version>1.12.0</avro.version>
+    <aws.java.sdk.version>2.27.23</aws.java.sdk.version>
+    <commons.version>1.9.0</commons.version>
+    <confluent-ce.version>7.7.0-ce</confluent-ce.version>
+    <confluent.version>7.7.0</confluent.version>
+    <gcp.java.sdk.version>26.45.0</gcp.java.sdk.version>
+    <hamcrest.version>3.0</hamcrest.version>
+    <jackson.version>2.17.2</jackson.version>
+    <jedis.version>5.1.5</jedis.version>
+    <jersey.version>3.1.8</jersey.version>
     <jinjava.version>2.7.2</jinjava.version>
     <junit.version>4.13.2</junit.version>
     <ksqldb.client.version>7.0.0</ksqldb.client.version>
     <ksqldb.version>0.27.1</ksqldb.version>
-    <log4j.version>2.23.0</log4j.version>
-    <lombok.version>1.18.30</lombok.version>
-    <mockito.version>5.11.0</mockito.version>
-    <slf4j.version>2.0.12</slf4j.version>
-    <testcontainers.version>1.19.7</testcontainers.version>
+    <log4j.version>2.24.0</log4j.version>
+    <lombok.version>1.18.34</lombok.version>
+    <mockito.version>5.13.0</mockito.version>
+    <slf4j.version>2.0.16</slf4j.version>
+    <testcontainers.version>1.20.1</testcontainers.version>
     <typesafe.version>1.4.3</typesafe.version>
-    <zookeeper.version>3.9.1</zookeeper.version>
+    <zookeeper.version>3.9.2</zookeeper.version>
   </properties>
 
   <dependencies>
@@ -648,11 +648,6 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>io.confluent</groupId>
-      <artifactId>kafka-client-plugins</artifactId>
-      <version>${confluent-ce.version}</version>
-    </dependency>
-    <dependency>
       <groupId>io.confluent.ksql</groupId>
       <artifactId>ksqldb-api-client</artifactId>
       <version>${ksqldb.client.version}</version>
@@ -720,7 +715,7 @@
     <dependency>
       <groupId>com.google.cloud</groupId>
       <artifactId>google-cloud-storage</artifactId>
-      <version>2.35.0</version>
+      <version>2.42.0</version>
     </dependency>
     <dependency>
       <groupId>org.hamcrest</groupId>
@@ -761,7 +756,7 @@
     <dependency>
       <groupId>org.awaitility</groupId>
       <artifactId>awaitility</artifactId>
-      <version>4.2.0</version>
+      <version>4.2.2</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -771,9 +766,9 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>com.github.tomakehurst</groupId>
-      <artifactId>wiremock-jre8</artifactId>
-      <version>2.35.2</version>
+      <groupId>org.wiremock</groupId>
+      <artifactId>wiremock</artifactId>
+      <version>3.9.1</version>
       <scope>test</scope>
     </dependency>
 

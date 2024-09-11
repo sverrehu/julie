@@ -6,7 +6,8 @@ import org.testcontainers.utility.DockerImageName;
 public class SchemaRegistryContainer extends GenericContainer<SchemaRegistryContainer> {
 
   private static final DockerImageName DEFAULT_IMAGE =
-      DockerImageName.parse("confluentinc/cp-schema-registry").withTag("7.6.0");
+      DockerImageName.parse("confluentinc/cp-schema-registry")
+          .withTag(ContainerTestUtils.DEFAULT_CP_KAFKA_VERSION);
 
   public static final int SR_PORT = 8081;
 

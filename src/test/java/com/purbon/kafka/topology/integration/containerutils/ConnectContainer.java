@@ -8,7 +8,8 @@ import org.testcontainers.utility.DockerImageName;
 public class ConnectContainer extends GenericContainer<ConnectContainer> {
 
   private static final DockerImageName DEFAULT_IMAGE =
-      DockerImageName.parse("confluentinc/cp-kafka-connect").withTag("7.6.0");
+      DockerImageName.parse("confluentinc/cp-kafka-connect")
+          .withTag(ContainerTestUtils.DEFAULT_CP_KAFKA_VERSION);
 
   private static int CONNECT_PORT = 8083;
   private static int CONNECT_SSL_PORT = 8084;
