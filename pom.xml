@@ -546,7 +546,7 @@
     <spotbugs-maven-plugin.version>4.8.6.3</spotbugs-maven-plugin.version>
     <!-- dependencies -->
     <assertj.version>3.26.3</assertj.version>
-    <aws.java.sdk.version>2.27.23</aws.java.sdk.version>
+    <aws.java.sdk.version>2.27.24</aws.java.sdk.version>
     <commons.version>1.9.0</commons.version>
     <confluent-ce.version>7.7.0-ce</confluent-ce.version>
     <confluent.version>7.7.0</confluent.version>
@@ -685,12 +685,10 @@
     <dependency>
       <groupId>software.amazon.awssdk</groupId>
       <artifactId>s3</artifactId>
-      <version>${aws.java.sdk.version}</version>
     </dependency>
     <dependency>
       <groupId>com.google.cloud</groupId>
       <artifactId>google-cloud-storage</artifactId>
-      <version>2.42.0</version>
     </dependency>
     <dependency>
       <groupId>org.mockito</groupId>
