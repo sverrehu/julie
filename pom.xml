@@ -422,6 +422,7 @@
           <additionalOptions>
             <additionalOption>-Xdoclint:none</additionalOption>
           </additionalOptions>
+          <legacyMode>true</legacyMode>
         </configuration>
       </plugin>
 
@@ -545,16 +546,13 @@
     <spotbugs-maven-plugin.version>4.8.6.3</spotbugs-maven-plugin.version>
     <!-- dependencies -->
     <assertj.version>3.26.3</assertj.version>
-    <avro.version>1.12.0</avro.version>
     <aws.java.sdk.version>2.27.23</aws.java.sdk.version>
     <commons.version>1.9.0</commons.version>
     <confluent-ce.version>7.7.0-ce</confluent-ce.version>
     <confluent.version>7.7.0</confluent.version>
     <gcp.java.sdk.version>26.45.0</gcp.java.sdk.version>
-    <hamcrest.version>3.0</hamcrest.version>
     <jackson.version>2.17.2</jackson.version>
     <jedis.version>5.1.5</jedis.version>
-    <jersey.version>3.1.8</jersey.version>
     <jinjava.version>2.7.2</jinjava.version>
     <junit.version>4.13.2</junit.version>
     <ksqldb.client.version>7.0.0</ksqldb.client.version>
@@ -595,16 +593,6 @@
       <groupId>io.confluent</groupId>
       <artifactId>kafka-schema-registry-client</artifactId>
       <version>${confluent.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>io.confluent</groupId>
-      <artifactId>kafka-avro-serializer</artifactId>
-      <version>${confluent.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.avro</groupId>
-      <artifactId>avro</artifactId>
-      <version>${avro.version}</version>
     </dependency>
     <dependency>
       <groupId>io.confluent</groupId>
@@ -658,11 +646,6 @@
         </exclusion>
       </exclusions>
     </dependency>
-    <dependency>
-      <groupId>org.glassfish.jersey.core</groupId>
-      <artifactId>jersey-common</artifactId>
-      <version>${jersey.version}</version>
-    </dependency>
 
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
@@ -682,17 +665,9 @@
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.datatype</groupId>
-      <artifactId>jackson-datatype-jsr310</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.fasterxml.jackson.datatype</groupId>
       <artifactId>jackson-datatype-jdk8</artifactId>
     </dependency>
 
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-    </dependency>
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-slf4j2-impl</artifactId>
@@ -716,18 +691,6 @@
       <groupId>com.google.cloud</groupId>
       <artifactId>google-cloud-storage</artifactId>
       <version>2.42.0</version>
-    </dependency>
-    <dependency>
-      <groupId>org.hamcrest</groupId>
-      <artifactId>hamcrest-core</artifactId>
-      <version>${hamcrest.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.hamcrest</groupId>
-      <artifactId>hamcrest-library</artifactId>
-      <version>${hamcrest.version}</version>
-      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.mockito</groupId>

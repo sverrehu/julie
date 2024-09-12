@@ -2,7 +2,6 @@ package com.purbon.kafka.topology;
 
 import static com.purbon.kafka.topology.CommandLineInterface.BROKERS_OPTION;
 import static com.purbon.kafka.topology.Constants.*;
-import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.internal.verification.VerificationModeFactory.times;
@@ -17,7 +16,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import org.hamcrest.MatcherAssert;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -66,7 +65,7 @@ public class AccessControlProviderFactoryTest {
     verify(mdsApiClient, times(1)).setBasicAuth(new BasicAuth("alice", "alice-secret"));
     verify(mdsApiClient, times(1)).authenticate();
 
-    MatcherAssert.assertThat(provider, instanceOf(RBACProvider.class));
+    Assert.assertTrue(provider instanceof RBACProvider);
   }
 
   @Test
@@ -77,7 +76,7 @@ public class AccessControlProviderFactoryTest {
     AccessControlProviderFactory factory =
         new AccessControlProviderFactory(config, adminClient, mdsApiClientBuilder);
 
-    MatcherAssert.assertThat(factory.get(), instanceOf(SimpleAclsProvider.class));
+    Assert.assertTrue(factory.get() instanceof SimpleAclsProvider);
   }
 
   @Test(expected = IOException.class)
