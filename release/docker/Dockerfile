@@ -1,4 +1,4 @@
-FROM alpine:3.14
+FROM alpine:3.20
 MAINTAINER pere.urbon@gmail.com
 ENV container docker
 ENV BUILDER_HOME /usr/local/julie-ops
