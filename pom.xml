@@ -546,14 +546,14 @@
     <spotbugs-maven-plugin.version>4.8.6.3</spotbugs-maven-plugin.version>
     <!-- dependencies -->
     <assertj.version>3.26.3</assertj.version>
-    <aws.java.sdk.version>2.27.24</aws.java.sdk.version>
+    <aws.java.sdk.version>2.28.1</aws.java.sdk.version>
     <commons.version>1.9.0</commons.version>
-    <confluent-ce.version>7.7.0-ce</confluent-ce.version>
+    <confluent-ce.version>7.7.1-ce</confluent-ce.version>
     <confluent.version>7.7.0</confluent.version>
     <gcp.java.sdk.version>26.45.0</gcp.java.sdk.version>
     <jackson.version>2.17.2</jackson.version>
     <jedis.version>5.1.5</jedis.version>
-    <jinjava.version>2.7.2</jinjava.version>
+    <jinjava.version>2.7.3</jinjava.version>
     <junit.version>4.13.2</junit.version>
     <ksqldb.client.version>7.7.1</ksqldb.client.version>
     <ksqldb.version>0.27.1</ksqldb.version>
