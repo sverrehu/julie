@@ -15,7 +15,7 @@ Topic ACLs will be managed if the topic matches
 Group ACLs will be managed if the group matches
 *topology.group.managed.prefixes* configuration setting. Check :ref:`config` for details.
 
-All others currently and for the above if a global wildcard, will be managed if principle matches
+All others currently and for the above if a global wildcard, will be managed if principal matches
 *topology.service.accounts.managed.prefixes* configuration setting. Check :ref:`config` for details.
 
 
@@ -248,7 +248,7 @@ topic name and group used for the communication.
               - principal: "User:Hans"
               - principal: "User:Bob"
 
-If you are using rbac, under the specific section users can attach their own cluster wide role principles.
+If you are using rbac, under the specific section users can attach their own cluster wide role principals.
 
 What ACLs are created
 ^^^^^^^^^^^^^^^^^^^^^

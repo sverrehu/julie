@@ -108,7 +108,7 @@ abstract class AbstractPrincipalManager implements ExecutionPlanUpdater {
 
   @Override
   public final void printCurrentState(PrintStream out) throws IOException {
-    out.println("List of Principles: ");
+    out.println("List of Principals: ");
     provider.listServiceAccounts().forEach(out::println);
   }
 }

@@ -23,14 +23,14 @@ public class ResourceFilter {
 
   public boolean matchesManagedPrefixList(TopologyAclBinding topologyAclBinding) {
     String resourceName = topologyAclBinding.getResourceName();
-    String principle = topologyAclBinding.getPrincipal();
-    // For global wild cards ACL's we manage only if we manage the service account/principle,
+    String principal = topologyAclBinding.getPrincipal();
+    // For global wild cards ACL's we manage only if we manage the service account/principal,
     // regardless. Filtering by service account will always take precedence if defined
     if (hasServiceAccountPrefixFilters() || resourceName.equals("*")) {
       if (resourceName.equals("*")) {
-        return matchesServiceAccountPrefixList(principle);
+        return matchesServiceAccountPrefixList(principal);
       } else {
-        return matchesServiceAccountPrefixList(principle)
+        return matchesServiceAccountPrefixList(principal)
             && matchesTopicOrSubjectOrGroupPrefix(topologyAclBinding, resourceName);
       }
     } else if (hasTopicNamePrefixFilter()
