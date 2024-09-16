@@ -569,7 +569,7 @@ public class RBACPRoviderRbacIT extends MDSBaseTest {
     defaultAccessControlManager.updatePlan(topology, plan);
     plan.run();
 
-    // two group and two topics as we have one topic and two principles
+    // two group and two topics as we have one topic and two principals
     List<TopologyAclBinding> bindings = getBindings(rbacProvider);
     assertThat(bindings).hasSize(4);
     consumers.remove(0); // remove the first consumer
@@ -581,7 +581,7 @@ public class RBACPRoviderRbacIT extends MDSBaseTest {
     plan.run();
 
     bindings = getBindings(rbacProvider);
-    // only one group and one topic as we removed one of principles
+    // only one group and one topic as we removed one of principals
     assertThat(bindings).hasSize(2);
   }
 
@@ -628,7 +628,7 @@ public class RBACPRoviderRbacIT extends MDSBaseTest {
     var extraBinding = apiClient.bind("User:Pere", RESOURCE_OWNER, "topicA", "Topic", "LITERAL");
     rbacProvider.createBindings(singleton(extraBinding));
 
-    // two group and three topics, as we have one topic and two principles and one unmanaged
+    // two group and three topics, as we have one topic and two principals and one unmanaged
     // resource binding
     List<TopologyAclBinding> bindings =
         getBindings(rbacProvider).stream()
@@ -653,7 +653,7 @@ public class RBACPRoviderRbacIT extends MDSBaseTest {
                     principals.contains(binding.getPrincipal())
                         || binding.getResourceName().startsWith(prefix))
             .collect(Collectors.toList());
-    // only one group and one topic as we removed one of principles plus the extra binding
+    // only one group and one topic as we removed one of principals plus the extra binding
     assertThat(bindings).hasSize(3);
     List<String> finalPrincipals = asList("User:Pere", "User:app2b");
     for (TopologyAclBinding binding : bindings) {

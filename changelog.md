@@ -324,7 +324,7 @@ v1.4.0 / 2021-01-03
 * Support multiple schema per topic (#183)
 * Adding ability to pass KTB options for the jvm or the KTB itself via an environment variable (#177)
 * Allow topic state bookkeeping from the cluster backend state system   (#180)
-* Fix that principle manager was not adding principles defined within consumers/producers at topic levels (#179)
+* Fix that principal manager was not adding principals defined within consumers/producers at topic levels (#179)
 * Improve AccessControlManagerTest (#168)
 * Option to disable creation of the CLUSTER CREATE ACL for connectors (#173)
 * Add Kafka Streams integration test bed (#169)
