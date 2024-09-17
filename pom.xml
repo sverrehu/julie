@@ -430,18 +430,6 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
         <version>3.6.0</version>
-        <configuration>
-          <filters>
-            <filter>
-              <artifact>*:*</artifact>
-              <excludes>
-                <exclude>META-INF/*.SF</exclude>
-                <exclude>META-INF/*.DSA</exclude>
-                <exclude>META-INF/*.RSA</exclude>
-              </excludes>
-            </filter>
-          </filters>
-        </configuration>
         <executions>
           <execution>
             <phase>package</phase>
@@ -453,7 +441,6 @@
                 <filter>
                   <artifact>*:*</artifact>
                   <excludes>
-                    <exclude>**/Log4j2Plugins.dat</exclude>
                     <exclude>META-INF/*.SF</exclude>
                     <exclude>META-INF/*.DSA</exclude>
                     <exclude>META-INF/*.RSA</exclude>
@@ -461,9 +448,10 @@
                 </filter>
               </filters>
               <transformers>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                  <mainClass>com.purbon.kafka.topology.CommandLineInterface</mainClass>
                   <manifestEntries>
+                    <Main-Class>com.purbon.kafka.topology.CommandLineInterface</Main-Class>
                     <Multi-Release>true</Multi-Release>
                   </manifestEntries>
                 </transformer>
@@ -670,11 +658,16 @@
 
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-slf4j2-impl</artifactId>
+      <artifactId>log4j-api</artifactId>
     </dependency>
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-slf4j2-impl</artifactId>
+      <scope>runtime</scope>
     </dependency>
 
     <dependency>
