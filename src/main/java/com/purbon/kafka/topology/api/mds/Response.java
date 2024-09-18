@@ -12,15 +12,12 @@ import org.apache.logging.log4j.Logger;
 public class Response {
 
   private static final Logger LOGGER = LogManager.getLogger(Response.class);
-  private static final String STATUS_FIELD = "status";
 
   private final String response;
   private Map<String, Object> map;
   private final int statusCode;
-  private final HttpHeaders headers;
 
   public Response(HttpHeaders headers, int statusCode, Map<String, Object> map, String response) {
-    this.headers = headers;
     this.statusCode = statusCode;
     this.map = map;
     this.response = response;

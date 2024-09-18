@@ -556,7 +556,7 @@ public class RBACPRoviderRbacIT extends MDSBaseTest {
     consumers.add(new Consumer("User:app1a"));
     consumers.add(new Consumer("User:app2a"));
 
-    Topology topology = new TopologyImpl(config);
+    Topology topology = new TopologyImpl();
     topology.setContext("testRoleDeleteFlow-test");
 
     Project project = new ProjectImpl("project");
@@ -610,7 +610,7 @@ public class RBACPRoviderRbacIT extends MDSBaseTest {
     consumers.add(new Consumer("User:app1b"));
     consumers.add(new Consumer("User:app2b"));
 
-    Topology topology = new TopologyImpl(config);
+    Topology topology = new TopologyImpl();
     var prefix = "deleteRolesShouldBeSkippedIfPrincipalIsNotManaged-test";
     topology.setContext(prefix);
 

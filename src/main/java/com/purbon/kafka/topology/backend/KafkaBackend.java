@@ -87,13 +87,13 @@ public class KafkaBackend implements Backend, RecordReceivedCallback {
   }
 
   @Override
-  public void save(BackendState state) throws IOException {
+  public void save(BackendState state) {
     producer.save(state);
   }
 
   @SneakyThrows
   @Override
-  public BackendState load() throws IOException {
+  public BackendState load() {
     while (shouldWaitForLoad.get()) {
       continue;
     }

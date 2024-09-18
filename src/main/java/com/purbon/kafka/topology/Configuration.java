@@ -21,7 +21,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -228,17 +227,14 @@ public class Configuration {
         .flatMap(topology -> topology.getProjects().stream())
         .flatMap(project -> project.getStreams().stream().map(s -> new Pair(project, s)))
         .forEach(
-            new Consumer<Pair>() {
-              @Override
-              public void accept(Pair pair) {
-                var project = (Project) pair.getKey();
-                var kStream = (KStream) pair.getValue();
-                kStream
-                    .getApplicationId()
-                    .ifPresentOrElse(
-                        internalTopicPrefixes::add,
-                        () -> internalTopicPrefixes.add(project.namePrefix()));
-              }
+            pair -> {
+              var project = (Project) pair.getKey();
+              var kStream = (KStream) pair.getValue();
+              kStream
+                  .getApplicationId()
+                  .ifPresentOrElse(
+                      internalTopicPrefixes::add,
+                      () -> internalTopicPrefixes.add(project.namePrefix()));
             });
 
     return internalTopicPrefixes;

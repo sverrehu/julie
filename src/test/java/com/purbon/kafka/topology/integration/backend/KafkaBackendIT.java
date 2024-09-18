@@ -63,7 +63,7 @@ public class KafkaBackendIT {
   }
 
   @Test
-  public void testExpectedFlow() throws IOException, InterruptedException {
+  public void testExpectedFlow() throws InterruptedException {
 
     TopologyAclBinding binding =
         TopologyAclBinding.build(

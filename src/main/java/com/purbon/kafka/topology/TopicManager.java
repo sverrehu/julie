@@ -87,9 +87,8 @@ public class TopicManager implements ExecutionPlanUpdater {
     updateTopicConfigActions.forEach(plan::add);
 
     topics.forEach(
-        (topicName, topic) -> {
-          plan.add(new RegisterSchemaAction(schemaRegistryManager, topic, topicName));
-        });
+        (topicName, topic) ->
+            plan.add(new RegisterSchemaAction(schemaRegistryManager, topic, topicName)));
 
     if (config.isAllowDeleteTopics()) {
       // Handle topic delete: Topics in the initial list, but not present anymore after a
@@ -99,7 +98,7 @@ public class TopicManager implements ExecutionPlanUpdater {
               .filter(topic -> !topics.containsKey(topic) && !isAnInternalTopics(topic))
               .collect(Collectors.toList());
 
-      if (topicsToBeDeleted.size() > 0) {
+      if (!topicsToBeDeleted.isEmpty()) {
         LOGGER.debug("Topic to be deleted: " + StringUtils.join(topicsToBeDeleted, ","));
         plan.add(new DeleteTopics(adminClient, topicsToBeDeleted));
       }
@@ -131,7 +130,7 @@ public class TopicManager implements ExecutionPlanUpdater {
 
     listOfTopics =
         listOfTopics.stream().filter(this::matchesPrefixList).collect(Collectors.toSet());
-    if (listOfTopics.size() > 0)
+    if (!listOfTopics.isEmpty())
       LOGGER.debug(
           "Full list of managed topics in the cluster: "
               + StringUtils.join(new ArrayList<>(listOfTopics), ","));
@@ -159,7 +158,7 @@ public class TopicManager implements ExecutionPlanUpdater {
             .filter(localTopic -> !remoteTopics.contains(localTopic))
             .collect(Collectors.toList());
 
-    if (delta.size() > 0) {
+    if (!delta.isEmpty()) {
       String errorMessage =
           "Your remote state has changed since the last execution, this topics: "
               + StringUtils.join(delta, ",")
@@ -175,7 +174,7 @@ public class TopicManager implements ExecutionPlanUpdater {
 
   private boolean matchesPrefixList(String topic) {
     boolean matches =
-        managedPrefixes.size() == 0 || managedPrefixes.stream().anyMatch(topic::startsWith);
+        managedPrefixes.isEmpty() || managedPrefixes.stream().anyMatch(topic::startsWith);
     LOGGER.debug(String.format("Topic %s matches %s with $s", topic, matches, managedPrefixes));
     return matches;
   }

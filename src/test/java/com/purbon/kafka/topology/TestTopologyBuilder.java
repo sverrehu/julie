@@ -38,7 +38,7 @@ public class TestTopologyBuilder {
 
   public TestTopologyBuilder(Configuration configuration, String context, String projectName) {
     this.configuration = configuration;
-    topology = new TopologyImpl(configuration);
+    topology = new TopologyImpl();
     topology.setContext(context);
     project = new ProjectImpl(projectName, configuration);
     topology.addProject(project);

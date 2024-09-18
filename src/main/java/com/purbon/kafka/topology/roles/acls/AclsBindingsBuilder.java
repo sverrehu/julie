@@ -29,12 +29,9 @@ import org.apache.kafka.common.acl.AclPermissionType;
 import org.apache.kafka.common.resource.PatternType;
 import org.apache.kafka.common.resource.ResourcePattern;
 import org.apache.kafka.common.resource.ResourceType;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class AclsBindingsBuilder implements BindingsBuilderProvider {
 
-  private static final Logger LOGGER = LogManager.getLogger(AclsBindingsBuilder.class);
   private static final String KAFKA_CLUSTER_NAME = "kafka-cluster";
 
   private final Configuration config;

@@ -93,7 +93,7 @@ public abstract class ArtefactManager implements ExecutionPlanUpdater {
     if (isAllowDelete()) {
       List<? extends Artefact> toBeDeleted = findArtefactsToBeDeleted(currentArtefacts, artefacts);
 
-      if (toBeDeleted.size() > 0) {
+      if (!toBeDeleted.isEmpty()) {
         LOGGER.debug("Artefacts to be deleted: " + StringUtils.join(toBeDeleted, ","));
         for (Artefact artefact : toBeDeleted) {
           ArtefactClient client = selectClient(artefact);
@@ -117,7 +117,7 @@ public abstract class ArtefactManager implements ExecutionPlanUpdater {
   }
 
   protected ArtefactClient selectClient(Artefact artefact) {
-    ArtefactClient defaultClient = clients.containsKey("default") ? clients.get("default") : null;
+    ArtefactClient defaultClient = clients.getOrDefault("default", null);
     return clients.getOrDefault(artefact.getServerLabel(), defaultClient);
   }
 
@@ -150,7 +150,7 @@ public abstract class ArtefactManager implements ExecutionPlanUpdater {
             .filter(localArtifact -> !remoteArtefacts.contains(localArtifact))
             .collect(Collectors.toList());
 
-    if (delta.size() > 0) {
+    if (!delta.isEmpty()) {
       String errorMessage =
           "Your remote state has changed since the last execution, these Artefact(s): "
               + StringUtils.join(delta, ",")

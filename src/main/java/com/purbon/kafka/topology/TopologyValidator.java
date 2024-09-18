@@ -14,12 +14,8 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class TopologyValidator {
-
-  private static final Logger LOGGER = LogManager.getLogger(TopologyValidator.class);
 
   private final Configuration config;
 

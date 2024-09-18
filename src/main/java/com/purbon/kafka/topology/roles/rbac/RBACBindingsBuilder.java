@@ -350,7 +350,7 @@ public class RBACBindingsBuilder implements BindingsBuilderProvider {
 
     subjects =
         writeTopics.stream()
-            .flatMap((Function<List<String>, Stream<String>>) topics -> topics.stream())
+            .flatMap((Function<List<String>, Stream<String>>) Collection::stream)
             .map(topicName -> String.format("%s-value", topicName))
             .collect(Collectors.toList());
 

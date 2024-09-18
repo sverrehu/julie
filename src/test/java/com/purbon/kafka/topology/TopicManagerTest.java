@@ -354,7 +354,7 @@ public class TopicManagerTest {
     project.addTopic(topicA);
     Topic topicB = new Topic("NamespaceB_TopicB", config);
     project.addTopic(topicB);
-    Topology topology = new TopologyImpl(config);
+    Topology topology = new TopologyImpl();
     topology.addProject(project);
 
     when(adminClient.listApplicationTopics()).thenReturn(new HashSet<>());

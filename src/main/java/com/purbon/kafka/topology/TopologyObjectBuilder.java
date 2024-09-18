@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class TopologyObjectBuilder {
+public final class TopologyObjectBuilder {
 
   public static Map<String, Topology> build(String fileOrDir) throws IOException {
     return build(fileOrDir, "", new Configuration());
@@ -85,7 +85,7 @@ public class TopologyObjectBuilder {
   }
 
   private static List<Topology> parseListOfTopologies(
-      String fileOrDir, Configuration config, PlanMap plans) throws IOException {
+      String fileOrDir, Configuration config, PlanMap plans) {
     TopologySerdes parser = new TopologySerdes(config, plans);
     List<Topology> topologies = new ArrayList<>();
     final Path path = Paths.get(fileOrDir);

@@ -7,12 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.cli.*;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class CommandLineInterface {
-
-  private static final Logger LOGGER = LogManager.getLogger(CommandLineInterface.class);
 
   public static final String TOPOLOGY_OPTION = "topology";
   public static final String TOPOLOGY_DESC = "Topology config file.";

@@ -3,7 +3,6 @@ package com.purbon.kafka.topology.actions.quotas;
 import com.purbon.kafka.topology.actions.BaseAction;
 import com.purbon.kafka.topology.api.adminclient.TopologyBuilderAdminClient;
 import com.purbon.kafka.topology.model.User;
-import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +18,7 @@ public class DeleteQuotasAction extends BaseAction {
   }
 
   @Override
-  public void run() throws IOException {
+  public void run() {
     adminClient.removeQuotasPrincipal(users);
   }
 

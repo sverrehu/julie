@@ -17,11 +17,9 @@ public class PartitionNumberValidation implements TopicValidation {
 
   private final int partitionNumberValue;
   private final String partitionNumberOp;
-  private Configuration config;
 
   public PartitionNumberValidation(Configuration config) throws ConfigurationException {
     this(getPartitionNumber(config), getPartitionNumberOp(config));
-    this.config = config;
   }
 
   public PartitionNumberValidation(int partitionNumberValue, String partitionNumberOp) {

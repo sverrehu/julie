@@ -576,15 +576,18 @@ public class AccessControlManagerTest {
 
     verify(aclsProvider, times(1)).createBindings(any());
 
-    var operations = bindings.stream().map(b -> b.getOperation()).collect(Collectors.toList());
+    var operations =
+        bindings.stream().map(TopologyAclBinding::getOperation).collect(Collectors.toList());
     assertThat(operations).contains("READ");
     assertThat(operations).contains("WRITE");
 
-    var users = bindings.stream().map(b -> b.getPrincipal()).collect(Collectors.toList());
+    var users =
+        bindings.stream().map(TopologyAclBinding::getPrincipal).collect(Collectors.toList());
     assertThat(users).contains("User:foo");
     assertThat(users).contains("User:bar");
 
-    var topics = bindings.stream().map(b -> b.getResourceName()).collect(Collectors.toSet());
+    var topics =
+        bindings.stream().map(TopologyAclBinding::getResourceName).collect(Collectors.toSet());
     assertThat(topics).contains("TopicA");
   }
 

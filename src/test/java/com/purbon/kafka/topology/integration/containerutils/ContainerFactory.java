@@ -4,7 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.testcontainers.utility.DockerImageName;
 
-public class ContainerFactory {
+public final class ContainerFactory {
 
   private static final Logger LOGGER = LogManager.getLogger(ContainerFactory.class);
 

@@ -5,7 +5,6 @@ import com.purbon.kafka.topology.Configuration;
 import com.purbon.kafka.topology.actions.BaseAccessControlAction;
 import com.purbon.kafka.topology.model.users.Schemas;
 import com.purbon.kafka.topology.roles.TopologyAclBinding;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -29,7 +28,7 @@ public class BuildBindingsForSchemaAuthorization extends BaseAccessControlAction
   }
 
   @Override
-  protected void execute() throws IOException {
+  protected void execute() {
     aclBindings =
         builderProvider.setSchemaAuthorization(
             schemaAuthorization.getPrincipal(),

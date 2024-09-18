@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-class BackendHelper {
+final class BackendHelper {
 
   private static final String expression =
       "^\"?\\'(\\S+)\\',\\s*\\'(\\S+)\\',\\s*\\'(\\S+)\\',\\s*\\'(\\S+)\\',\\s*\\'(.+)\\',\\s*\\'(\\S+)\\'\"?$";

@@ -106,7 +106,7 @@ public class AccessControlManager implements ExecutionPlanUpdater {
             .filter(acl -> !remoteAcls.contains(acl))
             .collect(Collectors.toList());
 
-    if (delta.size() > 0) {
+    if (!delta.isEmpty()) {
       String errorMessage =
           "Your remote state has changed since the last execution, this ACL(s): "
               + StringUtils.join(delta, ",")

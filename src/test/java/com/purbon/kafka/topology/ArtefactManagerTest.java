@@ -7,7 +7,6 @@ import com.purbon.kafka.topology.model.Artefact;
 import com.purbon.kafka.topology.model.Topology;
 import com.purbon.kafka.topology.model.artefact.KafkaConnectArtefact;
 import com.purbon.kafka.topology.utils.TestUtils;
-import java.io.IOException;
 import java.io.PrintStream;
 import java.util.*;
 import org.junit.Rule;
@@ -18,12 +17,7 @@ import org.mockito.junit.MockitoRule;
 
 public class ArtefactManagerTest {
 
-  public class MyArtefactManager extends ArtefactManager {
-
-    public MyArtefactManager(
-        ArtefactClient client, Configuration config, String topologyFileOrDir) {
-      super(client, config, topologyFileOrDir);
-    }
+  public static class MyArtefactManager extends ArtefactManager {
 
     public MyArtefactManager(
         Map<String, ? extends ArtefactClient> clients,
@@ -38,7 +32,7 @@ public class ArtefactManagerTest {
     }
 
     @Override
-    protected Collection<? extends Artefact> getClustersState() throws IOException {
+    protected Collection<? extends Artefact> getClustersState() {
       return new ArrayList<>();
     }
 

@@ -8,18 +8,13 @@ import com.purbon.kafka.topology.actions.quotas.DeleteQuotasAction;
 import com.purbon.kafka.topology.api.adminclient.TopologyBuilderAdminClient;
 import com.purbon.kafka.topology.model.Topology;
 import com.purbon.kafka.topology.model.users.Quota;
-import java.io.IOException;
 import java.io.PrintStream;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import org.apache.kafka.common.quota.ClientQuotaEntity;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class QuotasManager implements ExecutionPlanUpdater {
-
-  private static final Logger LOGGER = LogManager.getLogger(QuotasManager.class);
 
   private final TopologyBuilderAdminClient adminClient;
   private final Configuration config;
@@ -30,7 +25,7 @@ public class QuotasManager implements ExecutionPlanUpdater {
   }
 
   @Override
-  public void updatePlan(ExecutionPlan plan, Map<String, Topology> topologies) throws IOException {
+  public void updatePlan(ExecutionPlan plan, Map<String, Topology> topologies) {
     // Get current quotas
     try {
       Map<ClientQuotaEntity, Map<String, Double>> currentQuotas =
@@ -49,20 +44,19 @@ public class QuotasManager implements ExecutionPlanUpdater {
             .getKafka()
             .getQuotas()
             .ifPresent(
-                quotas -> {
-                  quotas.forEach(
-                      quota -> {
-                        String principal = quota.getPrincipal();
-                        Map<String, Double> currentQuotasForPrincipal =
-                            currentUsersWithQuotas.get(principal);
-                        // Check quotas with already existing one
-                        if (currentQuotasForPrincipal == null
-                            || isQuotaUpdated(currentQuotasForPrincipal, quota)) {
-                          plan.add(new CreateQuotasAction(adminClient, quotas));
-                        }
-                        usersWithQuotasInTopology.add(principal);
-                      });
-                });
+                quotas ->
+                    quotas.forEach(
+                        quota -> {
+                          String principal = quota.getPrincipal();
+                          Map<String, Double> currentQuotasForPrincipal =
+                              currentUsersWithQuotas.get(principal);
+                          // Check quotas with already existing one
+                          if (currentQuotasForPrincipal == null
+                              || isQuotaUpdated(currentQuotasForPrincipal, quota)) {
+                            plan.add(new CreateQuotasAction(adminClient, quotas));
+                          }
+                          usersWithQuotasInTopology.add(principal);
+                        }));
       }
       // Check for deletion, no prefixes here, all quotas should be put in one unique file
       if (config.isAllowDeleteQuotas()) {
@@ -113,17 +107,14 @@ public class QuotasManager implements ExecutionPlanUpdater {
   }
 
   @Override
-  public void printCurrentState(PrintStream out) throws IOException {
+  public void printCurrentState(PrintStream out) {
     out.println("List of Quotas:");
     try {
       Map<ClientQuotaEntity, Map<String, Double>> clientQuotaEntityMapMap =
           adminClient.describeClientQuotas();
       clientQuotaEntityMapMap
           .entrySet()
-          .forEach(
-              clientQuotaEntityMapEntry -> {
-                out.println(clientQuotaEntityMapEntry.toString());
-              });
+          .forEach(clientQuotaEntityMapEntry -> out.println(clientQuotaEntityMapEntry.toString()));
     } catch (ExecutionException | InterruptedException e) {
       throw new RuntimeException(e);
     }

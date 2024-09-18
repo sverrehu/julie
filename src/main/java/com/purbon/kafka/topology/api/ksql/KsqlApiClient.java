@@ -33,7 +33,6 @@ public class KsqlApiClient implements ArtefactClient {
   private final URL server;
   private final Client client;
 
-  public static final String QUERY_TYPE = "query";
   public static final String STREAM_TYPE = "stream";
   public static final String TABLE_TYPE = "table";
 

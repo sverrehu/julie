@@ -17,11 +17,9 @@ public class ReplicationFactorValidation implements TopicValidation {
 
   private final short replicationFactorValue;
   private final String replicationFactorOp;
-  private Configuration config;
 
   public ReplicationFactorValidation(Configuration config) throws ConfigurationException {
     this(getReplicationFactor(config), getReplicationFactorOp(config));
-    this.config = config;
   }
 
   public ReplicationFactorValidation(short replicationFactorValue, String replicationFactorOp) {

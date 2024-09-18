@@ -14,8 +14,6 @@ public class Connector extends DynamicUser {
   private static final String DEFAULT_CONNECT_CONFIGS_TOPIC = "connect-configs";
   private static final String DEFAULT_CONNECT_GROUP = "connect-cluster";
 
-  private static final String DEFAULT_CONNECT_CLUSTER_ID = "connect-cluster";
-
   @JsonInclude(Include.NON_EMPTY)
   private Optional<String> status_topic;
 

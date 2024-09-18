@@ -10,15 +10,13 @@ import java.util.Set;
 public class CCloudPrincipalProvider implements PrincipalProvider {
 
   private CCloudApi cCloudApi;
-  private String env;
 
   public CCloudPrincipalProvider(Configuration config) throws IOException {
     this.cCloudApi = new CCloudApi(config.getConfluentCloudClusterUrl(), config);
-    this.env = config.getConfluentCloudEnv();
   }
 
   @Override
-  public void configure() throws IOException {
+  public void configure() {
     // NoOp
   }
 

@@ -30,14 +30,11 @@ public class ClusterLevelRoleBuilderTest {
   private Connector connector;
 
   private static ClusterIDs allClusterIDs;
-  private static ClusterIDs nonClusterIDs;
 
   @BeforeClass
   public static void beforeClass() {
 
     allClusterIDs = new ClusterIDs();
-    nonClusterIDs = new ClusterIDs();
-
     allClusterIDs.setConnectClusterID("1234");
     allClusterIDs.setSchemaRegistryClusterID("4321");
     allClusterIDs.setKafkaClusterId("abcd");

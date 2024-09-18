@@ -109,7 +109,7 @@ public class TopologyCustomDeserializer extends StdDeserializer<Topology> {
               + ", this might be a required field, be aware.");
     }
 
-    Topology topology = new TopologyImpl(config);
+    Topology topology = new TopologyImpl();
     List<String> excludeAttributes =
         Arrays.asList(PROJECTS_KEY, CONTEXT_KEY, PLATFORM_KEY, SPECIAL_TOPICS_NODE);
 
@@ -124,7 +124,7 @@ public class TopologyCustomDeserializer extends StdDeserializer<Topology> {
 
     JsonNode platformNode = rootNode.get(PLATFORM_KEY);
     Platform platform = new Platform();
-    if (platformNode != null && platformNode.size() > 0) {
+    if (platformNode != null && !platformNode.isEmpty()) {
       parse(platformNode, KAFKA_KEY, parser, Kafka.class)
           .ifPresent(obj -> platform.setKafka((Kafka) obj));
       parse(platformNode, KAFKA_CONNECT_KEY, parser, KafkaConnect.class)
@@ -153,7 +153,7 @@ public class TopologyCustomDeserializer extends StdDeserializer<Topology> {
     }
 
     JsonNode specialTopicsNode = rootNode.get(SPECIAL_TOPICS_NODE);
-    if (specialTopicsNode != null && specialTopicsNode.size() > 0) {
+    if (specialTopicsNode != null && !specialTopicsNode.isEmpty()) {
       for (int i = 0; i < specialTopicsNode.size(); i++) {
         JsonNode node = specialTopicsNode.get(i);
         var topic = parser.getCodec().treeToValue(node, Topic.class);
@@ -194,12 +194,12 @@ public class TopologyCustomDeserializer extends StdDeserializer<Topology> {
       JsonParser parser, JsonNode rootNode, Topology topology, Configuration config)
       throws IOException {
 
-    Iterable<String> it = () -> rootNode.fieldNames();
+    Iterable<String> it = rootNode::fieldNames;
     List<String> keys =
         StreamSupport.stream(it.spliterator(), false)
             .filter(key -> !Arrays.asList(TOPICS_KEY, NAME_KEY).contains(key))
             .collect(Collectors.toList());
-    Map<String, JsonNode> rootNodes = Maps.asMap(new HashSet<>(keys), (key) -> rootNode.get(key));
+    Map<String, JsonNode> rootNodes = Maps.asMap(new HashSet<>(keys), rootNode::get);
 
     Map<String, PlatformSystem> mapOfValues = new HashMap<>();
     for (String key : rootNodes.keySet()) {

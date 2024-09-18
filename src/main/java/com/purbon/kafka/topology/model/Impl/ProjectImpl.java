@@ -175,7 +175,7 @@ public class ProjectImpl implements Project, Cloneable {
   public Map<String, List<Other>> getOthers() {
     return this.others.stream()
         .map(e -> Map.entry(e.getKey(), e.getValue().getAccessControlLists()))
-        .collect(Collectors.toMap(km -> km.getKey(), vm -> vm.getValue()));
+        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
   }
 
   public void setOthers(Map<String, List<Other>> others) {

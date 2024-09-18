@@ -1,6 +1,6 @@
 package com.purbon.kafka.topology;
 
-public class Constants {
+public final class Constants {
 
   public static final String HTTPS = "https";
   public static final String KAFKA_INTERNAL_TOPIC_PREFIXES = "kafka.internal.topic.prefixes";

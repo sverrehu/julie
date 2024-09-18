@@ -17,7 +17,6 @@ import com.purbon.kafka.topology.model.Topic;
 import com.purbon.kafka.topology.model.Topology;
 import com.purbon.kafka.topology.roles.SimpleAclsProvider;
 import com.purbon.kafka.topology.roles.TopologyAclBinding;
-import com.purbon.kafka.topology.schemas.SchemaRegistryManager;
 import com.purbon.kafka.topology.utils.TestUtils;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -44,8 +43,6 @@ public class ExecutionPlanTest {
   @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
 
   @Mock TopologyBuilderAdminClient adminClient;
-
-  @Mock SchemaRegistryManager schemaRegistryManager;
 
   @Before
   public void before() throws IOException {

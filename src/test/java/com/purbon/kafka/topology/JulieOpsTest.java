@@ -96,7 +96,7 @@ public class JulieOpsTest {
             accessControlProvider,
             bindingsBuilderProvider);
 
-    builder.verifyRequiredParameters(file, cliOps);
+    JulieOps.verifyRequiredParameters(file, cliOps);
   }
 
   @Test(expected = IOException.class)
@@ -112,7 +112,7 @@ public class JulieOpsTest {
             accessControlProvider,
             bindingsBuilderProvider);
 
-    builder.verifyRequiredParameters(fileOrDirPath, cliOps);
+    JulieOps.verifyRequiredParameters(fileOrDirPath, cliOps);
   }
 
   @Test
@@ -131,7 +131,7 @@ public class JulieOpsTest {
             accessControlProvider,
             bindingsBuilderProvider);
 
-    builder.verifyRequiredParameters(fileOrDirPath, cliOps);
+    JulieOps.verifyRequiredParameters(fileOrDirPath, cliOps);
   }
 
   @Test
@@ -173,7 +173,7 @@ public class JulieOpsTest {
     Configuration builderConfig = new Configuration(cliOps, props);
 
     BackendController backendController = new BackendController();
-    ExecutionPlan plan = ExecutionPlan.init(backendController, mockPrintStream);
+    ExecutionPlan.init(backendController, mockPrintStream);
 
     JulieOps builder =
         JulieOps.build(

@@ -55,7 +55,7 @@ public class TopologySerdes {
     return mapper.writeValueAsString(topology);
   }
 
-  private static class ObjectMapperFactory {
+  private static final class ObjectMapperFactory {
 
     public static ObjectMapper build(FileType type, Configuration config, PlanMap plans) {
       ObjectMapper mapper;

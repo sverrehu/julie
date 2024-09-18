@@ -19,11 +19,9 @@ public class TopicNameRegexValidation implements TopicValidation {
   private static final Logger LOGGER = LogManager.getLogger(TopicNameRegexValidation.class);
 
   private String topicNamePattern;
-  private Configuration config;
 
   public TopicNameRegexValidation(Configuration config) throws ConfigurationException {
     this(getTopicNamePatternFromConfig(config));
-    this.config = config;
   }
 
   public TopicNameRegexValidation(String pattern) throws ConfigurationException {

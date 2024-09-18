@@ -11,7 +11,7 @@ import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import java.util.List;
 import java.util.Map;
 
-public class JSON {
+public final class JSON {
 
   private static final ObjectMapper mapper;
   private static final ObjectWriter prettyWriter;

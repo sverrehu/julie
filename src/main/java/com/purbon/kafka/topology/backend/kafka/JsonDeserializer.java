@@ -10,13 +10,9 @@ public class JsonDeserializer<T> implements Deserializer<BackendState> {
 
   private final ObjectMapper objectMapper = new ObjectMapper();
 
-  private Class<T> tClass;
-
   public JsonDeserializer() {}
 
-  public JsonDeserializer(Class<T> tClass) {
-    this.tClass = tClass;
-  }
+  public JsonDeserializer(Class<T> tClass) {}
 
   @Override
   public BackendState deserialize(String s, byte[] bytes) {

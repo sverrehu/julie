@@ -228,9 +228,7 @@ public class TopologyBuilderAdminClient {
       list.forEach(
           aclBinding -> {
             String name = aclBinding.pattern().name();
-            if (acls.get(name) == null) {
-              acls.put(name, new ArrayList<>());
-            }
+            acls.computeIfAbsent(name, k -> new ArrayList<>());
             Collection<AclBinding> updatedList = acls.get(name);
             updatedList.add(aclBinding);
             acls.put(name, updatedList);

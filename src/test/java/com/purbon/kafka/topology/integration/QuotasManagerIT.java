@@ -36,7 +36,6 @@ public class QuotasManagerIT {
   private static AdminClient kafkaAdminClient;
 
   private TopologyBuilderAdminClient topologyAdminClient;
-  private TopicManager topicManager;
   private AccessControlManager accessControlManager;
   private SimpleAclsProvider aclsProvider;
 
@@ -64,7 +63,7 @@ public class QuotasManagerIT {
   }
 
   @Before
-  public void before() throws IOException, ExecutionException, InterruptedException {
+  public void before() throws IOException {
     kafkaAdminClient = ContainerTestUtils.getSaslAdminClient(container);
     topologyAdminClient = new TopologyBuilderAdminClient(kafkaAdminClient);
     topologyAdminClient.clearAcls();
@@ -84,7 +83,6 @@ public class QuotasManagerIT {
     this.cs = new BackendController();
     this.plan = ExecutionPlan.init(cs, System.out);
 
-    this.topicManager = new TopicManager(topologyAdminClient, null, config);
     bindingsBuilder = new AclsBindingsBuilder(config);
     quotasManager = new QuotasManager(topologyAdminClient, config);
     aclsProvider = new SimpleAclsProvider(topologyAdminClient);
@@ -330,7 +328,7 @@ public class QuotasManagerIT {
   }
 
   private List<Boolean> verifyQuotasOnlyUser(List<Quota> quotas)
-      throws ExecutionException, InterruptedException, IOException {
+      throws ExecutionException, InterruptedException {
     Map<ClientQuotaEntity, Map<String, Double>> cqsresult =
         kafkaAdminClient.describeClientQuotas(ClientQuotaFilter.all()).entities().get();
     return quotas.stream()

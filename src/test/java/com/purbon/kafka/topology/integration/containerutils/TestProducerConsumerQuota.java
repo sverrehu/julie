@@ -1,7 +1,6 @@
 package com.purbon.kafka.topology.integration.containerutils;
 
 import java.io.Closeable;
-import java.io.IOException;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.Map;
@@ -21,14 +20,11 @@ import org.apache.kafka.common.serialization.StringDeserializer;
 public final class TestProducerConsumerQuota implements Closeable {
 
   private static final long MAX_MS_TO_CONSUME = 60000 * 1000L;
-  private static final long SIZE_BYTES_MESSAGE = 1024;
   private final KafkaConsumer<String, String> consumer;
-  private final KafkaProducer<String, String> producer;
 
   public TestProducerConsumerQuota(
       final KafkaConsumer<String, String> consumer, final KafkaProducer<String, String> producer) {
     this.consumer = consumer;
-    this.producer = producer;
   }
 
   private static TestProducerConsumerQuota create(
@@ -67,7 +63,7 @@ public final class TestProducerConsumerQuota implements Closeable {
   }
 
   @Override
-  public void close() throws IOException {
+  public void close() {
     consumer.close();
   }
 }

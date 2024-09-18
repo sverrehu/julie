@@ -23,16 +23,12 @@ public class HybridCCloudAclsProvider extends SimpleAclsProvider implements Acce
   private static final Logger LOGGER = LogManager.getLogger(HybridCCloudAclsProvider.class);
 
   private final CCloudApi cli;
-  private final String clusterId;
-  private final Configuration config;
   private CCloudUtils cCloudUtils;
 
   public HybridCCloudAclsProvider(
       final TopologyBuilderAdminClient adminClient, final Configuration config) throws IOException {
     super(adminClient);
     this.cli = new CCloudApi(config.getConfluentCloudClusterUrl(), config);
-    this.clusterId = config.getConfluentCloudClusterId();
-    this.config = config;
     this.cCloudUtils = new CCloudUtils(config);
   }
 

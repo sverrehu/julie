@@ -73,23 +73,23 @@ public class ResourceFilter {
   }
 
   private boolean hasServiceAccountPrefixFilters() {
-    return managedServiceAccountPrefixes.size() != 0;
+    return !managedServiceAccountPrefixes.isEmpty();
   }
 
   private boolean hasTopicNamePrefixFilter() {
-    return managedTopicPrefixes.size() != 0;
+    return !managedTopicPrefixes.isEmpty();
   }
 
   private boolean hasGroupNamePrefixFilter() {
-    return managedGroupPrefixes.size() != 0;
+    return !managedGroupPrefixes.isEmpty();
   }
 
   private boolean hasSubjectNamePrefixFilter() {
-    return managedSubjectPrefixes.size() != 0;
+    return !managedSubjectPrefixes.isEmpty();
   }
 
   private boolean matchesPrefix(List<String> prefixes, String item, String type) {
-    boolean matches = prefixes.size() == 0 || prefixes.stream().anyMatch(item::startsWith);
+    boolean matches = prefixes.isEmpty() || prefixes.stream().anyMatch(item::startsWith);
     LOGGER.debug(String.format("%s %s matches %s with %s", type, item, matches, prefixes));
     return matches;
   }

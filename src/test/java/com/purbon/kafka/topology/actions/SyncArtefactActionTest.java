@@ -3,9 +3,7 @@ package com.purbon.kafka.topology.actions;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.purbon.kafka.topology.clients.ArtefactClient;
-import com.purbon.kafka.topology.model.Artefact;
 import com.purbon.kafka.topology.model.artefact.KafkaConnectArtefact;
-import java.util.ArrayList;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -21,7 +19,6 @@ public class SyncArtefactActionTest {
   @Test
   public void shouldComposeDetailedViewOfProperties() {
 
-    var artefacts = new ArrayList<Artefact>();
     var artefact = new KafkaConnectArtefact("path", "label", "name", null);
 
     var action = new SyncArtefactAction(client, "/foo/bar", artefact);

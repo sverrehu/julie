@@ -3,7 +3,7 @@ package com.purbon.kafka.topology.utils;
 import com.hubspot.jinjava.Jinjava;
 import java.util.Map;
 
-public class JinjaUtils {
+public final class JinjaUtils {
 
   private static Jinjava jinjava = new Jinjava();
 

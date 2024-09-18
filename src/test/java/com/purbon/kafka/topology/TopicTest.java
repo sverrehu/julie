@@ -77,7 +77,7 @@ public class TopicTest {
     props.put(TOPIC_PREFIX_SEPARATOR_CONFIG, "_");
     Configuration config = new Configuration(cliOps, props);
 
-    Topology topology = new TopologyImpl(config);
+    Topology topology = new TopologyImpl();
     topology.setContext("team");
 
     topology.addOther("other-f", "other");
@@ -104,7 +104,7 @@ public class TopicTest {
     props.put(TOPIC_PREFIX_FORMAT_CONFIG, "{{otherf}}.{{context}}.{{project}}.{{topic}}");
     Configuration config = new Configuration(cliOps, props);
 
-    Topology topology = new TopologyImpl(config);
+    Topology topology = new TopologyImpl();
     topology.setContext("team");
 
     topology.addOther("otherf", "other");

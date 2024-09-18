@@ -34,10 +34,6 @@ public class BackendControllerTest {
   public void testClusterStateRecovery() throws IOException {
 
     BackendController backend = new BackendController(fileStateProcessor);
-    TopologyAclBinding binding =
-        TopologyAclBinding.build(
-            ResourceType.CLUSTER.name(), "Topic", "host", "op", "principal", "LITERAL");
-
     when(fileStateProcessor.load()).thenReturn(new BackendState());
     backend.load();
     verify(fileStateProcessor, times(1)).load();
