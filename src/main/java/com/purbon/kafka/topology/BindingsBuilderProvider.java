@@ -5,6 +5,7 @@ import com.purbon.kafka.topology.model.JulieRoleAcl;
 import com.purbon.kafka.topology.model.users.Connector;
 import com.purbon.kafka.topology.model.users.Consumer;
 import com.purbon.kafka.topology.model.users.KSqlApp;
+import com.purbon.kafka.topology.model.users.KStream;
 import com.purbon.kafka.topology.model.users.Other;
 import com.purbon.kafka.topology.model.users.Producer;
 import com.purbon.kafka.topology.model.users.platform.KsqlServerInstance;
@@ -19,12 +20,7 @@ public interface BindingsBuilderProvider {
 
   List<TopologyAclBinding> buildBindingsForConnect(Connector connector, String topicPrefix);
 
-  List<TopologyAclBinding> buildBindingsForStreamsApp(
-      String principal,
-      String topicPrefix,
-      List<String> readTopics,
-      List<String> writeTopics,
-      boolean eos);
+  List<TopologyAclBinding> buildBindingsForKStream(KStream stream, String topicPrefix);
 
   List<TopologyAclBinding> buildBindingsForConsumers(
       Collection<Consumer> consumers, String resource, boolean prefixed);

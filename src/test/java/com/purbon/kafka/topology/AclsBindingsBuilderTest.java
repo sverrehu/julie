@@ -1,7 +1,10 @@
 package com.purbon.kafka.topology;
 
-import static com.purbon.kafka.topology.Constants.*;
-import static java.util.Collections.*;
+import static com.purbon.kafka.topology.Constants.CONNECTOR_ALLOW_TOPIC_CREATE;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.emptyMap;
+import static java.util.Collections.singletonList;
+import static java.util.Collections.singletonMap;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.purbon.kafka.topology.api.adminclient.AclBuilder;
@@ -16,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 import org.apache.kafka.common.acl.AccessControlEntry;
@@ -88,15 +92,11 @@ public class AclsBindingsBuilderTest {
 
   @Test
   public void testStreamsWithTxIdAclsBuilder() {
-    KStream producer =
-        new KStream(
-            "User:foo",
-            singletonMap("read", singletonList("bar")),
-            Optional.of("app1"),
-            Optional.of(true));
-    List<TopologyAclBinding> aclBindings =
-        builder.buildBindingsForStreamsApp(
-            "User:foo", "app1", singletonList("bar"), emptyList(), true);
+    HashMap<String, List<String>> topics = new HashMap<>();
+    topics.put(KStream.READ_TOPICS, singletonList("bar"));
+    topics.put(KStream.WRITE_TOPICS, emptyList());
+    KStream producer = new KStream("User:foo", topics, Optional.of("app1"), Optional.of(true));
+    List<TopologyAclBinding> aclBindings = builder.buildBindingsForKStream(producer, "app1");
     assertThat(aclBindings.size()).isEqualTo(5);
 
     assertThat(aclBindings)
@@ -309,14 +309,12 @@ public class AclsBindingsBuilderTest {
 
   @Test
   public void testStreamsAclsBuilder() {
-    KStream stream = new KStream("User:foo", new HashMap<>());
+    Map<String, List<String>> topics = new HashMap<>();
+    topics.put(KStream.READ_TOPICS, singletonList("foo"));
+    topics.put(KStream.WRITE_TOPICS, singletonList("bar"));
+    KStream stream = new KStream("User:foo", topics);
 
-    List<String> readTopics = singletonList("foo");
-    List<String> writeTopics = singletonList("bar");
-
-    List<TopologyAclBinding> bindings =
-        builder.buildBindingsForStreamsApp(
-            stream.getPrincipal(), "prefix", readTopics, writeTopics, false);
+    List<TopologyAclBinding> bindings = builder.buildBindingsForKStream(stream, "prefix");
 
     assertThat(bindings.size()).isEqualTo(4);
     assertThat(bindings)

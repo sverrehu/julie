@@ -9,6 +9,7 @@ import com.purbon.kafka.topology.model.JulieRoleAcl;
 import com.purbon.kafka.topology.model.users.Connector;
 import com.purbon.kafka.topology.model.users.Consumer;
 import com.purbon.kafka.topology.model.users.KSqlApp;
+import com.purbon.kafka.topology.model.users.KStream;
 import com.purbon.kafka.topology.model.users.Other;
 import com.purbon.kafka.topology.model.users.Producer;
 import com.purbon.kafka.topology.model.users.platform.KsqlServerInstance;
@@ -87,12 +88,11 @@ public class AclsBindingsBuilder implements BindingsBuilderProvider {
   }
 
   @Override
-  public List<TopologyAclBinding> buildBindingsForStreamsApp(
-      String principal,
-      String topicPrefix,
-      List<String> readTopics,
-      List<String> writeTopics,
-      boolean eos) {
+  public List<TopologyAclBinding> buildBindingsForKStream(KStream stream, String topicPrefix) {
+    String principal = stream.getPrincipal();
+    List<String> readTopics = stream.getTopics().get(KStream.READ_TOPICS);
+    List<String> writeTopics = stream.getTopics().get(KStream.WRITE_TOPICS);
+    boolean eos = stream.getExactlyOnce().orElseThrow();
     return toList(streamsAppStream(principal, topicPrefix, readTopics, writeTopics, eos));
   }
 

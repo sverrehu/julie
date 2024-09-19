@@ -23,12 +23,6 @@ public class KStreamsAclBindingsBuilder implements AclBindingsBuilder {
           "KStream application prefix should not be empty."
               + " Please define the applicationID or allow a nonEmpty project prefix (aka everything before the topic)");
     }
-    return AclBindingsResult.forAclBindings(
-        builderProvider.buildBindingsForStreamsApp(
-            app.getPrincipal(),
-            prefix,
-            app.getTopics().get(KStream.READ_TOPICS),
-            app.getTopics().get(KStream.WRITE_TOPICS),
-            app.getExactlyOnce().orElseThrow()));
+    return AclBindingsResult.forAclBindings(builderProvider.buildBindingsForKStream(app, prefix));
   }
 }

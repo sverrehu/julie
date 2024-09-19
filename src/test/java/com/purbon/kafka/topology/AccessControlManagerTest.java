@@ -237,19 +237,8 @@ public class AccessControlManagerTest {
 
     doReturn(new ArrayList<TopologyAclBinding>())
         .when(aclsBuilder)
-        .buildBindingsForStreamsApp(
-            "User:App0",
-            project.namePrefix(),
-            topics.get(KStream.READ_TOPICS),
-            topics.get(KStream.WRITE_TOPICS),
-            false);
-    verify(aclsBuilder, times(1))
-        .buildBindingsForStreamsApp(
-            eq("User:App0"),
-            eq(project.namePrefix()),
-            eq(topics.get(KStream.READ_TOPICS)),
-            eq(topics.get(KStream.WRITE_TOPICS)),
-            eq(false));
+        .buildBindingsForKStream(app, project.namePrefix());
+    verify(aclsBuilder, times(1)).buildBindingsForKStream(eq(app), eq(project.namePrefix()));
   }
 
   @Test

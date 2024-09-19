@@ -31,11 +31,11 @@ public class KStream extends DynamicUser {
   }
 
   public KStream(
-      String principal, HashMap<String, List<String>> topics, Optional<String> applicationId) {
+      String principal, Map<String, List<String>> topics, Optional<String> applicationId) {
     this(principal, topics, applicationId, Optional.of(Boolean.FALSE));
   }
 
-  public KStream(String principal, HashMap<String, List<String>> topics) {
+  public KStream(String principal, Map<String, List<String>> topics) {
     this(principal, topics, Optional.empty(), Optional.of(Boolean.FALSE));
   }
 
