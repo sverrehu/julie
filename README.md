@@ -216,7 +216,7 @@ The project is build using Java and Maven, so both are required if you aim to bu
 The minimum version of Java supported is Java 8, note it soon will be deprecated here, it is only keep as supported
 for very legacy environments.
 
-It is recommended to run JulieOps with Java 11 and an open JDK version.
+It is recommended to run JulieOps with Java 21 and an open JDK version.
 
 ### Building a release
 

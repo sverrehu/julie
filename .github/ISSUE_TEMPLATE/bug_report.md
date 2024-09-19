@@ -25,7 +25,7 @@ If applicable, add screenshots to help explain your problem.
 
 **Runtime (please complete the following information):**
  - OS: [e.g. Windows, Debian]
-- JVM version: [e.g openjdk 11]
+- JVM version: [e.g openjdk 21]
  - Version [e.g. 22]
 
 **Additional context**

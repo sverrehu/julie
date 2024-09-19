@@ -7,7 +7,7 @@ ENV PATH="${BUILDER_HOME}:${PATH}"
 
 USER root
 
-RUN apk add bash openjdk11 krb5-server krb5-libs krb5-conf krb5
+RUN apk add bash openjdk21 krb5-server krb5-libs krb5-conf krb5
 
 RUN mkdir -p /usr/local/julie-ops/bin && chmod 755 /usr/local/julie-ops
 COPY julie-ops.jar /usr/local/julie-ops/bin
