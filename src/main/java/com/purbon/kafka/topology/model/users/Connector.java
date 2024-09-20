@@ -3,6 +3,8 @@ package com.purbon.kafka.topology.model.users;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.purbon.kafka.topology.model.DynamicUser;
+import com.purbon.kafka.topology.model.User;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -39,6 +41,7 @@ public class Connector extends DynamicUser {
     this(
         principal,
         new HashMap<>(),
+        new ArrayList<>(),
         Optional.empty(),
         Optional.empty(),
         Optional.empty(),
@@ -50,6 +53,7 @@ public class Connector extends DynamicUser {
   public Connector(
       String principal,
       HashMap<String, List<String>> topics,
+      List<User> observerPrincipals,
       Optional<String> status_topic,
       Optional<String> offset_topic,
       Optional<String> configs_topic,
@@ -57,7 +61,7 @@ public class Connector extends DynamicUser {
       Optional<String> cluster_id,
       Optional<List<String>> connectors) {
 
-    super(principal, topics);
+    super(principal, topics, observerPrincipals);
 
     this.configs_topic = configs_topic;
     this.status_topic = status_topic;

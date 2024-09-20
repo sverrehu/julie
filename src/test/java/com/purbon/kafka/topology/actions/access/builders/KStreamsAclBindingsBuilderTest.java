@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.purbon.kafka.topology.Configuration;
 import com.purbon.kafka.topology.model.users.KStream;
 import com.purbon.kafka.topology.roles.acls.AclsBindingsBuilder;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -29,7 +30,7 @@ public class KStreamsAclBindingsBuilderTest {
     topics.put(KStream.READ_TOPICS, singletonList("topicA"));
     topics.put(KStream.WRITE_TOPICS, singletonList("topicB"));
 
-    KStream app = new KStream("User:user", topics);
+    KStream app = new KStream("User:user", topics, Collections.emptyList());
     String topicPrefix = "topicPrefix";
     builder = new KStreamsAclBindingsBuilder(aclsBindingsBuilder, app, topicPrefix);
     assertThat(builder.getAclBindings().getAclBindings())
@@ -51,7 +52,8 @@ public class KStreamsAclBindingsBuilderTest {
     topics.put(KStream.WRITE_TOPICS, singletonList("topicB"));
 
     String applicationId = "applicationId";
-    KStream app = new KStream("User:user", topics, Optional.of(applicationId));
+    KStream app =
+        new KStream("User:user", topics, Collections.emptyList(), Optional.of(applicationId));
     builder = new KStreamsAclBindingsBuilder(aclsBindingsBuilder, app, "topicPrefix");
     assertThat(builder.getAclBindings().getAclBindings())
         .anyMatch(

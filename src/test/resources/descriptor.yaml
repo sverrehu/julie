@@ -100,6 +100,9 @@ projects:
     streams:
       - principal: "User:App1"
         applicationId: "applicationId-1"
+        observerPrincipals:
+          - "User:baz-observer1"
+          - "User:baz-observer2"
         topics:
           read:
             - "topicE"

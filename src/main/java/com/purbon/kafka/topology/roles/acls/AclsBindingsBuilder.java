@@ -5,7 +5,9 @@ import static java.util.Arrays.asList;
 import com.purbon.kafka.topology.BindingsBuilderProvider;
 import com.purbon.kafka.topology.Configuration;
 import com.purbon.kafka.topology.api.adminclient.AclBuilder;
+import com.purbon.kafka.topology.model.DynamicUser;
 import com.purbon.kafka.topology.model.JulieRoleAcl;
+import com.purbon.kafka.topology.model.User;
 import com.purbon.kafka.topology.model.users.Connector;
 import com.purbon.kafka.topology.model.users.Consumer;
 import com.purbon.kafka.topology.model.users.KSqlApp;
@@ -44,6 +46,7 @@ public class AclsBindingsBuilder implements BindingsBuilderProvider {
   @Override
   public List<TopologyAclBinding> buildBindingsForConnect(
       Connector connector, String topicPrefixNotInUse) {
+    assertNoObserverPrincipals(connector);
 
     String principal = connector.getPrincipal();
     Stream<String> readTopics = Utils.asNullableStream(connector.getTopics().get("read"));
@@ -90,10 +93,12 @@ public class AclsBindingsBuilder implements BindingsBuilderProvider {
   @Override
   public List<TopologyAclBinding> buildBindingsForKStream(KStream stream, String topicPrefix) {
     String principal = stream.getPrincipal();
+    List<User> observerPrincipals = stream.getObserverPrincipals();
     List<String> readTopics = stream.getTopics().get(KStream.READ_TOPICS);
     List<String> writeTopics = stream.getTopics().get(KStream.WRITE_TOPICS);
     boolean eos = stream.getExactlyOnce().orElseThrow();
-    return toList(streamsAppStream(principal, topicPrefix, readTopics, writeTopics, eos));
+    return toList(
+        streamsAppStream(principal, observerPrincipals, topicPrefix, readTopics, writeTopics, eos));
   }
 
   @Override
@@ -150,6 +155,7 @@ public class AclsBindingsBuilder implements BindingsBuilderProvider {
 
   @Override
   public Collection<TopologyAclBinding> buildBindingsForKSqlApp(KSqlApp app, String prefix) {
+    assertNoObserverPrincipals(app);
     return toList(ksqlAppStream(app, prefix));
   }
 
@@ -248,6 +254,7 @@ public class AclsBindingsBuilder implements BindingsBuilderProvider {
 
   private Stream<AclBinding> streamsAppStream(
       String principal,
+      List<User> observerPrincipals,
       String prefix,
       List<String> readTopics,
       List<String> writeTopics,
@@ -262,12 +269,41 @@ public class AclsBindingsBuilder implements BindingsBuilderProvider {
         topic -> acls.add(buildLiteralTopicLevelAcl(principal, topic, AclOperation.WRITE)));
 
     acls.add(buildPrefixedTopicLevelAcl(principal, prefix, AclOperation.ALL));
-
     acls.add(buildPrefixedGroupLevelAcl(principal, prefix, AclOperation.READ));
+
+    if (observerPrincipals != null) {
+      observerPrincipals.forEach(
+          observerPrincipal ->
+              acls.add(
+                  buildPrefixedTopicLevelAcl(
+                      observerPrincipal.getPrincipal(), prefix, AclOperation.READ)));
+      observerPrincipals.forEach(
+          observerPrincipal ->
+              acls.add(
+                  buildPrefixedTopicLevelAcl(
+                      observerPrincipal.getPrincipal(), prefix, AclOperation.DESCRIBE)));
+      observerPrincipals.forEach(
+          observerPrincipal ->
+              acls.add(
+                  buildPrefixedGroupLevelAcl(
+                      observerPrincipal.getPrincipal(), prefix, AclOperation.READ)));
+    }
 
     if (eos) {
       acls.add(buildPrefixedTransactionIdLevelAcl(principal, prefix, AclOperation.WRITE));
       acls.add(buildPrefixedTransactionIdLevelAcl(principal, prefix, AclOperation.DESCRIBE));
+      if (observerPrincipals != null) {
+        observerPrincipals.forEach(
+            observerPrincipal ->
+                acls.add(
+                    buildPrefixedTransactionIdLevelAcl(
+                        observerPrincipal.getPrincipal(), prefix, AclOperation.READ)));
+        observerPrincipals.forEach(
+            observerPrincipal ->
+                acls.add(
+                    buildPrefixedTransactionIdLevelAcl(
+                        observerPrincipal.getPrincipal(), prefix, AclOperation.DESCRIBE)));
+      }
     }
 
     return acls.stream();
@@ -476,5 +512,12 @@ public class AclsBindingsBuilder implements BindingsBuilderProvider {
 
   private PatternType evaluateResourcePatternType(String res) {
     return isResourcePrefixed(res) ? PatternType.PREFIXED : PatternType.LITERAL;
+  }
+
+  private void assertNoObserverPrincipals(DynamicUser user) {
+    if (user.getObserverPrincipals() != null && !user.getObserverPrincipals().isEmpty()) {
+      throw new RuntimeException(
+          "Observer principals are not yet supported for " + user.getClass().getName());
+    }
   }
 }

@@ -9,6 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.purbon.kafka.topology.api.adminclient.AclBuilder;
 import com.purbon.kafka.topology.model.DynamicUser;
+import com.purbon.kafka.topology.model.User;
 import com.purbon.kafka.topology.model.users.Connector;
 import com.purbon.kafka.topology.model.users.Consumer;
 import com.purbon.kafka.topology.model.users.KStream;
@@ -95,7 +96,8 @@ public class AclsBindingsBuilderTest {
     HashMap<String, List<String>> topics = new HashMap<>();
     topics.put(KStream.READ_TOPICS, singletonList("bar"));
     topics.put(KStream.WRITE_TOPICS, emptyList());
-    KStream producer = new KStream("User:foo", topics, Optional.of("app1"), Optional.of(true));
+    KStream producer =
+        new KStream("User:foo", topics, emptyList(), Optional.of("app1"), Optional.of(true));
     List<TopologyAclBinding> aclBindings = builder.buildBindingsForKStream(producer, "app1");
     assertThat(aclBindings.size()).isEqualTo(5);
 
@@ -312,11 +314,12 @@ public class AclsBindingsBuilderTest {
     Map<String, List<String>> topics = new HashMap<>();
     topics.put(KStream.READ_TOPICS, singletonList("foo"));
     topics.put(KStream.WRITE_TOPICS, singletonList("bar"));
-    KStream stream = new KStream("User:foo", topics);
+    KStream stream =
+        new KStream("User:foo", topics, List.of(new User("observer1"), new User("observer2")));
 
     List<TopologyAclBinding> bindings = builder.buildBindingsForKStream(stream, "prefix");
 
-    assertThat(bindings.size()).isEqualTo(4);
+    assertThat(bindings.size()).isEqualTo(10);
     assertThat(bindings)
         .contains(
             buildTopicLevelAcl(
@@ -333,6 +336,20 @@ public class AclsBindingsBuilderTest {
         .contains(
             buildTopicLevelAcl(
                 stream.getPrincipal(), "prefix", PatternType.PREFIXED, AclOperation.ALL));
+    for (User observer : stream.getObserverPrincipals()) {
+      assertThat(bindings)
+          .contains(
+              buildGroupLevelAcl(
+                  observer.getPrincipal(), "prefix", PatternType.PREFIXED, AclOperation.READ));
+      assertThat(bindings)
+          .contains(
+              buildTopicLevelAcl(
+                  observer.getPrincipal(), "prefix", PatternType.PREFIXED, AclOperation.READ));
+      assertThat(bindings)
+          .contains(
+              buildTopicLevelAcl(
+                  observer.getPrincipal(), "prefix", PatternType.PREFIXED, AclOperation.DESCRIBE));
+    }
   }
 
   private TopologyAclBinding buildTopicLevelAcl(

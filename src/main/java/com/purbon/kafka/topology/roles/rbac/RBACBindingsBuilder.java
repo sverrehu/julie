@@ -10,6 +10,7 @@ import static com.purbon.kafka.topology.roles.rbac.RBACPredefinedRoles.SYSTEM_AD
 import com.purbon.kafka.topology.BindingsBuilderProvider;
 import com.purbon.kafka.topology.api.mds.MDSApiClient;
 import com.purbon.kafka.topology.model.Component;
+import com.purbon.kafka.topology.model.DynamicUser;
 import com.purbon.kafka.topology.model.JulieRoleAcl;
 import com.purbon.kafka.topology.model.users.Connector;
 import com.purbon.kafka.topology.model.users.Consumer;
@@ -46,6 +47,7 @@ public class RBACBindingsBuilder implements BindingsBuilderProvider {
 
   @Override
   public List<TopologyAclBinding> buildBindingsForConnect(Connector connector, String topicPrefix) {
+    assertNoObserverPrincipals(connector);
 
     String principal = connector.getPrincipal();
     List<String> readTopics = connector.getTopics().get("read");
@@ -100,6 +102,8 @@ public class RBACBindingsBuilder implements BindingsBuilderProvider {
 
   @Override
   public List<TopologyAclBinding> buildBindingsForKStream(KStream stream, String topicPrefix) {
+    assertNoObserverPrincipals(stream);
+
     String principal = stream.getPrincipal();
     List<String> readTopics = stream.getTopics().get(KStream.READ_TOPICS);
     List<String> writeTopics = stream.getTopics().get(KStream.WRITE_TOPICS);
@@ -312,6 +316,8 @@ public class RBACBindingsBuilder implements BindingsBuilderProvider {
 
   @Override
   public Collection<TopologyAclBinding> buildBindingsForKSqlApp(KSqlApp app, String prefix) {
+    assertNoObserverPrincipals(app);
+
     List<TopologyAclBinding> bindings = new ArrayList<>();
 
     // Ksql cluster scope
@@ -516,5 +522,11 @@ public class RBACBindingsBuilder implements BindingsBuilderProvider {
                     .apply("Connector", connector))
         .filter(Objects::nonNull)
         .collect(Collectors.toList());
+  }
+
+  private void assertNoObserverPrincipals(DynamicUser user) {
+    if (user.getObserverPrincipals() != null && !user.getObserverPrincipals().isEmpty()) {
+      throw new RuntimeException("Observer principals are not supported for RBAC");
+    }
   }
 }

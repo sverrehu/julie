@@ -103,13 +103,14 @@ public class TestTopologyBuilder {
   }
 
   public TestTopologyBuilder addKStream(String user, String applicationId) {
-    KStream stream = new KStream(user, new HashMap<>(), Optional.of(applicationId));
+    KStream stream =
+        new KStream(user, new HashMap<>(), Collections.emptyList(), Optional.of(applicationId));
     kstreams.add(stream);
     return this;
   }
 
   public TestTopologyBuilder addKStream(String user) {
-    KStream stream = new KStream(user, new HashMap<>(), Optional.empty());
+    KStream stream = new KStream(user, new HashMap<>(), Collections.emptyList(), Optional.empty());
     kstreams.add(stream);
     return this;
   }

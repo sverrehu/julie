@@ -231,6 +231,7 @@ public class TopologySerdesTest {
     assertThat(project.getConsumers()).hasSize(2);
     assertThat(project.getStreams()).hasSize(1);
     assertThat(project.getConnectors()).hasSize(2);
+    assertThat(project.getStreams().get(0).getObserverPrincipals()).hasSize(0);
 
     assertThat(project.getProducers().get(0).getIdempotence()).isEmpty();
     assertThat(project.getProducers().get(1).getTransactionId()).isEqualTo(Optional.of("1234"));
@@ -239,6 +240,14 @@ public class TopologySerdesTest {
     List<Topic> topics = topology.getProjects().get(2).getTopics();
     assertThat(topics).hasSize(2);
     assertThat(topics.get(0).toString()).isEqualTo("contextOrg.source.baz.topicE");
+
+    final List<KStream> streams = topology.getProjects().get(2).getStreams();
+    assertThat(streams).hasSize(1);
+    assertThat(streams.get(0).getObserverPrincipals()).hasSize(2);
+    assertThat(streams.get(0).getObserverPrincipals().get(0).getPrincipal())
+        .isEqualTo("User:baz-observer1");
+    assertThat(streams.get(0).getObserverPrincipals().get(1).getPrincipal())
+        .isEqualTo("User:baz-observer2");
   }
 
   @Test
@@ -808,12 +817,12 @@ public class TopologySerdesTest {
     HashMap<String, List<String>> topics = new HashMap<>();
     topics.put("read", Arrays.asList("topic1", "topic3"));
     topics.put("write", Arrays.asList("topic2", "topic4"));
-    streams.add(new KStream("app3", topics));
+    streams.add(new KStream("app3", topics, Collections.emptyList()));
 
     topics = new HashMap<>();
     topics.put("read", Arrays.asList("topic2", "topic4"));
     topics.put("write", Arrays.asList("topic5"));
-    streams.add(new KStream("app4", topics));
+    streams.add(new KStream("app4", topics, Collections.emptyList()));
 
     return streams;
   }
