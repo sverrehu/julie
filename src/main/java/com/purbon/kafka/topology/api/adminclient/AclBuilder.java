@@ -18,6 +18,14 @@ public class AclBuilder {
     this.principal = principal;
   }
 
+  public AclBuilder literalResource(ResourceType resourceType, String name) {
+    return resource(resourceType, name, PatternType.LITERAL);
+  }
+
+  public AclBuilder prefixedResource(ResourceType resourceType, String name) {
+    return resource(resourceType, name, PatternType.PREFIXED);
+  }
+
   public AclBuilder resource(ResourceType resourceType, String name, PatternType patternType) {
     resourcePattern = new ResourcePattern(resourceType, name, patternType);
     return this;

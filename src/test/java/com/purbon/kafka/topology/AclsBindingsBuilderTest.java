@@ -49,7 +49,7 @@ public class AclsBindingsBuilderTest {
     Consumer consumer = new Consumer("User:foo");
 
     List<TopologyAclBinding> aclBindings =
-        builder.buildBindingsForConsumers(Collections.singleton(consumer), "bar", false);
+        builder.buildLiteralBindingsForConsumers(Collections.singleton(consumer), "bar");
     assertThat(aclBindings.size()).isEqualTo(3);
     assertThat(aclBindings)
         .contains(buildTopicLevelAcl("User:foo", "bar", PatternType.LITERAL, AclOperation.READ));
@@ -66,7 +66,7 @@ public class AclsBindingsBuilderTest {
     Consumer consumer = new Consumer("User:foo", "foo*");
 
     List<TopologyAclBinding> aclBindings =
-        builder.buildBindingsForConsumers(Collections.singleton(consumer), "bar", false);
+        builder.buildLiteralBindingsForConsumers(Collections.singleton(consumer), "bar");
     assertThat(aclBindings.size()).isEqualTo(3);
     assertThat(aclBindings)
         .contains(buildTopicLevelAcl("User:foo", "bar", PatternType.LITERAL, AclOperation.READ));
@@ -81,7 +81,7 @@ public class AclsBindingsBuilderTest {
   public void testProducerAclsBuilder() {
     Producer producer = new Producer("User:foo");
     List<TopologyAclBinding> aclBindings =
-        builder.buildBindingsForProducers(Collections.singleton(producer), "bar", false);
+        builder.buildLiteralBindingsForProducers(Collections.singleton(producer), "bar");
     assertThat(aclBindings.size()).isEqualTo(2);
     assertThat(aclBindings)
         .contains(buildTopicLevelAcl("User:foo", "bar", PatternType.LITERAL, AclOperation.WRITE));
@@ -123,7 +123,7 @@ public class AclsBindingsBuilderTest {
   public void testProducerWithTxIdAclsBuilder() {
     Producer producer = new Producer("User:foo", "1234", true);
     List<TopologyAclBinding> aclBindings =
-        builder.buildBindingsForProducers(Collections.singleton(producer), "bar", false);
+        builder.buildLiteralBindingsForProducers(Collections.singleton(producer), "bar");
     assertThat(aclBindings.size()).isEqualTo(5);
 
     assertThat(aclBindings)
@@ -156,7 +156,7 @@ public class AclsBindingsBuilderTest {
   public void testProducerWithTxIdPrefixAclsBuilder() {
     Producer producer = new Producer("User:foo", "foo*", true);
     List<TopologyAclBinding> aclBindings =
-        builder.buildBindingsForProducers(Collections.singleton(producer), "bar", false);
+        builder.buildLiteralBindingsForProducers(Collections.singleton(producer), "bar");
     assertThat(aclBindings.size()).isEqualTo(5);
 
     assertThat(aclBindings)
@@ -183,7 +183,7 @@ public class AclsBindingsBuilderTest {
   public void testIdempotenceProducerAclsBuilder() {
     Producer producer = new Producer("User:foo", null, true);
     List<TopologyAclBinding> aclBindings =
-        builder.buildBindingsForProducers(Collections.singleton(producer), "bar", false);
+        builder.buildLiteralBindingsForProducers(Collections.singleton(producer), "bar");
     assertThat(aclBindings.size()).isEqualTo(3);
 
     assertThat(aclBindings)

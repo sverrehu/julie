@@ -25,6 +25,8 @@ public class ProducerAclBindingsBuilder implements AclBindingsBuilder {
   @Override
   public AclBindingsResult getAclBindings() {
     return AclBindingsResult.forAclBindings(
-        builderProvider.buildBindingsForProducers(producers, fullTopicName, prefixed));
+        prefixed
+            ? builderProvider.buildPrefixedBindingsForProducers(producers, fullTopicName)
+            : builderProvider.buildLiteralBindingsForProducers(producers, fullTopicName));
   }
 }

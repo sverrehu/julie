@@ -22,11 +22,17 @@ public interface BindingsBuilderProvider {
 
   List<TopologyAclBinding> buildBindingsForKStream(KStream stream, String topicPrefix);
 
-  List<TopologyAclBinding> buildBindingsForConsumers(
-      Collection<Consumer> consumers, String resource, boolean prefixed);
+  List<TopologyAclBinding> buildLiteralBindingsForConsumers(
+      Collection<Consumer> consumers, String resource);
 
-  List<TopologyAclBinding> buildBindingsForProducers(
-      Collection<Producer> principals, String resource, boolean prefixed);
+  List<TopologyAclBinding> buildPrefixedBindingsForConsumers(
+      Collection<Consumer> consumers, String resource);
+
+  List<TopologyAclBinding> buildLiteralBindingsForProducers(
+      Collection<Producer> principals, String resource);
+
+  List<TopologyAclBinding> buildPrefixedBindingsForProducers(
+      Collection<Producer> principals, String resource);
 
   default TopologyAclBinding setPredefinedRole(
       String principal, String predefinedRole, String topicPrefix) {

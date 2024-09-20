@@ -25,6 +25,8 @@ public class ConsumerAclBindingsBuilder implements AclBindingsBuilder {
   @Override
   public AclBindingsResult getAclBindings() {
     return AclBindingsResult.forAclBindings(
-        builderProvider.buildBindingsForConsumers(consumers, fullTopicName, prefixed));
+        prefixed
+            ? builderProvider.buildPrefixedBindingsForConsumers(consumers, fullTopicName)
+            : builderProvider.buildLiteralBindingsForConsumers(consumers, fullTopicName));
   }
 }

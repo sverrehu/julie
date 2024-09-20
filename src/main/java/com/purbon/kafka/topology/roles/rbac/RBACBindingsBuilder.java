@@ -136,7 +136,30 @@ public class RBACBindingsBuilder implements BindingsBuilderProvider {
   }
 
   @Override
-  public List<TopologyAclBinding> buildBindingsForConsumers(
+  public List<TopologyAclBinding> buildLiteralBindingsForConsumers(
+      final Collection<Consumer> consumers, final String resource) {
+    return buildBindingsForConsumers(consumers, resource, false);
+  }
+
+  @Override
+  public List<TopologyAclBinding> buildPrefixedBindingsForConsumers(
+      final Collection<Consumer> consumers, final String resource) {
+    return buildBindingsForConsumers(consumers, resource, true);
+  }
+
+  @Override
+  public List<TopologyAclBinding> buildLiteralBindingsForProducers(
+      final Collection<Producer> principals, final String resource) {
+    return buildBindingsForProducers(principals, resource, false);
+  }
+
+  @Override
+  public List<TopologyAclBinding> buildPrefixedBindingsForProducers(
+      final Collection<Producer> principals, final String resource) {
+    return buildBindingsForProducers(principals, resource, true);
+  }
+
+  private List<TopologyAclBinding> buildBindingsForConsumers(
       Collection<Consumer> consumers, String resource, boolean prefixed) {
     String patternType = prefixed ? PREFIX : LITERAL;
     List<TopologyAclBinding> bindings = new ArrayList<>();
@@ -169,8 +192,7 @@ public class RBACBindingsBuilder implements BindingsBuilderProvider {
     return isResourcePrefixed(res) ? PREFIX : LITERAL;
   }
 
-  @Override
-  public List<TopologyAclBinding> buildBindingsForProducers(
+  private List<TopologyAclBinding> buildBindingsForProducers(
       Collection<Producer> producers, String resource, boolean prefixed) {
     String patternType = prefixed ? PREFIX : LITERAL;
     List<TopologyAclBinding> bindings = new ArrayList<>();

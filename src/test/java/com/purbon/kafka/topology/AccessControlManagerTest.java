@@ -27,7 +27,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 import org.apache.kafka.common.acl.AclBinding;
 import org.apache.kafka.common.acl.AclOperation;
-import org.apache.kafka.common.resource.PatternType;
 import org.apache.kafka.common.resource.ResourceType;
 import org.junit.Before;
 import org.junit.Rule;
@@ -73,10 +72,10 @@ public class AccessControlManagerTest {
 
     doReturn(new ArrayList<TopologyAclBinding>())
         .when(aclsBuilder)
-        .buildBindingsForConsumers(users, topicA.toString(), false);
+        .buildLiteralBindingsForConsumers(users, topicA.toString());
     accessControlManager.updatePlan(builder.buildTopology(), plan);
     verify(aclsBuilder, times(1))
-        .buildBindingsForConsumers(eq(users), eq(topicA.toString()), eq(false));
+        .buildLiteralBindingsForConsumers(eq(users), eq(topicA.toString()));
   }
 
   @Test
@@ -96,10 +95,9 @@ public class AccessControlManagerTest {
 
     doReturn(new ArrayList<TopologyAclBinding>())
         .when(aclsBuilder)
-        .buildBindingsForConsumers(users, builder.getProject().namePrefix(), true);
+        .buildPrefixedBindingsForConsumers(users, builder.getProject().namePrefix());
     accessControlManager.updatePlan(builder.buildTopology(), plan);
-    verify(aclsBuilder, times(1))
-        .buildBindingsForConsumers(eq(users), eq("ctx.project."), eq(true));
+    verify(aclsBuilder, times(1)).buildPrefixedBindingsForConsumers(eq(users), eq("ctx.project."));
   }
 
   @Test
@@ -125,14 +123,14 @@ public class AccessControlManagerTest {
 
     doReturn(new ArrayList<TopologyAclBinding>())
         .when(aclsBuilder)
-        .buildBindingsForConsumers(any(), eq(topic.toString()), eq(false));
+        .buildLiteralBindingsForConsumers(any(), eq(topic.toString()));
 
     accessControlManager.updatePlan(topology, plan);
 
     ArgumentCaptor<List> argumentCaptor = ArgumentCaptor.forClass(List.class);
 
     verify(aclsBuilder, times(1))
-        .buildBindingsForConsumers(argumentCaptor.capture(), eq(topic.toString()), eq(false));
+        .buildLiteralBindingsForConsumers(argumentCaptor.capture(), eq(topic.toString()));
 
     List<Consumer> capturedList = argumentCaptor.getValue();
     assertThat(capturedList).contains(projectConsumer);
@@ -149,11 +147,11 @@ public class AccessControlManagerTest {
 
     doReturn(new ArrayList<TopologyAclBinding>())
         .when(aclsBuilder)
-        .buildBindingsForProducers(producers, topicA.toString(), false);
+        .buildLiteralBindingsForProducers(producers, topicA.toString());
 
     accessControlManager.updatePlan(builder.buildTopology(), plan);
     verify(aclsBuilder, times(1))
-        .buildBindingsForProducers(eq(producers), eq(topicA.toString()), eq(false));
+        .buildLiteralBindingsForProducers(eq(producers), eq(topicA.toString()));
   }
 
   @Test
@@ -172,10 +170,10 @@ public class AccessControlManagerTest {
 
     doReturn(new ArrayList<TopologyAclBinding>())
         .when(aclsBuilder)
-        .buildBindingsForProducers(producers, builder.getProject().namePrefix(), true);
+        .buildPrefixedBindingsForProducers(producers, builder.getProject().namePrefix());
     accessControlManager.updatePlan(builder.buildTopology(), plan);
     verify(aclsBuilder, times(1))
-        .buildBindingsForProducers(eq(producers), eq("ctx.project."), eq(true));
+        .buildPrefixedBindingsForProducers(eq(producers), eq("ctx.project."));
   }
 
   @Test
@@ -201,14 +199,14 @@ public class AccessControlManagerTest {
 
     doReturn(new ArrayList<TopologyAclBinding>())
         .when(aclsBuilder)
-        .buildBindingsForProducers(any(), eq(topic.toString()), eq(false));
+        .buildLiteralBindingsForProducers(any(), eq(topic.toString()));
 
     accessControlManager.updatePlan(topology, plan);
 
     ArgumentCaptor<List> argumentCaptor = ArgumentCaptor.forClass(List.class);
 
     verify(aclsBuilder, times(1))
-        .buildBindingsForProducers(argumentCaptor.capture(), eq(topic.toString()), eq(false));
+        .buildLiteralBindingsForProducers(argumentCaptor.capture(), eq(topic.toString()));
 
     List<Producer> capturedList = argumentCaptor.getValue();
     assertThat(capturedList).contains(projectProducer);
@@ -456,7 +454,7 @@ public class AccessControlManagerTest {
 
     doReturn(singletonList(new TopologyAclBinding()))
         .when(aclsBuilder)
-        .buildBindingsForConsumers(users, topicA.toString(), false);
+        .buildLiteralBindingsForConsumers(users, topicA.toString());
 
     accessControlManager.updatePlan(builder.buildTopology(), plan);
 
@@ -593,37 +591,21 @@ public class AccessControlManagerTest {
     List<AclBinding> acls = newArrayList();
 
     for (Consumer consumer : consumers) {
+      acls.add(buildTopicLevelAcl(consumer.getPrincipal(), topic, AclOperation.DESCRIBE));
+      acls.add(buildTopicLevelAcl(consumer.getPrincipal(), topic, AclOperation.READ));
       acls.add(
-          buildTopicLevelAcl(
-              consumer.getPrincipal(), topic, PatternType.LITERAL, AclOperation.DESCRIBE));
-      acls.add(
-          buildTopicLevelAcl(
-              consumer.getPrincipal(), topic, PatternType.LITERAL, AclOperation.READ));
-      acls.add(
-          buildGroupLevelAcl(
-              consumer.getPrincipal(),
-              consumer.groupString(),
-              PatternType.LITERAL,
-              AclOperation.READ));
+          buildGroupLevelAcl(consumer.getPrincipal(), consumer.groupString(), AclOperation.READ));
     }
 
     return acls.stream().map(TopologyAclBinding::new).collect(Collectors.toList());
   }
 
-  private AclBinding buildTopicLevelAcl(
-      String principal, String topic, PatternType patternType, AclOperation op) {
-    return new AclBuilder(principal)
-        .resource(ResourceType.TOPIC, topic, patternType)
-        .allow(op)
-        .build();
+  private AclBinding buildTopicLevelAcl(String principal, String topic, AclOperation op) {
+    return new AclBuilder(principal).literalResource(ResourceType.TOPIC, topic).allow(op).build();
   }
 
-  private AclBinding buildGroupLevelAcl(
-      String principal, String group, PatternType patternType, AclOperation op) {
-    return new AclBuilder(principal)
-        .resource(ResourceType.GROUP, group, patternType)
-        .allow(op)
-        .build();
+  private AclBinding buildGroupLevelAcl(String principal, String group, AclOperation op) {
+    return new AclBuilder(principal).literalResource(ResourceType.GROUP, group).allow(op).build();
   }
 
   private BackendController initializeFileBackendController() throws IOException {
