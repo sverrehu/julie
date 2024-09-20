@@ -160,8 +160,8 @@ public class AclsBindingsBuilder implements BindingsBuilderProvider {
       }
       var binding =
           new AclBuilder(other.getPrincipal())
-              .addResource(resourceType, acl.getResourceName(), patternType)
-              .addControlEntry(acl.getHost(), aclOperation, AclPermissionType.ALLOW)
+              .resource(resourceType, acl.getResourceName(), patternType)
+              .allow(acl.getHost(), aclOperation)
               .build();
       bindings.add(new TopologyAclBinding(binding));
     }
@@ -389,24 +389,24 @@ public class AclsBindingsBuilder implements BindingsBuilderProvider {
   private AclBinding buildTopicLevelAcl(
       String principal, String topic, PatternType patternType, AclOperation op) {
     return new AclBuilder(principal)
-        .addResource(ResourceType.TOPIC, topic, patternType)
-        .addControlEntry("*", op, AclPermissionType.ALLOW)
+        .resource(ResourceType.TOPIC, topic, patternType)
+        .allow(op)
         .build();
   }
 
   private AclBinding buildTransactionIdLevelAcl(
       String principal, String transactionId, PatternType patternType, AclOperation op) {
     return new AclBuilder(principal)
-        .addResource(ResourceType.TRANSACTIONAL_ID, transactionId, patternType)
-        .addControlEntry("*", op, AclPermissionType.ALLOW)
+        .resource(ResourceType.TRANSACTIONAL_ID, transactionId, patternType)
+        .allow(op)
         .build();
   }
 
   private AclBinding buildGroupLevelAcl(
       String principal, String group, PatternType patternType, AclOperation op) {
     return new AclBuilder(principal)
-        .addResource(ResourceType.GROUP, group, patternType)
-        .addControlEntry("*", op, AclPermissionType.ALLOW)
+        .resource(ResourceType.GROUP, group, patternType)
+        .allow(op)
         .build();
   }
 

@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.apache.kafka.common.acl.AclOperation;
-import org.apache.kafka.common.acl.AclPermissionType;
 import org.apache.kafka.common.resource.PatternType;
 import org.apache.kafka.common.resource.ResourceType;
 import org.apache.logging.log4j.LogManager;
@@ -50,14 +49,11 @@ public class HybridCCloudAclsProvider extends SimpleAclsProvider implements Acce
                 binding -> {
                   var aclBinding =
                       new AclBuilder(binding.getPrincipal())
-                          .addResource(
+                          .resource(
                               ResourceType.fromString(binding.getResourceType()),
                               binding.getResourceName(),
                               PatternType.fromString(binding.getPattern()))
-                          .addControlEntry(
-                              binding.getHost(),
-                              AclOperation.fromString(binding.getOperation()),
-                              AclPermissionType.ALLOW)
+                          .allow(binding.getHost(), AclOperation.fromString(binding.getOperation()))
                           .build();
                   return new TopologyAclBinding(aclBinding);
                 })

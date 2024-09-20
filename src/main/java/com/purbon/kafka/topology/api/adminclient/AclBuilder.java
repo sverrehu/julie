@@ -18,14 +18,17 @@ public class AclBuilder {
     this.principal = principal;
   }
 
-  public AclBuilder addResource(ResourceType resourceType, String name, PatternType patternType) {
+  public AclBuilder resource(ResourceType resourceType, String name, PatternType patternType) {
     resourcePattern = new ResourcePattern(resourceType, name, patternType);
     return this;
   }
 
-  public AclBuilder addControlEntry(
-      String host, AclOperation op, AclPermissionType permissionType) {
-    entry = new AccessControlEntry(principal, host, op, permissionType);
+  public AclBuilder allow(AclOperation op) {
+    return allow("*", op);
+  }
+
+  public AclBuilder allow(String host, AclOperation op) {
+    entry = new AccessControlEntry(principal, host, op, AclPermissionType.ALLOW);
     return this;
   }
 

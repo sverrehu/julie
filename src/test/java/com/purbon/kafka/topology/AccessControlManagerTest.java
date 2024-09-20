@@ -27,7 +27,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 import org.apache.kafka.common.acl.AclBinding;
 import org.apache.kafka.common.acl.AclOperation;
-import org.apache.kafka.common.acl.AclPermissionType;
 import org.apache.kafka.common.resource.PatternType;
 import org.apache.kafka.common.resource.ResourceType;
 import org.junit.Before;
@@ -614,16 +613,16 @@ public class AccessControlManagerTest {
   private AclBinding buildTopicLevelAcl(
       String principal, String topic, PatternType patternType, AclOperation op) {
     return new AclBuilder(principal)
-        .addResource(ResourceType.TOPIC, topic, patternType)
-        .addControlEntry("*", op, AclPermissionType.ALLOW)
+        .resource(ResourceType.TOPIC, topic, patternType)
+        .allow(op)
         .build();
   }
 
   private AclBinding buildGroupLevelAcl(
       String principal, String group, PatternType patternType, AclOperation op) {
     return new AclBuilder(principal)
-        .addResource(ResourceType.GROUP, group, patternType)
-        .addControlEntry("*", op, AclPermissionType.ALLOW)
+        .resource(ResourceType.GROUP, group, patternType)
+        .allow(op)
         .build();
   }
 

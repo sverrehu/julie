@@ -352,8 +352,8 @@ public class AccessControlManagerIT {
     String juliePrincipal = "User:Julie";
     AclBinding julieBinding =
         new AclBuilder(juliePrincipal)
-            .addResource(ResourceType.TOPIC, "foo", PatternType.LITERAL)
-            .addControlEntry("*", AclOperation.ALL, AclPermissionType.ALLOW)
+            .resource(ResourceType.TOPIC, "foo", PatternType.LITERAL)
+            .allow(AclOperation.ALL)
             .build();
 
     topologyAdminClient.createAcls(Collections.singleton(julieBinding));

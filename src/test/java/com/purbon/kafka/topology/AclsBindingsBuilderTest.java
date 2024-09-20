@@ -339,8 +339,8 @@ public class AclsBindingsBuilderTest {
       String principal, String topic, PatternType patternType, AclOperation op) {
     return new TopologyAclBinding(
         new AclBuilder(principal)
-            .addResource(ResourceType.TOPIC, topic, patternType)
-            .addControlEntry("*", op, AclPermissionType.ALLOW)
+            .resource(ResourceType.TOPIC, topic, patternType)
+            .allow(op)
             .build());
   }
 
@@ -351,8 +351,8 @@ public class AclsBindingsBuilderTest {
       AclOperation op) {
     return new TopologyAclBinding(
         new AclBuilder(principal)
-            .addResource(ResourceType.TRANSACTIONAL_ID, transactionId, patternType)
-            .addControlEntry("*", op, AclPermissionType.ALLOW)
+            .resource(ResourceType.TRANSACTIONAL_ID, transactionId, patternType)
+            .allow(op)
             .build());
   }
 
@@ -370,8 +370,8 @@ public class AclsBindingsBuilderTest {
       @SuppressWarnings("SameParameterValue") AclOperation op) {
     return new TopologyAclBinding(
         new AclBuilder(principal)
-            .addResource(ResourceType.GROUP, group, patternType)
-            .addControlEntry("*", op, AclPermissionType.ALLOW)
+            .resource(ResourceType.GROUP, group, patternType)
+            .allow(op)
             .build());
   }
 }
