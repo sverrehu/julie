@@ -506,7 +506,7 @@
     <maven-site-plugin.version>3.20.0</maven-site-plugin.version>
     <maven-surefire-plugin.version>3.5.0</maven-surefire-plugin.version>
     <rpm-maven-plugin.version>2.3.0</rpm-maven-plugin.version>
-    <spotbugs-maven-plugin.version>4.8.6.3</spotbugs-maven-plugin.version>
+    <spotbugs-maven-plugin.version>4.8.6.4</spotbugs-maven-plugin.version>
     <!-- dependencies -->
     <assertj.version>3.26.3</assertj.version>
     <aws.java.sdk.version>2.28.5</aws.java.sdk.version>
