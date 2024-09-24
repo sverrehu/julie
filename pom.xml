@@ -509,7 +509,7 @@
     <spotbugs-maven-plugin.version>4.8.6.4</spotbugs-maven-plugin.version>
     <!-- dependencies -->
     <assertj.version>3.26.3</assertj.version>
-    <aws.java.sdk.version>2.28.6</aws.java.sdk.version>
+    <aws.java.sdk.version>2.28.7</aws.java.sdk.version>
     <commons.version>1.9.0</commons.version>
     <confluent-ce.version>7.7.1-ce</confluent-ce.version>
     <confluent.version>7.7.1</confluent.version>
