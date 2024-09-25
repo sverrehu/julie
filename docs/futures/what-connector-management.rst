@@ -3,7 +3,7 @@ Managing Connectors
 
 As a Kafka deployment is growing it becomes natural to start ingress or egress of data from the cluster in a structured way.
 This is usually done using one, or multiple, Kafka Connect clusters.
-So as natural, as a user, you aim to handle your connectors as well from within your gitops pipeline, and you can do now this with
+So as natural, as a user, you aim to handle your connectors as well from within your GitOps pipeline, and you can do now this with
 JulieOps since version 3.0
 
 **IMPORTANT**: This functionality is available only since version 3.0 of JulieOps.

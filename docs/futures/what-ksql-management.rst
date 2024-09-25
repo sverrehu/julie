@@ -3,7 +3,7 @@ Managing KSQL artefacts
 
 As a Kafka deployment is growing it becomes natural to start processing streaming data, and we like to do it in an structured way.
 This is usually done using Kafka Streams or KSQL.
-So as natural, as a user, you aim to handle your KSQL queries as well from within your gitops pipeline, and you can do now this with
+So as natural, as a user, you aim to handle your KSQL queries as well from within your GitOps pipeline, and you can do now this with
 JulieOps since version 3.0
 
 **IMPORTANT**: This functionality is available only since version 3.0 of JulieOps.

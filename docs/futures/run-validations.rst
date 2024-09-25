@@ -1,7 +1,7 @@
 Validate your topologies
 *******************************
 
-A normal practise in many *gitops* deployments is to run a set of automated validations before allowing the changes in.
+A normal practise in many *GitOps* deployments is to run a set of automated validations before allowing the changes in.
 JulieOps allows the users to run a variable set of validations before the project will apply the changes into each of the managed components.
 
 Validate a topology in a feature branch

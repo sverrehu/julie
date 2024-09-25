@@ -165,5 +165,5 @@ If your project is following the `Gitlab flow <https://docs.gitlab.com/ee/topics
 
 Moving changes across environment will be as easy as following the same approach you are already taking for releasing commits across environments. This could be cherry pick, pull requests, etc.
 
-*NOTE*: as a team, you might like to move towards a more controlled setup, going from complete freedom in the lower environment, to a more restricted setup as soon as you get into production. But with a flexible approach like gitops, continuous release is as well possible,
+*NOTE*: as a team, you might like to move towards a more controlled setup, going from complete freedom in the lower environment, to a more restricted setup as soon as you get into production. But with a flexible approach like GitOps, continuous release is as well possible,
 the limits are only on yourself and the stability of your platform.

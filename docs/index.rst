@@ -3,10 +3,10 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to JulieOps's documentation!
+Welcome to JulieOps' documentation!
 ==================================================
 
-Welcome to JulieOps documentation, in this site we recollected notes and guides to provide the beginners, but as well reference for the most experienced on implementing a gitops
+Welcome to JulieOps documentation, in this site we recollected notes and guides to provide the beginners, but as well reference for the most experienced on implementing a GitOps
 approach for operations in Apache Kafka.
 
 .. image:: _static/images/julie-ops.png
@@ -21,7 +21,7 @@ If you have landed in this page is because you aim to get started with JulieOps.
 To get you started we recommend:
 
 * Want a quickstart ? checkout our demo in `[here] <https://github.com/purbon/kafka-topology-builder-demo>`_.
-* New to gitops and kafka, check the :doc:`core-concepts` page.
+* New to GitOps and kafka, check the :doc:`core-concepts` page.
 * If you are ready to jump in, start with the :doc:`workflow-setup`.
 
 To learn more about JulieOps listen to `this podcast <https://developer.confluent.io/podcast/automating-devops-for-apache-kafka-and-confluent-ft-pere-urbon-bayes>`_ with Pere Urbón-Bayes.
@@ -29,7 +29,7 @@ To learn more about JulieOps listen to `this podcast <https://developer.confluen
 Installation
 -----------
 
-To install JulieOps and enable your teams to use a gitops approach when managing Apache Kafka you need:
+To install JulieOps and enable your teams to use a GitOps approach when managing Apache Kafka you need:
 
 * A CI/CD server, for example Jenkins, but any other will serve the purpose
 * A git repository where the Topology description will be stored

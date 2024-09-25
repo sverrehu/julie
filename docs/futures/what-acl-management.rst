@@ -271,12 +271,12 @@ Julie Ops will assign the following ACLs:
 
     * these fields default to `connect-status`, `connect-status`, and `connect-configs`. Hence access to these topics will be granted to the Connect principal if the fields are not explicitly given.
   * `CREATE` access on the cluster resource
-  * `READ` access on every topic in the corresponding `topics.read` subobject
-  * `WRITE` access on every topic in the corresponding `topics.write` subobject
+  * `READ` access on every topic in the corresponding `topics.read` sub-object
+  * `WRITE` access on every topic in the corresponding `topics.write` sub-object
   * `READ` access on the group specified in the corresponding `group` field
     * if no `group` is specified, rights to `connect-cluster` will be granted
 
-* the principal for a `schema_registy` platform component will be given `DESCRIBE_CONFIGS`, `READ`, and `WRITE` access to each topic.
+* the principal for a `schema_registry` platform component will be given `DESCRIBE_CONFIGS`, `READ`, and `WRITE` access to each topic.
 
 * the principal for a `control_center` platform component will be given:
 

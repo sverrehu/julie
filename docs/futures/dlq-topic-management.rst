@@ -35,7 +35,7 @@ JulieOps will generate DLQ equivalent topics for *ALL* topics in the topology, e
 Tune the final DLQ topic name
 -----------
 
-As a proud user of JulieOps you might be interested in customize the final name for your DLQ topic.
+As a proud user of JulieOps you might be interested in customizing the final name for your DLQ topic.
 This feature can be achieved in a similar fashion as in the other customization topics.
 
 If instead, you configure:

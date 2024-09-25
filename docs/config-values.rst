@@ -129,7 +129,7 @@ If no list is specified and DLQ topics are activated there is going to be one ge
 DLQ topic naming format
 -----------
 
-It is possible to customize the naming format for DLQ topics, this can be achived by using a Jinja pattern within this property.
+It is possible to customize the naming format for DLQ topics, this can be achieved by using a Jinja pattern within this property.
 
 **Property**: *topology.topic.dlq.prefix.format*
 **Default value**: "default"
@@ -219,8 +219,8 @@ An example to use local topic management state will look like this:
 Retrieve management state from local controlled view
 -----------
 
-Julie Ops for everything apart from topics uses a local state, so that Julie Ops's uses the actual state not its internal state this means pulling the actual view directly,
-we can enable this for everything, topics, acls, service accounts etc. Note this flag supercedes the topology.state.topics.cluster.enabled.
+Julie Ops for everything apart from topics uses a local state, so that Julie Ops uses the actual state not its internal state this means pulling the actual view directly,
+we can enable this for everything, topics, acls, service accounts etc. Note this flag supersedes the topology.state.topics.cluster.enabled.
 
 If you want to manage the current view of everything from the own Julie Ops cluster state subsystem, you should use this property.
 
@@ -248,7 +248,7 @@ An example configuration might look like this:
     topology.topic.managed.prefixes.1=User:BService
 
 If this prefix list is used, only topics that match the prefix will be ever processed, anything else will be ignored.
-This is useful in a shared cluster, to avoid Julie Ops removing/accidentally managing topics managed by other teams with seperate pipelines.
+This is useful in a shared cluster, to avoid Julie Ops removing/accidentally managing topics managed by other teams with separate pipelines.
 
 
 Control allowed Service accounts to be managed by Julie Ops
@@ -265,7 +265,7 @@ An example configuration might look like this:
     topology.service.accounts.managed.prefixes.1=User:BService
 
 If this prefix list is used, only service accounts that match the prefix will be ever processed, anything else will be ignored.
-This is useful in a shared cluster, to avoid Julie Ops removing/accidentally managing service accounts managed by other teams with seperate pipelines.
+This is useful in a shared cluster, to avoid Julie Ops removing/accidentally managing service accounts managed by other teams with separate pipelines.
 
 Control allowed Group to be managed by Julie Ops
 -----------
@@ -283,7 +283,7 @@ An example configuration might look like this:
     topology.group.managed.prefixes.1=NameSpaceB
 
 If this prefix list is used, only groups that match the prefix will be ever processed, if wildcard it will be managed if the service account is managed by Julie Ops, anything else will be ignored.
-This is useful in a shared cluster, to avoid Julie Ops removing/accidentally managing group acls by other teams with seperate pipelines.
+This is useful in a shared cluster, to avoid Julie Ops removing/accidentally managing group acls by other teams with separate pipelines.
 
 Control allowed Subject to be managed by Julie Ops
 -----------
@@ -299,7 +299,7 @@ An example configuration might look like this:
     topology.subject.managed.prefixes.1=NameSpaceB
 
 If this prefix list is used, only subjects that match the prefix will be ever processed, if wildcard it will be managed if the service account is managed by Julie Ops, anything else will be ignored.
-This is useful in a shared cluster, to avoid Julie Ops removing/accidentally managing subject acls by other teams with seperate pipelines.
+This is useful in a shared cluster, to avoid Julie Ops removing/accidentally managing subject acls by other teams with separate pipelines.
 
 HTTPs configuration (TLS)
 -----------

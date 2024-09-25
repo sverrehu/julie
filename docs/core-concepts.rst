@@ -1,9 +1,9 @@
 Core Concepts
 *******************************
 
-In this page you will find a description of the core concepts necessary to move on with implementing a gitops approach for automating Kafka operations.
+In this page you will find a description of the core concepts necessary to move on with implementing a GitOps approach for automating Kafka operations.
 
-What is gitops?
+What is GitOps?
 -----------
 
 GitOps is a paradigm or a set of practices that empowers developers to perform tasks which typically fall under the purview of IT operations.
@@ -18,10 +18,10 @@ So with this we bring into the table:
 * A centralised way to verify and control changes, providing an audit trail to fulfil change management requirements.
 * Have a centralised source of truth where the current state of the platform is represented.
 
-What do I need to use gitops?
+What do I need to use GitOps?
 -----------
 
-To setup a gitops flow you need three basic components:
+To setup a GitOps flow you need three basic components:
 
 - A git server, anything will work from Github, Gitlab or Bitbucket
 - A CI/CD pipeline, for example the master Jenkins!
@@ -34,7 +34,7 @@ This building blocks will build up necessary integration steps:
 * Jenkins will be the muscle of the operation, in charge of retrieving the git content, do an initial verification and run the topology builder to apply the changes in Apache Kafka.
 * And The Julie Ops project, the responsible of interpreting the configuration files (topologies) and apply the changes directly into Apache Kafka and related components.
 
-How are the users / dev teams leveraging gitops?
+How are the users / dev teams leveraging GitOps?
 -----------
 
 This flow is in place, at most the organisations, in order to enable individual cluster users request the resources they need for their project, and do this without very tied formal processes or even worst a Jira ticket :-).
