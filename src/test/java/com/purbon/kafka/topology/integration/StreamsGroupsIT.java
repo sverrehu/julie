@@ -61,15 +61,6 @@ public final class StreamsGroupsIT {
               .all()
               .get();
       assertTrue(result.containsKey(groupResource));
-      // DEBUG
-      System.out.println("###GROUPCONFIG###");
-      result
-          .get(groupResource)
-          .entries()
-          .forEach(
-              entry -> {
-                System.out.println(entry.name() + " : " + entry.value());
-              });
       Config config = result.get(groupResource);
       assertEquals("60000", config.get("streams.session.timeout.ms").value());
       assertEquals("6000", config.get("streams.heartbeat.interval.ms").value());
