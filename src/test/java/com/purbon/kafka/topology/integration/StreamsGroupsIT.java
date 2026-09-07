@@ -83,7 +83,7 @@ public final class StreamsGroupsIT {
       assertEquals(SESSION_TIMEOUT_MS, config.get("streams.session.timeout.ms").value());
       assertEquals(HEARTBEAT_INTERVAL_MS, config.get("streams.heartbeat.interval.ms").value());
       assertEquals(NUM_STANDBY_REPLICAS, config.get("streams.num.standby.replicas").value());
-      assertEquals(INITIAL_REBALANCE_MS, config.get("group.initial.rebalance.delay.ms").value());
+      assertEquals(INITIAL_REBALANCE_MS, config.get("group.streams.initial.rebalance.delay.ms").value());
     } catch (InterruptedException | ExecutionException e) {
       throw new RuntimeException(e);
     }
@@ -107,7 +107,7 @@ public final class StreamsGroupsIT {
       assertEquals("50000", config.get("streams.session.timeout.ms").value());
       assertEquals("5000", config.get("streams.heartbeat.interval.ms").value());
       assertEquals("6", config.get("streams.num.standby.replicas").value());
-      assertEquals("3000", config.get("streams.initial.rebalance.delay.ms").value());
+      assertEquals("3000", config.get("group.streams.initial.rebalance.delay.ms").value());
     } catch (InterruptedException | ExecutionException e) {
       throw new RuntimeException(e);
     }

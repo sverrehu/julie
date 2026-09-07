@@ -304,7 +304,7 @@ public class TopologyBuilderAdminClient {
                 OpType.SET),
             new AlterConfigOp(
                 new ConfigEntry(
-                    "group.initial.rebalance.delay.ms",
+                    "group.streams.initial.rebalance.delay.ms",
                     groupConfig
                         .getInitialRebalanceDelayMs()
                         .orElse(GroupConfig.DEFAULT_INITIAL_REBALANCE_MS)
