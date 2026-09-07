@@ -16,11 +16,7 @@ import com.purbon.kafka.topology.model.artefact.KafkaConnectArtefact;
 import com.purbon.kafka.topology.model.artefact.KsqlArtefacts;
 import com.purbon.kafka.topology.model.artefact.KsqlStreamArtefact;
 import com.purbon.kafka.topology.model.artefact.KsqlTableArtefact;
-import com.purbon.kafka.topology.model.users.Connector;
-import com.purbon.kafka.topology.model.users.Consumer;
-import com.purbon.kafka.topology.model.users.KSqlApp;
-import com.purbon.kafka.topology.model.users.KStream;
-import com.purbon.kafka.topology.model.users.Producer;
+import com.purbon.kafka.topology.model.users.*;
 import com.purbon.kafka.topology.model.users.platform.KsqlServerInstance;
 import com.purbon.kafka.topology.model.users.platform.SchemaRegistryInstance;
 import com.purbon.kafka.topology.serdes.TopologySerdes;
@@ -79,6 +75,34 @@ public class TopologySerdesTest {
   @Test(expected = TopologyParsingException.class)
   public void testStreamsParsingOnlyWriteTopicsShoulRaiseAnException() {
     parser.deserialise(TestUtils.getResourceFile("/descriptor-streams-only-write.yaml"));
+  }
+
+  @Test
+  public void testStreamsParsingWithGroupConfig() {
+    Topology topology =
+        parser.deserialise(TestUtils.getResourceFile("/descriptor-streams-with-groups.yaml"));
+    Project project = topology.getProjects().getFirst();
+
+    if (project.getStreams().getFirst().getGroupConfig().isEmpty()) {
+      throw new TopologyParsingException("GroupConfig is not present");
+    }
+
+    GroupConfig groupConfig = project.getStreams().getFirst().getGroupConfig().get();
+
+    String groupId = groupConfig.getGroupId().orElseThrow();
+    assertEquals("GroupA", groupId);
+
+    Long sessionTimeoutMs = groupConfig.getSessionTimeoutMs().orElseThrow();
+    assertEquals(45000L, sessionTimeoutMs.longValue());
+
+    Long heartbeatIntervalMs = groupConfig.getHeartbeatIntervalMs().orElseThrow();
+    assertEquals(3000L, heartbeatIntervalMs.longValue());
+
+    Integer numStandbyReplicas = groupConfig.getNumStandbyReplicas().orElseThrow();
+    assertEquals(1, numStandbyReplicas.intValue());
+
+    Long initialRebalanceDelayMs = groupConfig.getInitialRebalanceDelayMs().orElseThrow();
+    assertEquals(0L, initialRebalanceDelayMs.longValue());
   }
 
   @Test

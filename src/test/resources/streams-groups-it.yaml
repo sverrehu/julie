@@ -1,0 +1,59 @@
+---
+context: "context"
+projects:
+  - name: "streams-project-a"
+    streams:
+      - principal: "User:streamsapp-a"
+        applicationId: "streams-app-a"
+        groupConfig:
+          groupId: "streams-app-a"
+          sessionTimeoutMs: 60000
+          heartbeatIntervalMs: 6000
+          numStandbyReplicas: 1
+          initialRebalanceDelayMs: 2000
+        topics:
+          read:
+            - topic-A
+          write:
+            - topic-B
+    producers:
+      - principal: "User:producer"
+    consumers:
+      - principal: "User:consumer"
+    topics:
+      - name: topic-A
+        config:
+          replication.factor: "1"
+          num.partitions: "1"
+      - name: topic-B
+        metadata:
+          allow-backup: true
+        config:
+          replication.factor: "1"
+          num.partitions: "1"
+  - name: "streams-project-b"
+    streams:
+      - principal: "User:streamsapp-b"
+        applicationId: "streams-app-b"
+        groupConfig:
+          groupId: "streams-app-b"
+          sessionTimeoutMs: 50000
+          numStandbyReplicas: 2
+        topics:
+          read:
+            - topic-C
+          write:
+            - topic-D
+    producers:
+      - principal: "User:producer"
+    consumers:
+      - principal: "User:consumer"
+    topics:
+      - name: topic-C
+        config:
+          replication.factor: "1"
+          num.partitions: "1"
+      - name: topic-D
+        config:
+          replication.factor: "1"
+          num.partitions: "1"

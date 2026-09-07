@@ -14,6 +14,9 @@ public class KStream extends DynamicUser {
   @JsonInclude(Include.NON_EMPTY)
   private Optional<Boolean> exactlyOnce;
 
+  @JsonInclude(Include.NON_EMPTY)
+  private Optional<GroupConfig> groupConfig;
+
   public KStream() {
     this("", new HashMap<>(), Collections.emptyList());
   }
@@ -23,10 +26,12 @@ public class KStream extends DynamicUser {
       Map<String, List<String>> topics,
       List<User> observerPrincipals,
       Optional<String> applicationId,
-      Optional<Boolean> exactlyOnce) {
+      Optional<Boolean> exactlyOnce,
+      Optional<GroupConfig> groupConfig) {
     super(principal, topics, observerPrincipals);
     this.applicationId = applicationId;
     this.exactlyOnce = exactlyOnce;
+    this.groupConfig = groupConfig;
   }
 
   public KStream(
@@ -34,12 +39,24 @@ public class KStream extends DynamicUser {
       Map<String, List<String>> topics,
       List<User> observerPrincipals,
       Optional<String> applicationId) {
-    this(principal, topics, observerPrincipals, applicationId, Optional.of(Boolean.FALSE));
+    this(
+        principal,
+        topics,
+        observerPrincipals,
+        applicationId,
+        Optional.of(Boolean.FALSE),
+        Optional.empty());
   }
 
   public KStream(
       String principal, Map<String, List<String>> topics, List<User> observerPrincipals) {
-    this(principal, topics, observerPrincipals, Optional.empty(), Optional.of(Boolean.FALSE));
+    this(
+        principal,
+        topics,
+        observerPrincipals,
+        Optional.empty(),
+        Optional.of(Boolean.FALSE),
+        Optional.empty());
   }
 
   public Optional<String> getApplicationId() {
@@ -56,5 +73,13 @@ public class KStream extends DynamicUser {
 
   public void setExactlyOnce(Optional<Boolean> exactlyOnce) {
     this.exactlyOnce = exactlyOnce;
+  }
+
+  public Optional<GroupConfig> getGroupConfig() {
+    return groupConfig;
+  }
+
+  public void setGroupConfig(Optional<GroupConfig> groupConfig) {
+    this.groupConfig = groupConfig;
   }
 }

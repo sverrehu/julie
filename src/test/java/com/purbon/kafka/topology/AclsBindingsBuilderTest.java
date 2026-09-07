@@ -93,7 +93,13 @@ public class AclsBindingsBuilderTest {
     topics.put(KStream.READ_TOPICS, singletonList("bar"));
     topics.put(KStream.WRITE_TOPICS, emptyList());
     KStream producer =
-        new KStream("User:foo", topics, emptyList(), Optional.of("app1"), Optional.of(true));
+        new KStream(
+            "User:foo",
+            topics,
+            emptyList(),
+            Optional.of("app1"),
+            Optional.of(true),
+            Optional.empty());
     List<TopologyAclBinding> aclBindings = builder.buildBindingsForKStream(producer, "app1");
     assertThat(aclBindings.size()).isEqualTo(5);
     assertThat(aclBindings)

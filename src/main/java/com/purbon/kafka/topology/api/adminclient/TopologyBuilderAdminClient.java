@@ -3,6 +3,7 @@ package com.purbon.kafka.topology.api.adminclient;
 import com.purbon.kafka.topology.actions.topics.TopicConfigUpdatePlan;
 import com.purbon.kafka.topology.model.Topic;
 import com.purbon.kafka.topology.model.User;
+import com.purbon.kafka.topology.model.users.GroupConfig;
 import com.purbon.kafka.topology.model.users.Quota;
 import com.purbon.kafka.topology.quotas.QuotasClientBindingsBuilder;
 import com.purbon.kafka.topology.roles.TopologyAclBinding;
@@ -10,15 +11,8 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
-import org.apache.kafka.clients.admin.AdminClient;
-import org.apache.kafka.clients.admin.AlterConfigOp;
+import org.apache.kafka.clients.admin.*;
 import org.apache.kafka.clients.admin.AlterConfigOp.OpType;
-import org.apache.kafka.clients.admin.Config;
-import org.apache.kafka.clients.admin.ConfigEntry;
-import org.apache.kafka.clients.admin.ListTopicsOptions;
-import org.apache.kafka.clients.admin.NewPartitions;
-import org.apache.kafka.clients.admin.NewTopic;
-import org.apache.kafka.clients.admin.TopicDescription;
 import org.apache.kafka.common.acl.AccessControlEntryFilter;
 import org.apache.kafka.common.acl.AclBinding;
 import org.apache.kafka.common.acl.AclBindingFilter;
@@ -268,6 +262,63 @@ public class TopologyBuilderAdminClient {
   public Map<ClientQuotaEntity, Map<String, Double>> describeClientQuotas()
       throws ExecutionException, InterruptedException {
     return this.adminClient.describeClientQuotas(ClientQuotaFilter.all()).entities().get();
+  }
+
+  public Set<String> listGroups() {
+    Set<String> groups = new HashSet<>();
+    try {
+      Collection<GroupListing> groupListings = this.adminClient.listGroups().all().get();
+      groupListings.forEach(g -> groups.add(g.groupId()));
+      return groups;
+    } catch (InterruptedException | ExecutionException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  public void updateGroupConfig(GroupConfig groupConfig) {
+    List<AlterConfigOp> alterConfigOps =
+        List.of(
+            new AlterConfigOp(
+                new ConfigEntry(
+                    "streams.heartbeat.interval.ms",
+                    groupConfig
+                        .getHeartbeatIntervalMs()
+                        .orElse(GroupConfig.DEFAULT_HEARTBEAT_INTERVAL_MS)
+                        .toString()),
+                OpType.SET),
+            new AlterConfigOp(
+                new ConfigEntry(
+                    "streams.num.standby.replicas",
+                    groupConfig
+                        .getNumStandbyReplicas()
+                        .orElse(GroupConfig.DEFAULT_NUM_STANDBY_REPLICAS)
+                        .toString()),
+                OpType.SET),
+            new AlterConfigOp(
+                new ConfigEntry(
+                    "streams.session.timeout.ms",
+                    groupConfig
+                        .getSessionTimeoutMs()
+                        .orElse(GroupConfig.DEFAULT_SESSION_TIMEOUT_MS)
+                        .toString()),
+                OpType.SET),
+            new AlterConfigOp(
+                new ConfigEntry(
+                    "streams.initial.rebalance.delay.ms",
+                    groupConfig
+                        .getInitialRebalanceDelayMs()
+                        .orElse(GroupConfig.DEFAULT_INITIAL_REBALANCE_MS)
+                        .toString()),
+                OpType.SET));
+    Map<ConfigResource, Collection<AlterConfigOp>> configs =
+        Map.of(
+            new ConfigResource(Type.GROUP, groupConfig.getGroupId().orElseThrow()), alterConfigOps);
+    try {
+      this.adminClient.incrementalAlterConfigs(configs).all().get();
+    } catch (InterruptedException | ExecutionException e) {
+      LOGGER.error(e);
+      throw new RuntimeException(e);
+    }
   }
 
   public void close() {

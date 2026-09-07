@@ -1,0 +1,17 @@
+---
+context: "contextOrg"
+source: "source"
+projects:
+  - name: "foo"
+    streams:
+      - principal: "User:App0"
+        groupConfig:
+          groupId: "GroupA"
+          sessionTimeoutMs: 45000
+          heartbeatIntervalMs: 3000
+          numStandbyReplicas: 1
+          initialRebalanceDelayMs: 0
+        topics:
+          read:
+            - "topicA"
+            - "topicB"

@@ -44,6 +44,7 @@ public class JulieOps implements AutoCloseable {
   private KafkaConnectArtefactManager connectorManager;
   private KSqlArtefactManager kSqlArtefactManager;
   private QuotasManager quotasManager;
+  private final GroupConfigManager groupConfigManager;
   private final Map<String, Topology> topologies;
   private final Configuration config;
   private final PrintStream outputStream;
@@ -57,7 +58,8 @@ public class JulieOps implements AutoCloseable {
       PrincipalDeleteManager principalDeleteManager,
       KafkaConnectArtefactManager connectorManager,
       KSqlArtefactManager kSqlArtefactManager,
-      QuotasManager quotasManager) {
+      QuotasManager quotasManager,
+      GroupConfigManager groupConfigManager) {
     this.topologies = topologies;
     this.config = config;
     this.topicManager = topicManager;
@@ -67,6 +69,7 @@ public class JulieOps implements AutoCloseable {
     this.connectorManager = connectorManager;
     this.kSqlArtefactManager = kSqlArtefactManager;
     this.quotasManager = quotasManager;
+    this.groupConfigManager = groupConfigManager;
     this.outputStream = System.out;
   }
 
@@ -162,6 +165,7 @@ public class JulieOps implements AutoCloseable {
     KSqlArtefactManager kSqlArtefactManager =
         configureKSqlArtefactManager(config, topologyFileOrDir);
     QuotasManager quotasManager = new QuotasManager(adminClient, config);
+    GroupConfigManager groupConfigManager = new GroupConfigManager(adminClient);
     configureLogsInDebugMode(config);
     return new JulieOps(
         topologies,
@@ -172,7 +176,8 @@ public class JulieOps implements AutoCloseable {
         principalDeleteManager,
         connectorManager,
         kSqlArtefactManager,
-        quotasManager);
+        quotasManager,
+        groupConfigManager);
   }
 
   void run(BackendController backendController, PrintStream printStream, Auditor auditor)
@@ -191,6 +196,7 @@ public class JulieOps implements AutoCloseable {
     connectorManager.updatePlan(plan, topologies);
     kSqlArtefactManager.updatePlan(plan, topologies);
     quotasManager.updatePlan(plan, topologies);
+    groupConfigManager.updatePlan(plan, topologies);
     // Delete users should always be last,
     // avoids any unlinked acls, e.g. if acl delete or something errors then there is a link still
     // from the account, and can be re-run or manually fixed more easily

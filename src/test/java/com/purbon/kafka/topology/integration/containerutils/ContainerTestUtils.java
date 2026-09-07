@@ -32,7 +32,7 @@ public final class ContainerTestUtils {
   public static final String OTHER_PRODUCER_USERNAME = "other-producer";
   public static final String OTHER_CONSUMER_USERNAME = "other-consumer";
   public static final String STREAMS_USERNAME = "streamsapp";
-  public static final int NUM_JULIE_INITIAL_ACLS = 11;
+  public static final int NUM_JULIE_INITIAL_ACLS = 12;
   static final String DEFAULT_CP_KAFKA_VERSION = "8.3.1";
   static final String DEFAULT_KSQLDB_SERVER_VERSION = "0.29.0";
   public static final String REDIS_VERSION = "8.2.3";
@@ -168,6 +168,7 @@ public final class ContainerTestUtils {
             AclOperation.ALTER,
             AclOperation.ALTER_CONFIGS,
             AclOperation.DELETE));
+    bindings.addAll(getJulieBindings(ResourceType.GROUP, "*", AclOperation.ALL));
     /* Specific permissions for storing cluster state in a topic, needed in some tests. */
     bindings.addAll(
         getJulieBindings(
