@@ -51,12 +51,12 @@ public final class StreamsGroupsIT {
   public void shouldOverrideGroupConfigs() {
     try {
       ConfigResource groupResource =
-          new ConfigResource(ConfigResource.Type.GROUP, "streamsapp-group-a");
+          new ConfigResource(ConfigResource.Type.GROUP, "streams-app-a");
       Map<ConfigResource, Config> result =
           adminClient
               .describeConfigs(
                   Collections.singleton(
-                      new ConfigResource(ConfigResource.Type.GROUP, "streamsapp-group-a")),
+                      new ConfigResource(ConfigResource.Type.GROUP, "streams-app-a")),
                   new DescribeConfigsOptions())
               .all()
               .get();
@@ -83,13 +83,13 @@ public final class StreamsGroupsIT {
   @Test
   public void shouldFallbackToDefaultsIfNotSpecified() {
     ConfigResource groupResource =
-        new ConfigResource(ConfigResource.Type.GROUP, "streams-app-group-b");
+        new ConfigResource(ConfigResource.Type.GROUP, "streams-app-b");
     try {
       Map<ConfigResource, Config> result =
           adminClient
               .describeConfigs(
                   Collections.singleton(
-                      new ConfigResource(ConfigResource.Type.GROUP, "streamsapp-group-b")),
+                      new ConfigResource(ConfigResource.Type.GROUP, "streams-app-b")),
                   new DescribeConfigsOptions())
               .all()
               .get();
