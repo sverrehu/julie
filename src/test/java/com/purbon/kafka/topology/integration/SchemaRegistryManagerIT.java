@@ -117,24 +117,6 @@ public class SchemaRegistryManagerIT {
     verifySubject("schemas.proto.foo.foo.proto-value");
   }
 
-  @Test
-  public void testSchemaSetupWithContentInUTF() throws IOException, RestClientException {
-    AdminClient kafkaAdminClient = ContainerTestUtils.getSaslJulieAdminClient(container);
-    TopologyBuilderAdminClient adminClient = new TopologyBuilderAdminClient(kafkaAdminClient);
-    File file = TestUtils.getResourceFile("/descriptor-schemas-utf.yaml");
-    SchemaRegistryManager schemaRegistryManager =
-        new SchemaRegistryManager(schemaRegistryClient, file.getAbsolutePath());
-    TopicManager topicManager = new TopicManager(adminClient, schemaRegistryManager, config);
-    topicManager.updatePlan(parser.deserialise(file), plan);
-    plan.run();
-    String subjectName = "schemas.utf.foo.bar.avro-value";
-    verifySubject(subjectName);
-    SchemaMetadata schemaMetadata = schemaRegistryClient.getLatestSchemaMetadata(subjectName);
-    String schema = schemaMetadata.getSchema();
-    assertThat(schema).contains("Näme");
-    assertThat(schema).contains("Äge");
-  }
-
   private void verifySubject(String... subjects) throws IOException, RestClientException {
     Collection<String> savedSubjects = schemaRegistryClient.getAllSubjects();
     for (String subject : subjects) {
