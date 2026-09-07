@@ -9,7 +9,7 @@ projects:
           groupId: "streams-app-a"
           sessionTimeoutMs: 60000
           heartbeatIntervalMs: 6000
-          numStandbyReplicas: 2
+          numStandbyReplicas: 1
           initialRebalanceDelayMs: 2000
         topics:
           read:
@@ -38,7 +38,7 @@ projects:
         groupConfig:
           groupId: "streams-app-b"
           sessionTimeoutMs: 50000
-          numStandbyReplicas: 6
+          numStandbyReplicas: 2
         topics:
           read:
             - topic-C
