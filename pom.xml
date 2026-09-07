@@ -221,7 +221,7 @@
     <lombok.version>1.18.48</lombok.version>
     <mockito.version>5.23.0</mockito.version>
     <protobuf.version>4.36.1</protobuf.version>
-    <slf4j.version>2.0.18</slf4j.version>
+    <slf4j.version>2.0.19</slf4j.version>
     <testcontainers.version>2.0.5</testcontainers.version>
     <typesafe.version>1.4.9</typesafe.version>
   </properties>
