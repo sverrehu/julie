@@ -23,7 +23,7 @@ public final class StreamsGroupsIT {
   public static final String STREAMS_APP_ID = "streams-appid";
 
   public static final String HEARTBEAT_INTERVAL_MS = "6000";
-  public static final String NUM_STANDBY_REPLICAS = "2";
+  public static final String NUM_STANDBY_REPLICAS = "1";
   public static final String SESSION_TIMEOUT_MS = "60000";
   public static final String INITIAL_REBALANCE_MS = "2000";
   private static final String CONSUMER_GROUP = "streams-appid";
@@ -60,12 +60,12 @@ public final class StreamsGroupsIT {
   public void shouldOverrideGroupConfigs() {
     try {
       ConfigResource groupResource =
-          new ConfigResource(ConfigResource.Type.GROUP, "streamsapp-group-a");
+          new ConfigResource(ConfigResource.Type.GROUP, "streams-app-a");
       Map<ConfigResource, Config> result =
           adminClient
               .describeConfigs(
                   Collections.singleton(
-                      new ConfigResource(ConfigResource.Type.GROUP, "streamsapp-group-a")),
+                      new ConfigResource(ConfigResource.Type.GROUP, "streams-app-a")),
                   new DescribeConfigsOptions())
               .all()
               .get();
@@ -92,13 +92,13 @@ public final class StreamsGroupsIT {
   @Test
   public void shouldFallbackToDefaultsIfNotSpecified() {
     ConfigResource groupResource =
-        new ConfigResource(ConfigResource.Type.GROUP, "streams-app-group-b");
+        new ConfigResource(ConfigResource.Type.GROUP, "streams-app-b");
     try {
       Map<ConfigResource, Config> result =
           adminClient
               .describeConfigs(
                   Collections.singleton(
-                      new ConfigResource(ConfigResource.Type.GROUP, "streamsapp-group-b")),
+                      new ConfigResource(ConfigResource.Type.GROUP, "streams-app-b")),
                   new DescribeConfigsOptions())
               .all()
               .get();
@@ -106,7 +106,7 @@ public final class StreamsGroupsIT {
       Config config = result.get(groupResource);
       assertEquals("50000", config.get("streams.session.timeout.ms").value());
       assertEquals("5000", config.get("streams.heartbeat.interval.ms").value());
-      assertEquals("6", config.get("streams.num.standby.replicas").value());
+      assertEquals("2", config.get("streams.num.standby.replicas").value());
       assertEquals("3000", config.get("streams.initial.rebalance.delay.ms").value());
     } catch (InterruptedException | ExecutionException e) {
       throw new RuntimeException(e);
