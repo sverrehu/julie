@@ -44,10 +44,10 @@ projects:
             - topic-C
           write:
             - topic-D
-        producers:
-          - principal: "User:producer"
-        consumers:
-          - principal: "User:consumer"
+    producers:
+      - principal: "User:producer"
+    consumers:
+      - principal: "User:consumer"
     topics:
       - name: topic-C
         config:

@@ -34,12 +34,12 @@ public final class StreamsGroupsIT {
   @BeforeClass
   public static void beforeClass() {
     container =
-            new SaslPlaintextKafkaContainer()
-                    .withUser(ContainerTestUtils.PRODUCER_USERNAME)
-                    .withUser(ContainerTestUtils.CONSUMER_USERNAME)
-                    .withUser(ContainerTestUtils.BACKUP_USERNAME)
-                    .withUser("streamsapp-a")
-                    .withUser("streamsapp-b");
+        new SaslPlaintextKafkaContainer()
+            .withUser(ContainerTestUtils.PRODUCER_USERNAME)
+            .withUser(ContainerTestUtils.CONSUMER_USERNAME)
+            .withUser(ContainerTestUtils.BACKUP_USERNAME)
+            .withUser("streamsapp-a")
+            .withUser("streamsapp-b");
     container.start();
   }
 
@@ -59,12 +59,13 @@ public final class StreamsGroupsIT {
   @Test
   public void shouldOverrideGroupConfigs() {
     try {
-      ConfigResource groupResource = new ConfigResource(ConfigResource.Type.GROUP, "streamsapp-group-a");
+      ConfigResource groupResource =
+          new ConfigResource(ConfigResource.Type.GROUP, "streamsapp-group-a");
       Map<ConfigResource, Config> result =
           adminClient
               .describeConfigs(
                   Collections.singleton(
-                      new ConfigResource(ConfigResource.Type.GROUP, CONSUMER_GROUP)),
+                      new ConfigResource(ConfigResource.Type.GROUP, "streamsapp-group-a")),
                   new DescribeConfigsOptions())
               .all()
               .get();
@@ -82,7 +83,7 @@ public final class StreamsGroupsIT {
       assertEquals(SESSION_TIMEOUT_MS, config.get("streams.session.timeout.ms").value());
       assertEquals(HEARTBEAT_INTERVAL_MS, config.get("streams.heartbeat.interval.ms").value());
       assertEquals(NUM_STANDBY_REPLICAS, config.get("streams.num.standby.replicas").value());
-      assertEquals(INITIAL_REBALANCE_MS, config.get("streams.initial.rebalance.delay.ms").value());
+      assertEquals(INITIAL_REBALANCE_MS, config.get("group.initial.rebalance.delay.ms").value());
     } catch (InterruptedException | ExecutionException e) {
       throw new RuntimeException(e);
     }
@@ -90,22 +91,25 @@ public final class StreamsGroupsIT {
 
   @Test
   public void shouldFallbackToDefaultsIfNotSpecified() {
-    ConfigResource groupResource = new ConfigResource(ConfigResource.Type.GROUP, "streams-app-group-b");
-      try {
-          Map<ConfigResource, Config> result = adminClient
-                  .describeConfigs(
-                          Collections.singleton(new ConfigResource(ConfigResource.Type.GROUP, "streamsapp-group-b")),
-                          new DescribeConfigsOptions())
-                  .all()
-                  .get();
-          assertTrue(result.containsKey(groupResource));
-          Config config = result.get(groupResource);
-          assertEquals("50000", config.get("streams.session.timeout.ms").value());
-          assertEquals("5000",  config.get("streams.heartbeat.interval.ms").value());
-          assertEquals("6", config.get("streams.num.standby.replicas").value());
-          assertEquals("3000", config.get("streams.initial.rebalance.delay.ms").value());
-      } catch (InterruptedException | ExecutionException e) {
-          throw new RuntimeException(e);
-      }
+    ConfigResource groupResource =
+        new ConfigResource(ConfigResource.Type.GROUP, "streams-app-group-b");
+    try {
+      Map<ConfigResource, Config> result =
+          adminClient
+              .describeConfigs(
+                  Collections.singleton(
+                      new ConfigResource(ConfigResource.Type.GROUP, "streamsapp-group-b")),
+                  new DescribeConfigsOptions())
+              .all()
+              .get();
+      assertTrue(result.containsKey(groupResource));
+      Config config = result.get(groupResource);
+      assertEquals("50000", config.get("streams.session.timeout.ms").value());
+      assertEquals("5000", config.get("streams.heartbeat.interval.ms").value());
+      assertEquals("6", config.get("streams.num.standby.replicas").value());
+      assertEquals("3000", config.get("streams.initial.rebalance.delay.ms").value());
+    } catch (InterruptedException | ExecutionException e) {
+      throw new RuntimeException(e);
+    }
   }
 }

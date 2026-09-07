@@ -304,7 +304,7 @@ public class TopologyBuilderAdminClient {
                 OpType.SET),
             new AlterConfigOp(
                 new ConfigEntry(
-                    "streams.initial.rebalance.delay.ms",
+                    "group.initial.rebalance.delay.ms",
                     groupConfig
                         .getInitialRebalanceDelayMs()
                         .orElse(GroupConfig.DEFAULT_INITIAL_REBALANCE_MS)
@@ -312,7 +312,8 @@ public class TopologyBuilderAdminClient {
                 OpType.SET));
     Map<ConfigResource, Collection<AlterConfigOp>> configs =
         Map.of(
-            new ConfigResource(Type.GROUP, groupConfig.getGroupId().orElseThrow()), alterConfigOps);
+            new ConfigResource(Type.GROUP, groupConfig.getGroupId().orElseThrow()),
+            alterConfigOps);
     try {
       this.adminClient.incrementalAlterConfigs(configs).all().get();
     } catch (InterruptedException | ExecutionException e) {
