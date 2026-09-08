@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.5.1](https://github.com/statnett/kafka-ops-julie/compare/v6.5.0...v6.5.1) (2026-09-08)
+
+
+### Bug Fixes
+
+* populate KStream group ID from application ID ([#837](https://github.com/statnett/kafka-ops-julie/issues/837)) ([78ba77e](https://github.com/statnett/kafka-ops-julie/commit/78ba77e99748629c4ed02a8fab1f18a086c0781f))
+
 ## [6.5.0](https://github.com/statnett/kafka-ops-julie/compare/v6.4.5...v6.5.0) (2026-09-07)
 
 
