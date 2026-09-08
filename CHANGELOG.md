@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.5.2](https://github.com/statnett/kafka-ops-julie/compare/v6.5.1...v6.5.2) (2026-09-08)
+
+
+### Bug Fixes
+
+* conduct groupconfig actions via groupmanager ([#840](https://github.com/statnett/kafka-ops-julie/issues/840)) ([811d06a](https://github.com/statnett/kafka-ops-julie/commit/811d06a4b1b0a819d80282b399977bd737fb3b05))
+
 ## [6.5.1](https://github.com/statnett/kafka-ops-julie/compare/v6.5.0...v6.5.1) (2026-09-08)
 
 
