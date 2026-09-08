@@ -15,9 +15,10 @@ public class UpdateGroupConfigAction extends BaseAction {
   private final Logger LOGGER = LogManager.getLogger(this.getClass());
 
   private final TopologyBuilderAdminClient adminClient;
-  private final GroupConfig groupConfig;
+  private final List<GroupConfig> groupConfig;
 
-  public UpdateGroupConfigAction(TopologyBuilderAdminClient adminClient, GroupConfig groupConfig) {
+  public UpdateGroupConfigAction(
+      TopologyBuilderAdminClient adminClient, List<GroupConfig> groupConfig) {
     this.adminClient = adminClient;
     this.groupConfig = groupConfig;
   }

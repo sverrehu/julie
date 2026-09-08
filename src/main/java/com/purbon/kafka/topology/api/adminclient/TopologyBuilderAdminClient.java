@@ -275,45 +275,43 @@ public class TopologyBuilderAdminClient {
     }
   }
 
-  public void updateGroupConfig(GroupConfig groupConfig) {
-    List<AlterConfigOp> alterConfigOps =
-        List.of(
-            new AlterConfigOp(
-                new ConfigEntry(
-                    "streams.heartbeat.interval.ms",
-                    groupConfig
-                        .getHeartbeatIntervalMs()
-                        .orElse(GroupConfig.DEFAULT_HEARTBEAT_INTERVAL_MS)
-                        .toString()),
-                OpType.SET),
-            new AlterConfigOp(
-                new ConfigEntry(
-                    "streams.num.standby.replicas",
-                    groupConfig
-                        .getNumStandbyReplicas()
-                        .orElse(GroupConfig.DEFAULT_NUM_STANDBY_REPLICAS)
-                        .toString()),
-                OpType.SET),
-            new AlterConfigOp(
-                new ConfigEntry(
-                    "streams.session.timeout.ms",
-                    groupConfig
-                        .getSessionTimeoutMs()
-                        .orElse(GroupConfig.DEFAULT_SESSION_TIMEOUT_MS)
-                        .toString()),
-                OpType.SET),
-            new AlterConfigOp(
-                new ConfigEntry(
-                    "streams.initial.rebalance.delay.ms",
-                    groupConfig
-                        .getInitialRebalanceDelayMs()
-                        .orElse(GroupConfig.DEFAULT_INITIAL_REBALANCE_MS)
-                        .toString()),
-                OpType.SET));
-    Map<ConfigResource, Collection<AlterConfigOp>> configs =
-        Map.of(new ConfigResource(Type.GROUP, groupConfig.getGroupId()), alterConfigOps);
+  public void updateGroupConfig(List<GroupConfig> groupConfig) {
     try {
-      this.adminClient.incrementalAlterConfigs(configs).all().get();
+      for (GroupConfig gc : groupConfig) {
+        List<AlterConfigOp> alterConfigOps =
+            List.of(
+                new AlterConfigOp(
+                    new ConfigEntry(
+                        "streams.heartbeat.interval.ms",
+                        gc.getHeartbeatIntervalMs()
+                            .orElse(GroupConfig.DEFAULT_HEARTBEAT_INTERVAL_MS)
+                            .toString()),
+                    OpType.SET),
+                new AlterConfigOp(
+                    new ConfigEntry(
+                        "streams.num.standby.replicas",
+                        gc.getNumStandbyReplicas()
+                            .orElse(GroupConfig.DEFAULT_NUM_STANDBY_REPLICAS)
+                            .toString()),
+                    OpType.SET),
+                new AlterConfigOp(
+                    new ConfigEntry(
+                        "streams.session.timeout.ms",
+                        gc.getSessionTimeoutMs()
+                            .orElse(GroupConfig.DEFAULT_SESSION_TIMEOUT_MS)
+                            .toString()),
+                    OpType.SET),
+                new AlterConfigOp(
+                    new ConfigEntry(
+                        "streams.initial.rebalance.delay.ms",
+                        gc.getInitialRebalanceDelayMs()
+                            .orElse(GroupConfig.DEFAULT_INITIAL_REBALANCE_MS)
+                            .toString()),
+                    OpType.SET));
+        Map<ConfigResource, Collection<AlterConfigOp>> configs =
+            Map.of(new ConfigResource(Type.GROUP, gc.getGroupId()), alterConfigOps);
+        this.adminClient.incrementalAlterConfigs(configs).all().get();
+      }
     } catch (InterruptedException | ExecutionException e) {
       LOGGER.error(e);
       throw new RuntimeException(e);
