@@ -9,26 +9,25 @@ public class GroupConfig {
   public static final Long DEFAULT_SESSION_TIMEOUT_MS = 45000L;
   public static final Long DEFAULT_INITIAL_REBALANCE_MS = 3000L;
 
-  private Optional<String> groupId;
+  private String groupId;
   private Optional<Long> sessionTimeoutMs;
   private Optional<Long> heartbeatIntervalMs;
   private Optional<Integer> numStandbyReplicas;
   private Optional<Long> initialRebalanceDelayMs;
 
   public GroupConfig() {
-    this.groupId = Optional.empty();
     this.sessionTimeoutMs = Optional.empty();
     this.heartbeatIntervalMs = Optional.empty();
     this.numStandbyReplicas = Optional.empty();
     this.initialRebalanceDelayMs = Optional.empty();
   }
 
-  public Optional<String> getGroupId() {
+  public String getGroupId() {
     return groupId;
   }
 
-  public void setGroupId(Optional<String> groupId) {
-    this.groupId = groupId;
+  public void setGroupId(final String applicationId) {
+    this.groupId = applicationId;
   }
 
   public Optional<Long> getSessionTimeoutMs() {

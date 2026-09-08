@@ -311,8 +311,7 @@ public class TopologyBuilderAdminClient {
                         .toString()),
                 OpType.SET));
     Map<ConfigResource, Collection<AlterConfigOp>> configs =
-        Map.of(
-            new ConfigResource(Type.GROUP, groupConfig.getGroupId().orElseThrow()), alterConfigOps);
+        Map.of(new ConfigResource(Type.GROUP, groupConfig.getGroupId()), alterConfigOps);
     try {
       this.adminClient.incrementalAlterConfigs(configs).all().get();
     } catch (InterruptedException | ExecutionException e) {

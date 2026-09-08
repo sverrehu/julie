@@ -50,8 +50,7 @@ public final class StreamsGroupsIT {
   @Test
   public void shouldOverrideGroupConfigs() {
     try {
-      ConfigResource groupResource =
-          new ConfigResource(ConfigResource.Type.GROUP, "streams-app-a");
+      ConfigResource groupResource = new ConfigResource(ConfigResource.Type.GROUP, "streams-app-a");
       Map<ConfigResource, Config> result =
           adminClient
               .describeConfigs(
@@ -73,8 +72,7 @@ public final class StreamsGroupsIT {
 
   @Test
   public void shouldFallbackToDefaultsIfNotSpecified() {
-    ConfigResource groupResource =
-        new ConfigResource(ConfigResource.Type.GROUP, "streams-app-b");
+    ConfigResource groupResource = new ConfigResource(ConfigResource.Type.GROUP, "streams-app-b");
     try {
       Map<ConfigResource, Config> result =
           adminClient

@@ -14,13 +14,7 @@ import com.purbon.kafka.topology.model.*;
 import com.purbon.kafka.topology.model.Impl.ProjectImpl;
 import com.purbon.kafka.topology.model.Impl.TopologyImpl;
 import com.purbon.kafka.topology.model.artefact.*;
-import com.purbon.kafka.topology.model.users.Connector;
-import com.purbon.kafka.topology.model.users.Consumer;
-import com.purbon.kafka.topology.model.users.KSqlApp;
-import com.purbon.kafka.topology.model.users.KStream;
-import com.purbon.kafka.topology.model.users.Other;
-import com.purbon.kafka.topology.model.users.Producer;
-import com.purbon.kafka.topology.model.users.Schemas;
+import com.purbon.kafka.topology.model.users.*;
 import com.purbon.kafka.topology.model.users.platform.Kafka;
 import com.purbon.kafka.topology.model.users.platform.KafkaConnect;
 import com.purbon.kafka.topology.model.users.platform.KsqlServer;
@@ -385,6 +379,9 @@ public class TopologyCustomDeserializer extends StdDeserializer<Topology> {
                     ks -> {
                       ks.getTopics().putIfAbsent(KStream.READ_TOPICS, Collections.emptyList());
                       ks.getTopics().putIfAbsent(KStream.WRITE_TOPICS, Collections.emptyList());
+                      if (ks.getGroupConfig().isPresent()) {
+                        ks.getGroupConfig().get().setGroupId(ks.getApplicationId().orElseThrow());
+                      }
                     })
                 .collect(Collectors.toList());
     for (KStream ks : streams) {
