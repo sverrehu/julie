@@ -176,7 +176,6 @@ public final class ContainerTestUtils {
             AclOperation.ALTER,
             AclOperation.ALTER_CONFIGS,
             AclOperation.DELETE));
-    bindings.addAll(getJulieBindings(ResourceType.GROUP, "*", AclOperation.ALL));
     /* Specific permissions for storing cluster state in a topic, needed in some tests. */
     bindings.addAll(
         getJulieBindings(
