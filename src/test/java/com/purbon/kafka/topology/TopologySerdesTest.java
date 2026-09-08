@@ -5,8 +5,7 @@ import static com.purbon.kafka.topology.Constants.*;
 import static com.purbon.kafka.topology.model.SubjectNameStrategy.TOPIC_NAME_STRATEGY;
 import static com.purbon.kafka.topology.model.SubjectNameStrategy.TOPIC_RECORD_NAME_STRATEGY;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import com.purbon.kafka.topology.exceptions.TopologyParsingException;
 import com.purbon.kafka.topology.model.*;
@@ -89,8 +88,8 @@ public class TopologySerdesTest {
 
     GroupConfig groupConfig = project.getStreams().getFirst().getGroupConfig().get();
 
-    String groupId = groupConfig.getGroupId().orElseThrow();
-    assertEquals("GroupA", groupId);
+    String groupId = groupConfig.getGroupId();
+    assertEquals("app_stream_id", groupId);
 
     Long sessionTimeoutMs = groupConfig.getSessionTimeoutMs().orElseThrow();
     assertEquals(45000L, sessionTimeoutMs.longValue());

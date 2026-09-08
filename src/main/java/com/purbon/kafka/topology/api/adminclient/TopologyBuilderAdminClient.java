@@ -18,6 +18,7 @@ import org.apache.kafka.common.acl.AclBinding;
 import org.apache.kafka.common.acl.AclBindingFilter;
 import org.apache.kafka.common.acl.AclOperation;
 import org.apache.kafka.common.acl.AclPermissionType;
+import org.apache.kafka.common.config.ConfigException;
 import org.apache.kafka.common.config.ConfigResource;
 import org.apache.kafka.common.config.ConfigResource.Type;
 import org.apache.kafka.common.errors.InvalidConfigurationException;
@@ -311,8 +312,7 @@ public class TopologyBuilderAdminClient {
                         .toString()),
                 OpType.SET));
     Map<ConfigResource, Collection<AlterConfigOp>> configs =
-        Map.of(
-            new ConfigResource(Type.GROUP, groupConfig.getGroupId().orElseThrow()), alterConfigOps);
+        Map.of(new ConfigResource(Type.GROUP, groupConfig.getGroupId()), alterConfigOps);
     try {
       this.adminClient.incrementalAlterConfigs(configs).all().get();
     } catch (InterruptedException | ExecutionException e) {
