@@ -297,6 +297,11 @@
     </dependency>
     <dependency>
       <groupId>org.apache.kafka</groupId>
+      <artifactId>kafka-group-coordinator</artifactId>
+      <version>4.3.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.kafka</groupId>
       <artifactId>kafka-streams</artifactId>
       <version>${confluent.version}-ccs</version>
       <scope>test</scope>

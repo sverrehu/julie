@@ -116,6 +116,11 @@ public class TestTopologyBuilder {
     return this;
   }
 
+  public TestTopologyBuilder addKStream(final KStream stream) {
+    kstreams.add(stream);
+    return this;
+  }
+
   public TestTopologyBuilder addOther(String roleName, String principal, String topic) {
     return addOther(roleName, principal, topic, "", "");
   }

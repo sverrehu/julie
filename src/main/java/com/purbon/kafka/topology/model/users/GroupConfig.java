@@ -1,13 +1,22 @@
 package com.purbon.kafka.topology.model.users;
 
+import static org.apache.kafka.coordinator.group.GroupConfig.STREAMS_HEARTBEAT_INTERVAL_MS_CONFIG;
+import static org.apache.kafka.coordinator.group.GroupConfig.STREAMS_INITIAL_REBALANCE_DELAY_MS_CONFIG;
+import static org.apache.kafka.coordinator.group.GroupConfig.STREAMS_NUM_STANDBY_REPLICAS_CONFIG;
+import static org.apache.kafka.coordinator.group.GroupConfig.STREAMS_SESSION_TIMEOUT_MS_CONFIG;
+
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class GroupConfig {
 
-  public static final Long DEFAULT_HEARTBEAT_INTERVAL_MS = 5000L;
-  public static final Integer DEFAULT_NUM_STANDBY_REPLICAS = 0;
-  public static final Long DEFAULT_SESSION_TIMEOUT_MS = 45000L;
-  public static final Long DEFAULT_INITIAL_REBALANCE_MS = 3000L;
+  private static final List<String> configs =
+      List.of(
+          STREAMS_HEARTBEAT_INTERVAL_MS_CONFIG,
+          STREAMS_NUM_STANDBY_REPLICAS_CONFIG,
+          STREAMS_SESSION_TIMEOUT_MS_CONFIG,
+          STREAMS_INITIAL_REBALANCE_DELAY_MS_CONFIG);
 
   private String groupId;
   private Optional<Long> sessionTimeoutMs;
@@ -60,5 +69,20 @@ public class GroupConfig {
 
   public void setInitialRebalanceDelayMs(Optional<Long> initialRebalanceDelayMs) {
     this.initialRebalanceDelayMs = initialRebalanceDelayMs;
+  }
+
+  public static List<String> getConfigs() {
+    return configs;
+  }
+
+  // TODO: this is just nasty, find a better approach
+  public static Optional<? extends Number> getConfig(
+      final GroupConfig groupConfig, final String configKey) {
+    return Map.of(
+            STREAMS_HEARTBEAT_INTERVAL_MS_CONFIG, groupConfig.getSessionTimeoutMs(),
+            STREAMS_NUM_STANDBY_REPLICAS_CONFIG, groupConfig.getNumStandbyReplicas(),
+            STREAMS_SESSION_TIMEOUT_MS_CONFIG, groupConfig.getSessionTimeoutMs(),
+            STREAMS_INITIAL_REBALANCE_DELAY_MS_CONFIG, groupConfig.getInitialRebalanceDelayMs())
+        .get(configKey);
   }
 }

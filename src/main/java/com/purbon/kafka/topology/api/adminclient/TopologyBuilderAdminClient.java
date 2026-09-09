@@ -1,5 +1,7 @@
 package com.purbon.kafka.topology.api.adminclient;
 
+import static org.apache.kafka.coordinator.group.GroupConfig.*;
+
 import com.purbon.kafka.topology.actions.topics.TopicConfigUpdatePlan;
 import com.purbon.kafka.topology.model.Topic;
 import com.purbon.kafka.topology.model.User;
@@ -277,40 +279,21 @@ public class TopologyBuilderAdminClient {
 
   public void updateGroupConfig(GroupConfig groupConfig) {
     try {
-      List<AlterConfigOp> alterConfigOps =
-          List.of(
+      List<AlterConfigOp> alterConfigOps = new ArrayList<>();
+      for (final String configKey : GroupConfig.getConfigs()) {
+        if (GroupConfig.getConfig(groupConfig, configKey).isPresent()) {
+          alterConfigOps.add(
               new AlterConfigOp(
                   new ConfigEntry(
-                      "streams.heartbeat.interval.ms",
-                      groupConfig
-                          .getHeartbeatIntervalMs()
-                          .orElse(GroupConfig.DEFAULT_HEARTBEAT_INTERVAL_MS)
-                          .toString()),
-                  OpType.SET),
-              new AlterConfigOp(
-                  new ConfigEntry(
-                      "streams.num.standby.replicas",
-                      groupConfig
-                          .getNumStandbyReplicas()
-                          .orElse(GroupConfig.DEFAULT_NUM_STANDBY_REPLICAS)
-                          .toString()),
-                  OpType.SET),
-              new AlterConfigOp(
-                  new ConfigEntry(
-                      "streams.session.timeout.ms",
-                      groupConfig
-                          .getSessionTimeoutMs()
-                          .orElse(GroupConfig.DEFAULT_SESSION_TIMEOUT_MS)
-                          .toString()),
-                  OpType.SET),
-              new AlterConfigOp(
-                  new ConfigEntry(
-                      "streams.initial.rebalance.delay.ms",
-                      groupConfig
-                          .getInitialRebalanceDelayMs()
-                          .orElse(GroupConfig.DEFAULT_INITIAL_REBALANCE_MS)
-                          .toString()),
+                      configKey,
+                      String.valueOf(GroupConfig.getConfig(groupConfig, configKey).get())),
                   OpType.SET));
+        } else {
+          alterConfigOps.add(
+              new AlterConfigOp(
+                  new ConfigEntry(configKey, getBrokerDefault(configKey)), OpType.SET));
+        }
+      }
       Map<ConfigResource, Collection<AlterConfigOp>> configs =
           Map.of(new ConfigResource(Type.GROUP, groupConfig.getGroupId()), alterConfigOps);
       this.adminClient.incrementalAlterConfigs(configs).all().get();
@@ -318,6 +301,36 @@ public class TopologyBuilderAdminClient {
       LOGGER.error(e);
       throw new RuntimeException(e);
     }
+  }
+
+  public void resetGroupConfig(GroupConfig groupConfig) {
+    try {
+      List<AlterConfigOp> resetConfigOps = new ArrayList<>();
+      for (final String configKey : GroupConfig.getConfigs()) {
+        resetConfigOps.add(new AlterConfigOp(new ConfigEntry(configKey, null), OpType.DELETE));
+      }
+      Map<ConfigResource, Collection<AlterConfigOp>> configs =
+          Map.of(new ConfigResource(Type.GROUP, groupConfig.getGroupId()), resetConfigOps);
+      this.adminClient.incrementalAlterConfigs(configs).all().get();
+    } catch (InterruptedException | ExecutionException e) {
+      LOGGER.error(e);
+      throw new RuntimeException(e);
+    }
+  }
+
+  private String getBrokerDefault(final String configKey)
+      throws ExecutionException, InterruptedException {
+    final Collection<ConfigResource> configResources =
+        Collections.singleton(new ConfigResource(Type.GROUP, configKey));
+    final DescribeConfigsResult describeConfigsResult =
+        this.adminClient.describeConfigs(configResources);
+    final Map<ConfigResource, Config> configMap = describeConfigsResult.all().get();
+    if (configMap.get(configKey).entries().isEmpty()
+        || configMap.get(configKey).entries().size() > 1) {
+      throw new IllegalStateException(
+          "Unexpected multiple responses for describe config key: " + configKey);
+    }
+    return configMap.get(configKey).entries().iterator().next().value();
   }
 
   public void close() {
