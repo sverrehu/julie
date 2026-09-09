@@ -40,4 +40,8 @@ public class UpdateGroupConfigAction extends BaseAction {
   public void run() throws IOException {
     this.adminClient.updateGroupConfig(groupConfig);
   }
+
+  public String getGroupID() {
+    return this.groupConfig.getGroupId();
+  }
 }

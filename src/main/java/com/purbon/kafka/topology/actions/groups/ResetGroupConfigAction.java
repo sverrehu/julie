@@ -36,4 +36,8 @@ public class ResetGroupConfigAction extends BaseAction {
   public void run() throws IOException {
     this.adminClient.resetGroupConfig(groupConfig);
   }
+
+  public String getGroupID() {
+    return this.groupConfig.getGroupId();
+  }
 }

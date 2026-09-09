@@ -16,10 +16,7 @@ import com.purbon.kafka.topology.model.users.KStream;
 import java.io.IOException;
 import java.util.*;
 import org.apache.kafka.clients.admin.AdminClient;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 
 public class GroupConfigManagerIT {
 
@@ -31,8 +28,18 @@ public class GroupConfigManagerIT {
 
   @BeforeClass
   public static void setup() {
-    container = new SaslPlaintextKafkaContainer();
+    container =
+        new SaslPlaintextKafkaContainer()
+            .withUser(ContainerTestUtils.PRODUCER_USERNAME)
+            .withUser(ContainerTestUtils.CONSUMER_USERNAME)
+            .withUser(ContainerTestUtils.BACKUP_USERNAME)
+            .withUser("streamsapp-a");
     container.start();
+  }
+
+  @AfterClass
+  public static void tearDown() {
+    container.stop();
   }
 
   @Before
@@ -58,20 +65,9 @@ public class GroupConfigManagerIT {
     groupConfig.setInitialRebalanceDelayMs(Optional.of(4000L));
     groupConfig.setSessionTimeoutMs(Optional.of(50000L));
 
-    //    Topology topology = TestTopologyBuilder.createProject()
-    //            .addKStream(new KStream(
-    //                    "streams-app-a",
-    //                    topics,
-    //                    observerPrincipals,
-    //                    Optional.of("app_stream_id"),
-    //                    Optional.of(true),
-    //                    Optional.of(groupConfig)))
-    //            .addTopic("topic-A")
-    //            .buildTopology();
-
     KStream stream =
         new KStream(
-            "streams-app-a",
+            "streamsapp-a",
             topics,
             observerPrincipals,
             Optional.of("app_stream_id"),

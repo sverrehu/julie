@@ -57,6 +57,11 @@ public class BackendController {
     state.addConnectors(connectors);
   }
 
+  public void addStreams(Set<String> streams) {
+    LOGGER.debug(String.format("Adding Streams %s to the backend", streams));
+    state.addStreams(streams);
+  }
+
   public void addKSqlStreams(Set<KsqlStreamArtefact> ksqlStreams) {
     LOGGER.debug(String.format("Adding KSQL Streams %s to the backend", ksqlStreams));
     state.addKSqlStreams(ksqlStreams);
@@ -81,6 +86,10 @@ public class BackendController {
 
   public Set<KafkaConnectArtefact> getConnectors() {
     return state.getConnectors();
+  }
+
+  public Set<String> getStreams() {
+    return state.getStreams();
   }
 
   public Set<KsqlStreamArtefact> getKSqlStreams() {

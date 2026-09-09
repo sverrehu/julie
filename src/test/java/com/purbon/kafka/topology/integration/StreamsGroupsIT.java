@@ -62,7 +62,7 @@ public final class StreamsGroupsIT {
       assertTrue(result.containsKey(groupResource));
       Config config = result.get(groupResource);
       assertEquals("60000", config.get("streams.session.timeout.ms").value());
-      assertEquals("6000", config.get("streams.heartbeat.interval.ms").value());
+      assertEquals("3000", config.get("streams.heartbeat.interval.ms").value());
       assertEquals("1", config.get("streams.num.standby.replicas").value());
       assertEquals("2000", config.get("streams.initial.rebalance.delay.ms").value());
     } catch (InterruptedException | ExecutionException e) {

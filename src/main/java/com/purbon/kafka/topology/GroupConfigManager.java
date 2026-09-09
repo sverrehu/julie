@@ -1,7 +1,5 @@
 package com.purbon.kafka.topology;
 
-import static org.apache.kafka.coordinator.group.GroupConfig.*;
-
 import com.purbon.kafka.topology.actions.Action;
 import com.purbon.kafka.topology.actions.groups.ResetGroupConfigAction;
 import com.purbon.kafka.topology.actions.groups.UpdateGroupConfigAction;
@@ -15,13 +13,6 @@ import java.util.Map;
 import java.util.Set;
 
 public class GroupConfigManager implements ExecutionPlanUpdater {
-
-  //  private static final List<String> configSettings = List.of(
-  //          STREAMS_HEARTBEAT_INTERVAL_MS_CONFIG,
-  //          STREAMS_NUM_STANDBY_REPLICAS_CONFIG,
-  //          STREAMS_SESSION_TIMEOUT_MS_CONFIG,
-  //          STREAMS_INITIAL_REBALANCE_DELAY_MS_CONFIG
-  //  );
 
   private final TopologyBuilderAdminClient adminClient;
 
@@ -41,13 +32,17 @@ public class GroupConfigManager implements ExecutionPlanUpdater {
             .getStreams()
             .forEach(
                 stream -> {
+                  final String applicationId = stream.getApplicationId().orElseThrow();
                   if (stream.getGroupConfig().isPresent()) {
-                    createGroups.add(
-                        new UpdateGroupConfigAction(adminClient, stream.getGroupConfig().get()));
-                  }
-                  if (!existingGroupIDs.contains(stream.getApplicationId().orElseThrow())) {
-                    deleteGroups.add(
-                        new ResetGroupConfigAction(adminClient, stream.getGroupConfig().get()));
+                    // If GroupID is not in cluster, but in topology: create/update
+                    // If GroupID is in cluster, but not topology: delete
+                    if (!existingGroupIDs.contains(applicationId)) {
+                      createGroups.add(
+                          new UpdateGroupConfigAction(adminClient, stream.getGroupConfig().get()));
+                    } else {
+                      deleteGroups.add(
+                          new ResetGroupConfigAction(adminClient, stream.getGroupConfig().get()));
+                    }
                   }
                 });
       }
@@ -65,8 +60,4 @@ public class GroupConfigManager implements ExecutionPlanUpdater {
     out.println("List of groups");
     out.println(adminClient.listGroups());
   }
-
-  //  public static List<String> getConfigSettings() {
-  //    return configSettings;
-  //  }
 }
