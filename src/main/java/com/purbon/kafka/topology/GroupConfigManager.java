@@ -33,6 +33,11 @@ public class GroupConfigManager implements ExecutionPlanUpdater {
             .forEach(
                 stream -> {
                   if (stream.getGroupConfig().isPresent()) {
+                    // NOTE: internal testing showed that not all streams applications use a 1:1
+                    // relationship between application ID and group ID. For now, require users to
+                    // update applicationID for every group update, and in the future consider
+                    // adding
+                    // an optional `groupId` field with fallback value to `applicationId`
                     final String applicationId = stream.getApplicationId().orElseThrow();
                     // If GroupID is not in cluster, but in topology: create/update
                     // If GroupID is in cluster, but not topology: delete

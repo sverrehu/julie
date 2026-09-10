@@ -7,7 +7,7 @@ projects:
         applicationId: "streams-app-a"
         groupConfig:
           sessionTimeoutMs: "60000"
-          heartbeatIntervalMs: "3000"
+          heartbeatIntervalMs: "5500"
           numStandbyReplicas: "1"
           initialRebalanceDelayMs: "2000"
         topics:

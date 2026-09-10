@@ -33,7 +33,7 @@ public class GroupConfigManagerIT {
             .withUser(ContainerTestUtils.PRODUCER_USERNAME)
             .withUser(ContainerTestUtils.CONSUMER_USERNAME)
             .withUser(ContainerTestUtils.BACKUP_USERNAME)
-            .withUser("streamsapp-a");
+            .withUser("streams-app-a");
     container.start();
   }
 
@@ -61,13 +61,13 @@ public class GroupConfigManagerIT {
     Map<String, List<String>> topics = new HashMap<>();
     List<User> observerPrincipals = new ArrayList<>();
     GroupConfig groupConfig = new GroupConfig();
-    groupConfig.setHeartbeatIntervalMs(Optional.of(5500));
+    groupConfig.setHeartbeatIntervalMs(Optional.of(6500));
     groupConfig.setInitialRebalanceDelayMs(Optional.of(4000));
     groupConfig.setSessionTimeoutMs(Optional.of(50000));
 
     KStream stream =
         new KStream(
-            "streamsapp-a",
+            "streams-app-a",
             topics,
             observerPrincipals,
             Optional.of("app_stream_id"),
@@ -90,8 +90,7 @@ public class GroupConfigManagerIT {
     Assert.assertTrue(stream.getApplicationId().isPresent());
     final GroupConfig observedGroupConfig = observedStream.getGroupConfig().get();
 
-    Assert.assertEquals(
-        stream.getApplicationId().get(), observedGroupConfig.getGroupId());
+    Assert.assertEquals(stream.getApplicationId().get(), observedGroupConfig.getGroupId());
 
     Assert.assertTrue(groupConfig.getHeartbeatIntervalMs().isPresent());
     Assert.assertTrue(observedGroupConfig.getHeartbeatIntervalMs().isPresent());
@@ -102,8 +101,7 @@ public class GroupConfigManagerIT {
     Assert.assertTrue(groupConfig.getSessionTimeoutMs().isPresent());
     Assert.assertTrue(observedGroupConfig.getSessionTimeoutMs().isPresent());
     Assert.assertEquals(
-        groupConfig.getSessionTimeoutMs().get(),
-        observedGroupConfig.getSessionTimeoutMs().get());
+        groupConfig.getSessionTimeoutMs().get(), observedGroupConfig.getSessionTimeoutMs().get());
 
     Assert.assertTrue(groupConfig.getNumStandbyReplicas().isPresent());
     Assert.assertTrue(observedGroupConfig.getNumStandbyReplicas().isPresent());

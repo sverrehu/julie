@@ -8,9 +8,14 @@ import static org.apache.kafka.coordinator.group.GroupConfig.STREAMS_SESSION_TIM
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class GroupConfig {
 
+  @Getter
   private static final List<String> configs =
       List.of(
           STREAMS_HEARTBEAT_INTERVAL_MS_CONFIG,
@@ -31,54 +36,10 @@ public class GroupConfig {
     this.initialRebalanceDelayMs = Optional.empty();
   }
 
-  public String getGroupId() {
-    return groupId;
-  }
-
-  public void setGroupId(final String applicationId) {
-    this.groupId = applicationId;
-  }
-
-  public Optional<Integer> getSessionTimeoutMs() {
-    return sessionTimeoutMs;
-  }
-
-  public void setSessionTimeoutMs(Optional<Integer> sessionTimeoutMs) {
-    this.sessionTimeoutMs = sessionTimeoutMs;
-  }
-
-  public Optional<Integer> getHeartbeatIntervalMs() {
-    return heartbeatIntervalMs;
-  }
-
-  public void setHeartbeatIntervalMs(Optional<Integer> heartbeatIntervalMs) {
-    this.heartbeatIntervalMs = heartbeatIntervalMs;
-  }
-
-  public Optional<Integer> getNumStandbyReplicas() {
-    return numStandbyReplicas;
-  }
-
-  public void setNumStandbyReplicas(Optional<Integer> numStandbyReplicas) {
-    this.numStandbyReplicas = numStandbyReplicas;
-  }
-
-  public Optional<Integer> getInitialRebalanceDelayMs() {
-    return initialRebalanceDelayMs;
-  }
-
-  public void setInitialRebalanceDelayMs(Optional<Integer> initialRebalanceDelayMs) {
-    this.initialRebalanceDelayMs = initialRebalanceDelayMs;
-  }
-
-  public static List<String> getConfigs() {
-    return configs;
-  }
-
   // TODO: this is just nasty, find a better approach
   public static Optional<Integer> getConfig(final GroupConfig groupConfig, final String configKey) {
     return Map.of(
-            STREAMS_HEARTBEAT_INTERVAL_MS_CONFIG, groupConfig.getSessionTimeoutMs(),
+            STREAMS_HEARTBEAT_INTERVAL_MS_CONFIG, groupConfig.getHeartbeatIntervalMs(),
             STREAMS_NUM_STANDBY_REPLICAS_CONFIG, groupConfig.getNumStandbyReplicas(),
             STREAMS_SESSION_TIMEOUT_MS_CONFIG, groupConfig.getSessionTimeoutMs(),
             STREAMS_INITIAL_REBALANCE_DELAY_MS_CONFIG, groupConfig.getInitialRebalanceDelayMs())

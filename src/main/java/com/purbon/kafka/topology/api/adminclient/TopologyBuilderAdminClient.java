@@ -287,9 +287,23 @@ public class TopologyBuilderAdminClient {
               new AlterConfigOp(
                   new ConfigEntry(configKey, String.valueOf(configValue.get())), OpType.SET));
         } else {
+          final ConfigResource configResource = new ConfigResource(Type.GROUP, configKey);
+          Map<ConfigResource, Config> brokerDefaults =
+              this.adminClient.describeConfigs(Collections.singleton(configResource)).all().get();
+          if (!brokerDefaults.containsKey(configResource)) {
+            LOGGER.error(
+                "Expected singleton response from broker for describe config for '{}', got: {}",
+                configKey,
+                brokerDefaults.size());
+            throw new IllegalStateException(
+                "Expected singleton response from broker for describe config for '"
+                    + configKey
+                    + "', got: "
+                    + brokerDefaults.size());
+          }
+          final String defaultConfig = brokerDefaults.get(configResource).get(configKey).value();
           alterConfigOps.add(
-              new AlterConfigOp(
-                  new ConfigEntry(configKey, getBrokerDefault(configKey)), OpType.SET));
+              new AlterConfigOp(new ConfigEntry(configKey, defaultConfig), OpType.SET));
         }
       }
       Map<ConfigResource, Collection<AlterConfigOp>> configs =
@@ -314,21 +328,6 @@ public class TopologyBuilderAdminClient {
       LOGGER.error(e);
       throw new RuntimeException(e);
     }
-  }
-
-  private String getBrokerDefault(final String configKey)
-      throws ExecutionException, InterruptedException {
-    final Collection<ConfigResource> configResources =
-        Collections.singleton(new ConfigResource(Type.GROUP, configKey));
-    final DescribeConfigsResult describeConfigsResult =
-        this.adminClient.describeConfigs(configResources);
-    final Map<ConfigResource, Config> configMap = describeConfigsResult.all().get();
-    if (configMap.get(configKey).entries().isEmpty()
-        || configMap.get(configKey).entries().size() > 1) {
-      throw new IllegalStateException(
-          "Unexpected multiple responses for describe config key: " + configKey);
-    }
-    return configMap.get(configKey).entries().iterator().next().value();
   }
 
   public void close() {
