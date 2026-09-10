@@ -29,11 +29,14 @@ public class GroupConfig {
   private Optional<Integer> numStandbyReplicas;
   private Optional<Integer> initialRebalanceDelayMs;
 
-  public GroupConfig() {
-    this.sessionTimeoutMs = Optional.empty();
-    this.heartbeatIntervalMs = Optional.empty();
-    this.numStandbyReplicas = Optional.empty();
-    this.initialRebalanceDelayMs = Optional.empty();
+  // TODO: specify broker defaults centrally. For now, these are configured
+  // based on current defaults (v4.3.X) using min values where applicable
+  public GroupConfig(final String applicationId) {
+    this.groupId = applicationId;
+    this.sessionTimeoutMs = Optional.of(60000);
+    this.heartbeatIntervalMs = Optional.of(5000);
+    this.numStandbyReplicas = Optional.of(0);
+    this.initialRebalanceDelayMs = Optional.of(3000);
   }
 
   // TODO: this is just nasty, find a better approach

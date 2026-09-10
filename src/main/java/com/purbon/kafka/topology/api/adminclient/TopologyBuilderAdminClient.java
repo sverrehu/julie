@@ -1,7 +1,5 @@
 package com.purbon.kafka.topology.api.adminclient;
 
-import static org.apache.kafka.coordinator.group.GroupConfig.*;
-
 import com.purbon.kafka.topology.actions.topics.TopicConfigUpdatePlan;
 import com.purbon.kafka.topology.model.Topic;
 import com.purbon.kafka.topology.model.User;
