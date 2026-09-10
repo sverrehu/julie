@@ -3,6 +3,7 @@ package com.purbon.kafka.topology.integration;
 import com.purbon.kafka.topology.BackendController;
 import com.purbon.kafka.topology.ExecutionPlan;
 import com.purbon.kafka.topology.GroupConfigManager;
+import com.purbon.kafka.topology.actions.groups.ResetGroupConfigAction;
 import com.purbon.kafka.topology.api.adminclient.TopologyBuilderAdminClient;
 import com.purbon.kafka.topology.integration.containerutils.ContainerTestUtils;
 import com.purbon.kafka.topology.integration.containerutils.SaslPlaintextKafkaContainer;
@@ -25,6 +26,11 @@ public class GroupConfigManagerIT {
   private AdminClient kafkaAdminClient;
 
   private ExecutionPlan plan;
+
+  private Topology topology;
+  private Project project;
+  private KStream stream;
+  private final String applicationId = "app_stream_id_v1";
 
   @BeforeClass
   public static void setup() {
@@ -50,18 +56,58 @@ public class GroupConfigManagerIT {
         new TopologyBuilderAdminClient(kafkaAdminClient);
     plan = ExecutionPlan.init(new BackendController(), System.out);
     groupConfigManager = new GroupConfigManager(topologyBuilderAdminClient);
+    configureBaseTopology();
   }
 
   @Test
   public void testAddThenDeleteGroupConfig() throws IOException {
-    Topology topology = new TopologyImpl();
+    topology = new TopologyImpl();
     topology.setContext("reset-streams-app");
 
-    Project project = new ProjectImpl("project");
+    project = new ProjectImpl("project");
+    GroupConfig groupConfig = new GroupConfig();
+    groupConfig.setGroupId(applicationId);
+    stream.setGroupConfig(Optional.of(groupConfig));
+    project.setStreams(List.of(stream));
+    topology.addProject(project);
+
+    plan.getActions().clear();
+
+    groupConfigManager.updatePlan(plan, Map.of(project.getName(), topology));
+
+    Assert.assertTrue(plan.getActions().getFirst() instanceof ResetGroupConfigAction);
+
+    plan.run();
+
+    KStream observedResetStream = topology.getProjects().getFirst().getStreams().getFirst();
+    Assert.assertNotNull(stream);
+    Assert.assertTrue(observedResetStream.getGroupConfig().isPresent());
+    final GroupConfig observedResetStreamGroupConfig = observedResetStream.getGroupConfig().get();
+    Assert.assertTrue(observedResetStreamGroupConfig.getSessionTimeoutMs().isPresent());
+    final int resetSessionTimeoutMs = observedResetStreamGroupConfig.getSessionTimeoutMs().get();
+    Assert.assertEquals(60000, resetSessionTimeoutMs);
+    Assert.assertTrue(observedResetStreamGroupConfig.getHeartbeatIntervalMs().isPresent());
+    final int resetHeartbeatIntervalMs =
+        observedResetStreamGroupConfig.getHeartbeatIntervalMs().get();
+    Assert.assertEquals(5000, resetHeartbeatIntervalMs);
+    Assert.assertTrue(observedResetStreamGroupConfig.getNumStandbyReplicas().isPresent());
+    final int resetNumStandbyReplicas =
+        observedResetStreamGroupConfig.getNumStandbyReplicas().get();
+    Assert.assertEquals(0, resetNumStandbyReplicas);
+    Assert.assertTrue(observedResetStreamGroupConfig.getInitialRebalanceDelayMs().isPresent());
+    final int resetInitialRebalanceDelayMs =
+        observedResetStreamGroupConfig.getInitialRebalanceDelayMs().get();
+    Assert.assertEquals(3000, resetInitialRebalanceDelayMs);
+  }
+
+  private void configureBaseTopology() throws IOException {
+    topology = new TopologyImpl();
+    topology.setContext("reset-streams-app");
+
+    project = new ProjectImpl("project");
 
     Map<String, List<String>> topics = new HashMap<>();
     List<User> observerPrincipals = new ArrayList<>();
-    final String applicationId = "app_stream_id_v1";
     GroupConfig groupConfig = new GroupConfig();
     groupConfig.setGroupId(applicationId);
     groupConfig.setHeartbeatIntervalMs(Optional.of(6500));
@@ -69,14 +115,14 @@ public class GroupConfigManagerIT {
     groupConfig.setSessionTimeoutMs(Optional.of(50000));
     groupConfig.setNumStandbyReplicas(Optional.of(1));
 
-    KStream stream =
-        new KStream(
-            "streams-app-a",
-            topics,
-            observerPrincipals,
-            Optional.of(applicationId),
-            Optional.of(true),
-            Optional.of(groupConfig));
+    stream =
+            new KStream(
+                    "streams-app-a",
+                    topics,
+                    observerPrincipals,
+                    Optional.of(applicationId),
+                    Optional.of(true),
+                    Optional.of(groupConfig));
 
     project.setStreams(List.of(stream));
 
@@ -99,59 +145,24 @@ public class GroupConfigManagerIT {
     Assert.assertTrue(groupConfig.getHeartbeatIntervalMs().isPresent());
     Assert.assertTrue(observedGroupConfig.getHeartbeatIntervalMs().isPresent());
     Assert.assertEquals(
-        groupConfig.getHeartbeatIntervalMs().get(),
-        observedGroupConfig.getHeartbeatIntervalMs().get());
+            groupConfig.getHeartbeatIntervalMs().get(),
+            observedGroupConfig.getHeartbeatIntervalMs().get());
 
     Assert.assertTrue(groupConfig.getSessionTimeoutMs().isPresent());
     Assert.assertTrue(observedGroupConfig.getSessionTimeoutMs().isPresent());
     Assert.assertEquals(
-        groupConfig.getSessionTimeoutMs().get(), observedGroupConfig.getSessionTimeoutMs().get());
+            groupConfig.getSessionTimeoutMs().get(), observedGroupConfig.getSessionTimeoutMs().get());
 
     Assert.assertTrue(groupConfig.getNumStandbyReplicas().isPresent());
     Assert.assertTrue(observedGroupConfig.getNumStandbyReplicas().isPresent());
     Assert.assertEquals(
-        groupConfig.getNumStandbyReplicas().get(),
-        observedGroupConfig.getNumStandbyReplicas().get());
+            groupConfig.getNumStandbyReplicas().get(),
+            observedGroupConfig.getNumStandbyReplicas().get());
 
     Assert.assertTrue(groupConfig.getInitialRebalanceDelayMs().isPresent());
     Assert.assertTrue(observedGroupConfig.getInitialRebalanceDelayMs().isPresent());
     Assert.assertEquals(
-        groupConfig.getInitialRebalanceDelayMs().get(),
-        observedGroupConfig.getInitialRebalanceDelayMs().get());
-
-    topology = new TopologyImpl();
-    topology.setContext("reset-streams-app");
-
-    project = new ProjectImpl("project");
-    groupConfig = new  GroupConfig();
-    groupConfig.setGroupId(applicationId);
-    stream.setGroupConfig(Optional.of(groupConfig));
-    project.setStreams(List.of(stream));
-    topology.addProject(project);
-
-    plan.getActions().clear();
-
-    groupConfigManager.updatePlan(plan, Map.of(project.getName(), topology));
-    plan.run();
-
-    KStream observedResetStream = topology.getProjects().getFirst().getStreams().getFirst();
-    Assert.assertNotNull(stream);
-    Assert.assertTrue(observedResetStream.getGroupConfig().isPresent());
-    final GroupConfig observedResetStreamGroupConfig = observedResetStream.getGroupConfig().get();
-    Assert.assertTrue(observedResetStreamGroupConfig.getSessionTimeoutMs().isPresent());
-    final int resetSessionTimeoutMs = observedResetStreamGroupConfig.getSessionTimeoutMs().get();
-    Assert.assertEquals(60000, resetSessionTimeoutMs);
-    Assert.assertTrue(observedResetStreamGroupConfig.getHeartbeatIntervalMs().isPresent());
-    final int resetHeartbeatIntervalMs =
-        observedResetStreamGroupConfig.getHeartbeatIntervalMs().get();
-    Assert.assertEquals(5000, resetHeartbeatIntervalMs);
-    Assert.assertTrue(observedResetStreamGroupConfig.getNumStandbyReplicas().isPresent());
-    final int resetNumStandbyReplicas =
-        observedResetStreamGroupConfig.getNumStandbyReplicas().get();
-    Assert.assertEquals(0, resetNumStandbyReplicas);
-    Assert.assertTrue(observedResetStreamGroupConfig.getInitialRebalanceDelayMs().isPresent());
-    final int resetInitialRebalanceDelayMs =
-        observedResetStreamGroupConfig.getInitialRebalanceDelayMs().get();
-    Assert.assertEquals(3000, resetInitialRebalanceDelayMs);
+            groupConfig.getInitialRebalanceDelayMs().get(),
+            observedGroupConfig.getInitialRebalanceDelayMs().get());
   }
 }
