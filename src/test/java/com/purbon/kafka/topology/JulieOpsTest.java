@@ -37,6 +37,9 @@ public class JulieOpsTest {
   @Mock AccessControlManager accessControlManager;
 
   @Mock KafkaConnectArtefactManager connectorManager;
+
+  @Mock GroupConfigManager groupConfigManager;
+
   @Mock QuotasManager quotasManager;
 
   @Mock KSqlArtefactManager ksqlArtefactManager;
@@ -129,6 +132,7 @@ public class JulieOpsTest {
     builder.setConnectorManager(connectorManager);
     builder.setKSqlArtefactManager(ksqlArtefactManager);
     builder.setQuotasManager(quotasManager);
+    builder.setGroupConfigManager(groupConfigManager);
     doNothing().when(topicManager).updatePlan(any(ExecutionPlan.class), any(Map.class));
     doNothing().when(accessControlManager).updatePlan(any(ExecutionPlan.class), any(Map.class));
     builder.run();
@@ -157,6 +161,7 @@ public class JulieOpsTest {
     builder.setConnectorManager(connectorManager);
     builder.setKSqlArtefactManager(ksqlArtefactManager);
     builder.setQuotasManager(quotasManager);
+    builder.setGroupConfigManager(groupConfigManager);
     doNothing()
         .when(builder.getAccessControlManager())
         .updatePlan(any(ExecutionPlan.class), any(Map.class));
@@ -183,6 +188,7 @@ public class JulieOpsTest {
     builder.setConnectorManager(connectorManager);
     builder.setKSqlArtefactManager(ksqlArtefactManager);
     builder.setQuotasManager(quotasManager);
+    builder.setGroupConfigManager(groupConfigManager);
     doNothing().when(topicManager).updatePlan(any(ExecutionPlan.class), any(Map.class));
     doNothing().when(accessControlManager).updatePlan(any(ExecutionPlan.class), any(Map.class));
     builder.run(new BackendController(stateProcessor), System.out, new VoidAuditor());
@@ -230,6 +236,7 @@ public class JulieOpsTest {
     builder.setTopicManager(topicManager);
     builder.setAccessControlManager(accessControlManager);
     builder.setKSqlArtefactManager(ksqlArtefactManager);
+    builder.setGroupConfigManager(groupConfigManager);
     doNothing().when(topicManager).updatePlan(any(ExecutionPlan.class), any(Map.class));
     doNothing().when(accessControlManager).updatePlan(any(ExecutionPlan.class), any(Map.class));
     builder.run();

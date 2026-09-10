@@ -19,10 +19,10 @@ public class GroupConfig {
           STREAMS_INITIAL_REBALANCE_DELAY_MS_CONFIG);
 
   private String groupId;
-  private Optional<Long> sessionTimeoutMs;
-  private Optional<Long> heartbeatIntervalMs;
+  private Optional<Integer> sessionTimeoutMs;
+  private Optional<Integer> heartbeatIntervalMs;
   private Optional<Integer> numStandbyReplicas;
-  private Optional<Long> initialRebalanceDelayMs;
+  private Optional<Integer> initialRebalanceDelayMs;
 
   public GroupConfig() {
     this.sessionTimeoutMs = Optional.empty();
@@ -39,19 +39,19 @@ public class GroupConfig {
     this.groupId = applicationId;
   }
 
-  public Optional<Long> getSessionTimeoutMs() {
+  public Optional<Integer> getSessionTimeoutMs() {
     return sessionTimeoutMs;
   }
 
-  public void setSessionTimeoutMs(Optional<Long> sessionTimeoutMs) {
+  public void setSessionTimeoutMs(Optional<Integer> sessionTimeoutMs) {
     this.sessionTimeoutMs = sessionTimeoutMs;
   }
 
-  public Optional<Long> getHeartbeatIntervalMs() {
+  public Optional<Integer> getHeartbeatIntervalMs() {
     return heartbeatIntervalMs;
   }
 
-  public void setHeartbeatIntervalMs(Optional<Long> heartbeatIntervalMs) {
+  public void setHeartbeatIntervalMs(Optional<Integer> heartbeatIntervalMs) {
     this.heartbeatIntervalMs = heartbeatIntervalMs;
   }
 
@@ -63,11 +63,11 @@ public class GroupConfig {
     this.numStandbyReplicas = numStandbyReplicas;
   }
 
-  public Optional<Long> getInitialRebalanceDelayMs() {
+  public Optional<Integer> getInitialRebalanceDelayMs() {
     return initialRebalanceDelayMs;
   }
 
-  public void setInitialRebalanceDelayMs(Optional<Long> initialRebalanceDelayMs) {
+  public void setInitialRebalanceDelayMs(Optional<Integer> initialRebalanceDelayMs) {
     this.initialRebalanceDelayMs = initialRebalanceDelayMs;
   }
 
@@ -76,8 +76,7 @@ public class GroupConfig {
   }
 
   // TODO: this is just nasty, find a better approach
-  public static Optional<? extends Number> getConfig(
-      final GroupConfig groupConfig, final String configKey) {
+  public static Optional<Integer> getConfig(final GroupConfig groupConfig, final String configKey) {
     return Map.of(
             STREAMS_HEARTBEAT_INTERVAL_MS_CONFIG, groupConfig.getSessionTimeoutMs(),
             STREAMS_NUM_STANDBY_REPLICAS_CONFIG, groupConfig.getNumStandbyReplicas(),

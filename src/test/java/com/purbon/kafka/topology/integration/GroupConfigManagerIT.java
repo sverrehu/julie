@@ -61,9 +61,9 @@ public class GroupConfigManagerIT {
     Map<String, List<String>> topics = new HashMap<>();
     List<User> observerPrincipals = new ArrayList<>();
     GroupConfig groupConfig = new GroupConfig();
-    groupConfig.setHeartbeatIntervalMs(Optional.of(5500L));
-    groupConfig.setInitialRebalanceDelayMs(Optional.of(4000L));
-    groupConfig.setSessionTimeoutMs(Optional.of(50000L));
+    groupConfig.setHeartbeatIntervalMs(Optional.of(5500));
+    groupConfig.setInitialRebalanceDelayMs(Optional.of(4000));
+    groupConfig.setSessionTimeoutMs(Optional.of(50000));
 
     KStream stream =
         new KStream(
@@ -83,22 +83,39 @@ public class GroupConfigManagerIT {
 
     KStream observedStream = topology.getProjects().getFirst().getStreams().getFirst();
     Assert.assertNotNull(observedStream);
+
     Assert.assertTrue(observedStream.getApplicationId().isPresent());
     Assert.assertTrue(observedStream.getGroupConfig().isPresent());
+
+    Assert.assertTrue(stream.getApplicationId().isPresent());
+    final GroupConfig observedGroupConfig = observedStream.getGroupConfig().get();
+
     Assert.assertEquals(
-        stream.getApplicationId().get(), observedStream.getGroupConfig().get().getGroupId());
+        stream.getApplicationId().get(), observedGroupConfig.getGroupId());
+
+    Assert.assertTrue(groupConfig.getHeartbeatIntervalMs().isPresent());
+    Assert.assertTrue(observedGroupConfig.getHeartbeatIntervalMs().isPresent());
     Assert.assertEquals(
         groupConfig.getHeartbeatIntervalMs().get(),
-        observedStream.getGroupConfig().get().getHeartbeatIntervalMs());
+        observedGroupConfig.getHeartbeatIntervalMs().get());
+
+    Assert.assertTrue(groupConfig.getSessionTimeoutMs().isPresent());
+    Assert.assertTrue(observedGroupConfig.getSessionTimeoutMs().isPresent());
     Assert.assertEquals(
         groupConfig.getSessionTimeoutMs().get(),
-        observedStream.getGroupConfig().get().getSessionTimeoutMs());
+        observedGroupConfig.getSessionTimeoutMs().get());
+
+    Assert.assertTrue(groupConfig.getNumStandbyReplicas().isPresent());
+    Assert.assertTrue(observedGroupConfig.getNumStandbyReplicas().isPresent());
     Assert.assertEquals(
         groupConfig.getNumStandbyReplicas().get(),
-        observedStream.getGroupConfig().get().getNumStandbyReplicas());
+        observedGroupConfig.getNumStandbyReplicas().get());
+
+    Assert.assertTrue(groupConfig.getInitialRebalanceDelayMs().isPresent());
+    Assert.assertTrue(observedGroupConfig.getInitialRebalanceDelayMs().isPresent());
     Assert.assertEquals(
         groupConfig.getInitialRebalanceDelayMs().get(),
-        observedStream.getGroupConfig().get().getInitialRebalanceDelayMs());
+        observedGroupConfig.getInitialRebalanceDelayMs().get());
 
     stream.setGroupConfig(Optional.empty());
     project.setStreams(List.of(stream));
@@ -113,19 +130,19 @@ public class GroupConfigManagerIT {
     Assert.assertTrue(observedResetStream.getGroupConfig().isPresent());
     final GroupConfig observedResetStreamGroupConfig = observedResetStream.getGroupConfig().get();
     Assert.assertTrue(observedResetStreamGroupConfig.getSessionTimeoutMs().isPresent());
-    final long resetSessionTimeoutMs = observedResetStreamGroupConfig.getSessionTimeoutMs().get();
-    Assert.assertEquals(45000L, resetSessionTimeoutMs);
+    final int resetSessionTimeoutMs = observedResetStreamGroupConfig.getSessionTimeoutMs().get();
+    Assert.assertEquals(45000, resetSessionTimeoutMs);
     Assert.assertTrue(observedResetStreamGroupConfig.getHeartbeatIntervalMs().isPresent());
-    final long resetHeartbeatIntervalMs =
+    final int resetHeartbeatIntervalMs =
         observedResetStreamGroupConfig.getHeartbeatIntervalMs().get();
-    Assert.assertEquals(5000L, resetHeartbeatIntervalMs);
+    Assert.assertEquals(5000, resetHeartbeatIntervalMs);
     Assert.assertTrue(observedResetStreamGroupConfig.getNumStandbyReplicas().isPresent());
     final int resetNumStandbyReplicas =
         observedResetStreamGroupConfig.getNumStandbyReplicas().get();
     Assert.assertEquals(0, resetNumStandbyReplicas);
     Assert.assertTrue(observedResetStreamGroupConfig.getInitialRebalanceDelayMs().isPresent());
-    final long resetInitialRebalanceDelayMs =
+    final int resetInitialRebalanceDelayMs =
         observedResetStreamGroupConfig.getInitialRebalanceDelayMs().get();
-    Assert.assertEquals(3000L, resetInitialRebalanceDelayMs);
+    Assert.assertEquals(3000, resetInitialRebalanceDelayMs);
   }
 }

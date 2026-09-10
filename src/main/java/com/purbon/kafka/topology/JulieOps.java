@@ -44,7 +44,7 @@ public class JulieOps implements AutoCloseable {
   private KafkaConnectArtefactManager connectorManager;
   private KSqlArtefactManager kSqlArtefactManager;
   private QuotasManager quotasManager;
-  private final GroupConfigManager groupConfigManager;
+  private GroupConfigManager groupConfigManager;
   private final Map<String, Topology> topologies;
   private final Configuration config;
   private final PrintStream outputStream;

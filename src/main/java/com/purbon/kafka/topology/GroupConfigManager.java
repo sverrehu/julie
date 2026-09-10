@@ -24,7 +24,7 @@ public class GroupConfigManager implements ExecutionPlanUpdater {
   public void updatePlan(ExecutionPlan plan, Map<String, Topology> topologies) throws IOException {
     for (Map.Entry<String, Topology> entry : topologies.entrySet()) {
       Topology topology = entry.getValue();
-      Set<String> existingGroupIDs = adminClient.listGroups();
+      Set<String> existingGroupIDs = this.adminClient.listGroups();
       Set<Action> createGroups = new LinkedHashSet<>();
       Set<Action> deleteGroups = new LinkedHashSet<>();
       for (Project project : topology.getProjects()) {
@@ -32,16 +32,18 @@ public class GroupConfigManager implements ExecutionPlanUpdater {
             .getStreams()
             .forEach(
                 stream -> {
-                  final String applicationId = stream.getApplicationId().orElseThrow();
                   if (stream.getGroupConfig().isPresent()) {
+                    final String applicationId = stream.getApplicationId().orElseThrow();
                     // If GroupID is not in cluster, but in topology: create/update
                     // If GroupID is in cluster, but not topology: delete
                     if (!existingGroupIDs.contains(applicationId)) {
                       createGroups.add(
-                          new UpdateGroupConfigAction(adminClient, stream.getGroupConfig().get()));
+                          new UpdateGroupConfigAction(
+                              this.adminClient, stream.getGroupConfig().get()));
                     } else {
                       deleteGroups.add(
-                          new ResetGroupConfigAction(adminClient, stream.getGroupConfig().get()));
+                          new ResetGroupConfigAction(
+                              this.adminClient, stream.getGroupConfig().get()));
                     }
                   }
                 });
@@ -58,6 +60,6 @@ public class GroupConfigManager implements ExecutionPlanUpdater {
   @Override
   public void printCurrentState(PrintStream out) throws IOException {
     out.println("List of groups");
-    out.println(adminClient.listGroups());
+    out.println(this.adminClient.listGroups());
   }
 }

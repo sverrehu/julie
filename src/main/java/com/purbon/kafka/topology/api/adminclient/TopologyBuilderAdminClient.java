@@ -281,13 +281,11 @@ public class TopologyBuilderAdminClient {
     try {
       List<AlterConfigOp> alterConfigOps = new ArrayList<>();
       for (final String configKey : GroupConfig.getConfigs()) {
-        if (GroupConfig.getConfig(groupConfig, configKey).isPresent()) {
+        final Optional<Integer> configValue = GroupConfig.getConfig(groupConfig, configKey);
+        if (configValue.isPresent()) {
           alterConfigOps.add(
               new AlterConfigOp(
-                  new ConfigEntry(
-                      configKey,
-                      String.valueOf(GroupConfig.getConfig(groupConfig, configKey).get())),
-                  OpType.SET));
+                  new ConfigEntry(configKey, String.valueOf(configValue.get())), OpType.SET));
         } else {
           alterConfigOps.add(
               new AlterConfigOp(

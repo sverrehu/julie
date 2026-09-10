@@ -6,10 +6,10 @@ projects:
       - principal: "User:streamsapp-a"
         applicationId: "streams-app-a"
         groupConfig:
-          sessionTimeoutMs: 60000
-          heartbeatIntervalMs: 3000
-          numStandbyReplicas: 1
-          initialRebalanceDelayMs: 2000
+          sessionTimeoutMs: "60000"
+          heartbeatIntervalMs: "3000"
+          numStandbyReplicas: "1"
+          initialRebalanceDelayMs: "2000"
         topics:
           read:
             - topic-A
@@ -35,8 +35,8 @@ projects:
       - principal: "User:streamsapp-b"
         applicationId: "streams-app-b"
         groupConfig:
-          sessionTimeoutMs: 50000
-          numStandbyReplicas: 2
+          sessionTimeoutMs: "50000"
+          numStandbyReplicas: "2"
         topics:
           read:
             - topic-C
