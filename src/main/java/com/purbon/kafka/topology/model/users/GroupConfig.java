@@ -31,8 +31,7 @@ public class GroupConfig {
 
   // TODO: specify broker defaults centrally. For now, these are configured
   // based on current defaults (v4.3.X) using min values where applicable
-  public GroupConfig(final String applicationId) {
-    this.groupId = applicationId;
+  public GroupConfig() {
     this.sessionTimeoutMs = Optional.of(60000);
     this.heartbeatIntervalMs = Optional.of(5000);
     this.numStandbyReplicas = Optional.of(0);

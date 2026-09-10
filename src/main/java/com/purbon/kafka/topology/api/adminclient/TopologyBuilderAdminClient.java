@@ -267,7 +267,7 @@ public class TopologyBuilderAdminClient {
   public Set<String> listGroups() {
     Set<String> groups = new HashSet<>();
     try {
-      Collection<GroupListing> groupListings = this.adminClient.listGroups().all().get();
+      Collection<GroupListing> groupListings = adminClient.listGroups().all().get();
       groupListings.forEach(g -> groups.add(g.groupId()));
       return groups;
     } catch (InterruptedException | ExecutionException e) {

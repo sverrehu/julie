@@ -24,6 +24,7 @@ public class GroupConfigManager implements ExecutionPlanUpdater {
   public void updatePlan(ExecutionPlan plan, Map<String, Topology> topologies) throws IOException {
     for (Map.Entry<String, Topology> entry : topologies.entrySet()) {
       Topology topology = entry.getValue();
+      // TODO: returns 0 on second run for GroupManagerIT
       Set<String> existingGroupIDs = this.adminClient.listGroups();
       Set<Action> createGroups = new LinkedHashSet<>();
       Set<Action> deleteGroups = new LinkedHashSet<>();

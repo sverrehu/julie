@@ -55,13 +55,15 @@ public class GroupConfigManagerIT {
   @Test
   public void testAddThenDeleteGroupConfig() throws IOException {
     Topology topology = new TopologyImpl();
+    topology.setContext("reset-streams-app");
 
     Project project = new ProjectImpl("project");
 
     Map<String, List<String>> topics = new HashMap<>();
     List<User> observerPrincipals = new ArrayList<>();
-    final String applicationId = "app_stream_id";
-    GroupConfig groupConfig = new GroupConfig(applicationId);
+    final String applicationId = "app_stream_id_v1";
+    GroupConfig groupConfig = new GroupConfig();
+    groupConfig.setGroupId(applicationId);
     groupConfig.setHeartbeatIntervalMs(Optional.of(6500));
     groupConfig.setInitialRebalanceDelayMs(Optional.of(4000));
     groupConfig.setSessionTimeoutMs(Optional.of(50000));
@@ -108,8 +110,8 @@ public class GroupConfigManagerIT {
     Assert.assertTrue(groupConfig.getNumStandbyReplicas().isPresent());
     Assert.assertTrue(observedGroupConfig.getNumStandbyReplicas().isPresent());
     Assert.assertEquals(
-            groupConfig.getNumStandbyReplicas().get(),
-            observedGroupConfig.getNumStandbyReplicas().get());
+        groupConfig.getNumStandbyReplicas().get(),
+        observedGroupConfig.getNumStandbyReplicas().get());
 
     Assert.assertTrue(groupConfig.getInitialRebalanceDelayMs().isPresent());
     Assert.assertTrue(observedGroupConfig.getInitialRebalanceDelayMs().isPresent());
@@ -117,8 +119,15 @@ public class GroupConfigManagerIT {
         groupConfig.getInitialRebalanceDelayMs().get(),
         observedGroupConfig.getInitialRebalanceDelayMs().get());
 
-    stream.setGroupConfig(Optional.of(new GroupConfig(applicationId)));
+    topology = new TopologyImpl();
+    topology.setContext("reset-streams-app");
+
+    project = new ProjectImpl("project");
+    groupConfig = new  GroupConfig();
+    groupConfig.setGroupId(applicationId);
+    stream.setGroupConfig(Optional.of(groupConfig));
     project.setStreams(List.of(stream));
+    topology.addProject(project);
 
     plan.getActions().clear();
 
