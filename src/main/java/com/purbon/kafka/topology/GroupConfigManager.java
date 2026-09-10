@@ -15,9 +15,11 @@ import java.util.Set;
 public class GroupConfigManager implements ExecutionPlanUpdater {
 
   private final TopologyBuilderAdminClient adminClient;
+  private final Configuration config;
 
-  public GroupConfigManager(TopologyBuilderAdminClient adminClient) {
+  public GroupConfigManager(TopologyBuilderAdminClient adminClient, Configuration config) {
     this.adminClient = adminClient;
+      this.config = config;
   }
 
   @Override
@@ -25,7 +27,8 @@ public class GroupConfigManager implements ExecutionPlanUpdater {
     for (Map.Entry<String, Topology> entry : topologies.entrySet()) {
       Topology topology = entry.getValue();
       // TODO: returns 0 on second run for GroupManagerIT
-      Set<String> existingGroupIDs = this.adminClient.listGroups();
+      //Set<String> existingGroupIDs = this.adminClient.listGroups();
+      Set<String> existingGroupIDs = loadClusterState(plan);
       Set<Action> createGroups = new LinkedHashSet<>();
       Set<Action> deleteGroups = new LinkedHashSet<>();
       for (Project project : topology.getProjects()) {
@@ -61,6 +64,13 @@ public class GroupConfigManager implements ExecutionPlanUpdater {
         deleteGroups.forEach(plan::add);
       }
     }
+  }
+
+  private Set<String> loadClusterState(final ExecutionPlan plan) {
+    if(config.fetchStateFromTheCluster()) {
+      return this.adminClient.listGroups();
+    }
+    return plan.getStreamGroups();
   }
 
   @Override

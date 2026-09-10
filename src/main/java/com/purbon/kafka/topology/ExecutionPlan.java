@@ -16,6 +16,7 @@ import com.purbon.kafka.topology.model.artefact.KsqlArtefact;
 import com.purbon.kafka.topology.model.artefact.KsqlStreamArtefact;
 import com.purbon.kafka.topology.model.artefact.KsqlTableArtefact;
 import com.purbon.kafka.topology.model.cluster.ServiceAccount;
+import com.purbon.kafka.topology.model.users.KStream;
 import com.purbon.kafka.topology.roles.TopologyAclBinding;
 import com.purbon.kafka.topology.utils.StreamUtils;
 import java.io.IOException;
@@ -212,6 +213,10 @@ public class ExecutionPlan {
 
   public Set<String> getTopics() {
     return topics;
+  }
+
+  public Set<String> getStreamGroups() {
+    return streams;
   }
 
   public List<Action> getActions() {

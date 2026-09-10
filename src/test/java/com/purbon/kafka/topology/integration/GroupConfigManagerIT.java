@@ -1,6 +1,7 @@
 package com.purbon.kafka.topology.integration;
 
 import com.purbon.kafka.topology.BackendController;
+import com.purbon.kafka.topology.Configuration;
 import com.purbon.kafka.topology.ExecutionPlan;
 import com.purbon.kafka.topology.GroupConfigManager;
 import com.purbon.kafka.topology.actions.groups.ResetGroupConfigAction;
@@ -18,6 +19,8 @@ import java.io.IOException;
 import java.util.*;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.junit.*;
+
+import static com.purbon.kafka.topology.Constants.TOPOLOGY_TOPIC_STATE_FROM_CLUSTER;
 
 public class GroupConfigManagerIT {
 
@@ -54,13 +57,17 @@ public class GroupConfigManagerIT {
     kafkaAdminClient = ContainerTestUtils.getSaslJulieAdminClient(container);
     TopologyBuilderAdminClient topologyBuilderAdminClient =
         new TopologyBuilderAdminClient(kafkaAdminClient);
+    Properties properties = new Properties();
+    properties.put(TOPOLOGY_TOPIC_STATE_FROM_CLUSTER, "false");
     plan = ExecutionPlan.init(new BackendController(), System.out);
-    groupConfigManager = new GroupConfigManager(topologyBuilderAdminClient);
+    groupConfigManager = new GroupConfigManager(
+            topologyBuilderAdminClient,
+            new Configuration(new HashMap<>(), properties));
     configureBaseTopology();
   }
 
   @Test
-  public void testAddThenDeleteGroupConfig() throws IOException {
+  public void testResetGroupConfig() throws IOException {
     topology = new TopologyImpl();
     topology.setContext("reset-streams-app");
 

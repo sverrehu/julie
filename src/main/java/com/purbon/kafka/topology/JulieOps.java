@@ -165,7 +165,7 @@ public class JulieOps implements AutoCloseable {
     KSqlArtefactManager kSqlArtefactManager =
         configureKSqlArtefactManager(config, topologyFileOrDir);
     QuotasManager quotasManager = new QuotasManager(adminClient, config);
-    GroupConfigManager groupConfigManager = new GroupConfigManager(adminClient);
+    GroupConfigManager groupConfigManager = new GroupConfigManager(adminClient, config);
     configureLogsInDebugMode(config);
     return new JulieOps(
         topologies,
