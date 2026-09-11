@@ -16,7 +16,6 @@ import com.purbon.kafka.topology.model.artefact.KsqlArtefact;
 import com.purbon.kafka.topology.model.artefact.KsqlStreamArtefact;
 import com.purbon.kafka.topology.model.artefact.KsqlTableArtefact;
 import com.purbon.kafka.topology.model.cluster.ServiceAccount;
-import com.purbon.kafka.topology.model.users.KStream;
 import com.purbon.kafka.topology.roles.TopologyAclBinding;
 import com.purbon.kafka.topology.utils.StreamUtils;
 import java.io.IOException;

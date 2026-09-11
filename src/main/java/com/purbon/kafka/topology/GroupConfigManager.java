@@ -19,15 +19,13 @@ public class GroupConfigManager implements ExecutionPlanUpdater {
 
   public GroupConfigManager(TopologyBuilderAdminClient adminClient, Configuration config) {
     this.adminClient = adminClient;
-      this.config = config;
+    this.config = config;
   }
 
   @Override
   public void updatePlan(ExecutionPlan plan, Map<String, Topology> topologies) throws IOException {
     for (Map.Entry<String, Topology> entry : topologies.entrySet()) {
       Topology topology = entry.getValue();
-      // TODO: returns 0 on second run for GroupManagerIT
-      //Set<String> existingGroupIDs = this.adminClient.listGroups();
       Set<String> existingGroupIDs = loadClusterState(plan);
       Set<Action> createGroups = new LinkedHashSet<>();
       Set<Action> deleteGroups = new LinkedHashSet<>();
@@ -67,7 +65,7 @@ public class GroupConfigManager implements ExecutionPlanUpdater {
   }
 
   private Set<String> loadClusterState(final ExecutionPlan plan) {
-    if(config.fetchStateFromTheCluster()) {
+    if (config.fetchStateFromTheCluster()) {
       return this.adminClient.listGroups();
     }
     return plan.getStreamGroups();

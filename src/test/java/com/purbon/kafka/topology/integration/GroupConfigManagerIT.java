@@ -1,5 +1,7 @@
 package com.purbon.kafka.topology.integration;
 
+import static com.purbon.kafka.topology.Constants.TOPOLOGY_TOPIC_STATE_FROM_CLUSTER;
+
 import com.purbon.kafka.topology.BackendController;
 import com.purbon.kafka.topology.Configuration;
 import com.purbon.kafka.topology.ExecutionPlan;
@@ -19,8 +21,6 @@ import java.io.IOException;
 import java.util.*;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.junit.*;
-
-import static com.purbon.kafka.topology.Constants.TOPOLOGY_TOPIC_STATE_FROM_CLUSTER;
 
 public class GroupConfigManagerIT {
 
@@ -60,9 +60,9 @@ public class GroupConfigManagerIT {
     Properties properties = new Properties();
     properties.put(TOPOLOGY_TOPIC_STATE_FROM_CLUSTER, "false");
     plan = ExecutionPlan.init(new BackendController(), System.out);
-    groupConfigManager = new GroupConfigManager(
-            topologyBuilderAdminClient,
-            new Configuration(new HashMap<>(), properties));
+    groupConfigManager =
+        new GroupConfigManager(
+            topologyBuilderAdminClient, new Configuration(new HashMap<>(), properties));
     configureBaseTopology();
   }
 
@@ -123,13 +123,13 @@ public class GroupConfigManagerIT {
     groupConfig.setNumStandbyReplicas(Optional.of(1));
 
     stream =
-            new KStream(
-                    "streams-app-a",
-                    topics,
-                    observerPrincipals,
-                    Optional.of(applicationId),
-                    Optional.of(true),
-                    Optional.of(groupConfig));
+        new KStream(
+            "streams-app-a",
+            topics,
+            observerPrincipals,
+            Optional.of(applicationId),
+            Optional.of(true),
+            Optional.of(groupConfig));
 
     project.setStreams(List.of(stream));
 
@@ -152,24 +152,24 @@ public class GroupConfigManagerIT {
     Assert.assertTrue(groupConfig.getHeartbeatIntervalMs().isPresent());
     Assert.assertTrue(observedGroupConfig.getHeartbeatIntervalMs().isPresent());
     Assert.assertEquals(
-            groupConfig.getHeartbeatIntervalMs().get(),
-            observedGroupConfig.getHeartbeatIntervalMs().get());
+        groupConfig.getHeartbeatIntervalMs().get(),
+        observedGroupConfig.getHeartbeatIntervalMs().get());
 
     Assert.assertTrue(groupConfig.getSessionTimeoutMs().isPresent());
     Assert.assertTrue(observedGroupConfig.getSessionTimeoutMs().isPresent());
     Assert.assertEquals(
-            groupConfig.getSessionTimeoutMs().get(), observedGroupConfig.getSessionTimeoutMs().get());
+        groupConfig.getSessionTimeoutMs().get(), observedGroupConfig.getSessionTimeoutMs().get());
 
     Assert.assertTrue(groupConfig.getNumStandbyReplicas().isPresent());
     Assert.assertTrue(observedGroupConfig.getNumStandbyReplicas().isPresent());
     Assert.assertEquals(
-            groupConfig.getNumStandbyReplicas().get(),
-            observedGroupConfig.getNumStandbyReplicas().get());
+        groupConfig.getNumStandbyReplicas().get(),
+        observedGroupConfig.getNumStandbyReplicas().get());
 
     Assert.assertTrue(groupConfig.getInitialRebalanceDelayMs().isPresent());
     Assert.assertTrue(observedGroupConfig.getInitialRebalanceDelayMs().isPresent());
     Assert.assertEquals(
-            groupConfig.getInitialRebalanceDelayMs().get(),
-            observedGroupConfig.getInitialRebalanceDelayMs().get());
+        groupConfig.getInitialRebalanceDelayMs().get(),
+        observedGroupConfig.getInitialRebalanceDelayMs().get());
   }
 }

@@ -278,8 +278,8 @@ public class TopologyBuilderAdminClient {
   public void updateGroupConfig(GroupConfig groupConfig) {
     try {
       List<AlterConfigOp> alterConfigOps = new ArrayList<>();
-      for (final String configKey : GroupConfig.getConfigs()) {
-        final Optional<Integer> configValue = GroupConfig.getConfig(groupConfig, configKey);
+      for (final String configKey : groupConfig.getConfigProperties()) {
+        final Optional<Integer> configValue = groupConfig.getConfigValueForKey(configKey);
         if (configValue.isPresent()) {
           alterConfigOps.add(
               new AlterConfigOp(
@@ -316,7 +316,7 @@ public class TopologyBuilderAdminClient {
   public void resetGroupConfig(GroupConfig groupConfig) {
     try {
       List<AlterConfigOp> resetConfigOps = new ArrayList<>();
-      for (final String configKey : GroupConfig.getConfigs()) {
+      for (final String configKey : groupConfig.getConfigProperties()) {
         resetConfigOps.add(new AlterConfigOp(new ConfigEntry(configKey, null), OpType.DELETE));
       }
       Map<ConfigResource, Collection<AlterConfigOp>> configs =
