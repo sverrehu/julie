@@ -44,7 +44,7 @@ public class JulieOps implements AutoCloseable {
   private KafkaConnectArtefactManager connectorManager;
   private KSqlArtefactManager kSqlArtefactManager;
   private QuotasManager quotasManager;
-  private final GroupConfigManager groupConfigManager;
+  private GroupConfigManager groupConfigManager;
   private final Map<String, Topology> topologies;
   private final Configuration config;
   private final PrintStream outputStream;
@@ -165,7 +165,7 @@ public class JulieOps implements AutoCloseable {
     KSqlArtefactManager kSqlArtefactManager =
         configureKSqlArtefactManager(config, topologyFileOrDir);
     QuotasManager quotasManager = new QuotasManager(adminClient, config);
-    GroupConfigManager groupConfigManager = new GroupConfigManager(adminClient);
+    GroupConfigManager groupConfigManager = new GroupConfigManager(adminClient, config);
     configureLogsInDebugMode(config);
     return new JulieOps(
         topologies,

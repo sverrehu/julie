@@ -18,6 +18,7 @@ public class BackendState {
   private final Set<ServiceAccount> accounts;
   private final Set<String> topics;
   private final Set<KafkaConnectArtefact> connectors;
+  private final Set<String> streams;
   private final Set<KsqlStreamArtefact> ksqlStreams;
   private final Set<KsqlTableArtefact> ksqlTables;
 
@@ -26,6 +27,7 @@ public class BackendState {
     this.bindings = new HashSet<>();
     this.topics = new HashSet<>();
     this.connectors = new HashSet<>();
+    this.streams = new HashSet<>();
     this.ksqlStreams = new HashSet<>();
     this.ksqlTables = new HashSet<>();
   }
@@ -44,6 +46,10 @@ public class BackendState {
 
   public void addConnectors(Collection<KafkaConnectArtefact> connectors) {
     this.connectors.addAll(connectors);
+  }
+
+  public void addStreams(Collection<String> streams) {
+    this.streams.addAll(streams);
   }
 
   public void addKSqlStreams(Collection<KsqlStreamArtefact> ksqlStreams) {
@@ -68,6 +74,10 @@ public class BackendState {
 
   public Set<KafkaConnectArtefact> getConnectors() {
     return connectors;
+  }
+
+  public Set<String> getStreams() {
+    return streams;
   }
 
   public Set<KsqlStreamArtefact> getKSqlStreams() {

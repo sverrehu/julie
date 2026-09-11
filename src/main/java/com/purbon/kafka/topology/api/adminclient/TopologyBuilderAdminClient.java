@@ -267,7 +267,7 @@ public class TopologyBuilderAdminClient {
   public Set<String> listGroups() {
     Set<String> groups = new HashSet<>();
     try {
-      Collection<GroupListing> groupListings = this.adminClient.listGroups().all().get();
+      Collection<GroupListing> groupListings = adminClient.listGroups().all().get();
       groupListings.forEach(g -> groups.add(g.groupId()));
       return groups;
     } catch (InterruptedException | ExecutionException e) {
@@ -277,42 +277,50 @@ public class TopologyBuilderAdminClient {
 
   public void updateGroupConfig(GroupConfig groupConfig) {
     try {
-      List<AlterConfigOp> alterConfigOps =
-          List.of(
+      List<AlterConfigOp> alterConfigOps = new ArrayList<>();
+      for (final String configKey : groupConfig.getConfigProperties()) {
+        final Optional<Integer> configValue = groupConfig.getConfigValueForKey(configKey);
+        if (configValue.isPresent()) {
+          alterConfigOps.add(
               new AlterConfigOp(
-                  new ConfigEntry(
-                      "streams.heartbeat.interval.ms",
-                      groupConfig
-                          .getHeartbeatIntervalMs()
-                          .orElse(GroupConfig.DEFAULT_HEARTBEAT_INTERVAL_MS)
-                          .toString()),
-                  OpType.SET),
-              new AlterConfigOp(
-                  new ConfigEntry(
-                      "streams.num.standby.replicas",
-                      groupConfig
-                          .getNumStandbyReplicas()
-                          .orElse(GroupConfig.DEFAULT_NUM_STANDBY_REPLICAS)
-                          .toString()),
-                  OpType.SET),
-              new AlterConfigOp(
-                  new ConfigEntry(
-                      "streams.session.timeout.ms",
-                      groupConfig
-                          .getSessionTimeoutMs()
-                          .orElse(GroupConfig.DEFAULT_SESSION_TIMEOUT_MS)
-                          .toString()),
-                  OpType.SET),
-              new AlterConfigOp(
-                  new ConfigEntry(
-                      "streams.initial.rebalance.delay.ms",
-                      groupConfig
-                          .getInitialRebalanceDelayMs()
-                          .orElse(GroupConfig.DEFAULT_INITIAL_REBALANCE_MS)
-                          .toString()),
-                  OpType.SET));
+                  new ConfigEntry(configKey, String.valueOf(configValue.get())), OpType.SET));
+        } else {
+          final ConfigResource configResource = new ConfigResource(Type.GROUP, configKey);
+          Map<ConfigResource, Config> brokerDefaults =
+              this.adminClient.describeConfigs(Collections.singleton(configResource)).all().get();
+          if (!brokerDefaults.containsKey(configResource)) {
+            LOGGER.error(
+                "Expected singleton response from broker for describe config for '{}', got: {}",
+                configKey,
+                brokerDefaults.size());
+            throw new IllegalStateException(
+                "Expected singleton response from broker for describe config for '"
+                    + configKey
+                    + "', got: "
+                    + brokerDefaults.size());
+          }
+          final String defaultConfig = brokerDefaults.get(configResource).get(configKey).value();
+          alterConfigOps.add(
+              new AlterConfigOp(new ConfigEntry(configKey, defaultConfig), OpType.SET));
+        }
+      }
       Map<ConfigResource, Collection<AlterConfigOp>> configs =
           Map.of(new ConfigResource(Type.GROUP, groupConfig.getGroupId()), alterConfigOps);
+      this.adminClient.incrementalAlterConfigs(configs).all().get();
+    } catch (InterruptedException | ExecutionException e) {
+      LOGGER.error(e);
+      throw new RuntimeException(e);
+    }
+  }
+
+  public void resetGroupConfig(GroupConfig groupConfig) {
+    try {
+      List<AlterConfigOp> resetConfigOps = new ArrayList<>();
+      for (final String configKey : groupConfig.getConfigProperties()) {
+        resetConfigOps.add(new AlterConfigOp(new ConfigEntry(configKey, null), OpType.DELETE));
+      }
+      Map<ConfigResource, Collection<AlterConfigOp>> configs =
+          Map.of(new ConfigResource(Type.GROUP, groupConfig.getGroupId()), resetConfigOps);
       this.adminClient.incrementalAlterConfigs(configs).all().get();
     } catch (InterruptedException | ExecutionException e) {
       LOGGER.error(e);

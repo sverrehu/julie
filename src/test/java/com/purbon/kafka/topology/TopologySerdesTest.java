@@ -91,17 +91,17 @@ public class TopologySerdesTest {
     String groupId = groupConfig.getGroupId();
     assertEquals("app_stream_id", groupId);
 
-    Long sessionTimeoutMs = groupConfig.getSessionTimeoutMs().orElseThrow();
-    assertEquals(45000L, sessionTimeoutMs.longValue());
+    Integer sessionTimeoutMs = groupConfig.getSessionTimeoutMs().orElseThrow();
+    assertEquals(45000, sessionTimeoutMs.intValue());
 
-    Long heartbeatIntervalMs = groupConfig.getHeartbeatIntervalMs().orElseThrow();
-    assertEquals(3000L, heartbeatIntervalMs.longValue());
+    Integer heartbeatIntervalMs = groupConfig.getHeartbeatIntervalMs().orElseThrow();
+    assertEquals(3000, heartbeatIntervalMs.intValue());
 
     Integer numStandbyReplicas = groupConfig.getNumStandbyReplicas().orElseThrow();
     assertEquals(1, numStandbyReplicas.intValue());
 
-    Long initialRebalanceDelayMs = groupConfig.getInitialRebalanceDelayMs().orElseThrow();
-    assertEquals(0L, initialRebalanceDelayMs.longValue());
+    Integer initialRebalanceDelayMs = groupConfig.getInitialRebalanceDelayMs().orElseThrow();
+    assertEquals(0, initialRebalanceDelayMs.intValue());
   }
 
   @Test

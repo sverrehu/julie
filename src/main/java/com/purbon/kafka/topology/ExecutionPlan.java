@@ -4,6 +4,8 @@ import com.purbon.kafka.topology.actions.*;
 import com.purbon.kafka.topology.actions.access.ClearBindings;
 import com.purbon.kafka.topology.actions.accounts.ClearAccounts;
 import com.purbon.kafka.topology.actions.accounts.CreateAccounts;
+import com.purbon.kafka.topology.actions.groups.ResetGroupConfigAction;
+import com.purbon.kafka.topology.actions.groups.UpdateGroupConfigAction;
 import com.purbon.kafka.topology.actions.topics.CreateTopicAction;
 import com.purbon.kafka.topology.actions.topics.DeleteTopics;
 import com.purbon.kafka.topology.audit.Auditor;
@@ -18,7 +20,13 @@ import com.purbon.kafka.topology.roles.TopologyAclBinding;
 import com.purbon.kafka.topology.utils.StreamUtils;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.logging.log4j.LogManager;
@@ -36,6 +44,7 @@ public class ExecutionPlan {
   private Set<ServiceAccount> serviceAccounts;
   private Set<String> topics;
   private Set<KafkaConnectArtefact> connectors;
+  private Set<String> streams;
   private Set<KsqlStreamArtefact> ksqlStreams;
   private Set<KsqlTableArtefact> ksqlTables;
 
@@ -53,6 +62,7 @@ public class ExecutionPlan {
     this.serviceAccounts = new HashSet<>();
     this.topics = new HashSet<>();
     this.connectors = new HashSet<>();
+    this.streams = new HashSet<>();
     this.ksqlStreams = new HashSet<>();
     this.ksqlTables = new HashSet<>();
     this.backendController = backendController;
@@ -61,6 +71,7 @@ public class ExecutionPlan {
       this.serviceAccounts.addAll(backendController.getServiceAccounts());
       this.topics.addAll(backendController.getTopics());
       this.connectors.addAll(backendController.getConnectors());
+      this.streams.addAll(backendController.getStreams());
       this.ksqlStreams.addAll(backendController.getKSqlStreams());
       this.ksqlTables.addAll(backendController.getKSqlTables());
     }
@@ -103,6 +114,7 @@ public class ExecutionPlan {
       backendController.addServiceAccounts(serviceAccounts);
       backendController.addTopics(topics);
       backendController.addConnectors(connectors);
+      backendController.addStreams(streams);
       backendController.addKSqlStreams(ksqlStreams);
       backendController.addKSqlTables(ksqlTables);
       backendController.flushAndClose();
@@ -182,6 +194,11 @@ public class ExecutionPlan {
               new StreamUtils<>(ksqlTables.stream()).filterAsSet(ksql -> !ksql.equals(toBeDeleted));
         }
       }
+      if (action instanceof UpdateGroupConfigAction) {
+        streams.add(((UpdateGroupConfigAction) action).getGroupID());
+      } else if (action instanceof ResetGroupConfigAction) {
+        streams.add(((ResetGroupConfigAction) action).getGroupID());
+      }
     }
   }
 
@@ -195,6 +212,10 @@ public class ExecutionPlan {
 
   public Set<String> getTopics() {
     return topics;
+  }
+
+  public Set<String> getStreamGroups() {
+    return streams;
   }
 
   public List<Action> getActions() {
