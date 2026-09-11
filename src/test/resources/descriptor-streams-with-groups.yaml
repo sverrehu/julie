@@ -7,7 +7,6 @@ projects:
       - principal: "User:App0"
         applicationId: "app_stream_id"
         groupConfig:
-          groupId: app_stream_id
           sessionTimeoutMs: 45000
           heartbeatIntervalMs: 3000
           numStandbyReplicas: 1
