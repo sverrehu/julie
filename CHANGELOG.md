@@ -1,5 +1,15 @@
 # Changelog
 
+## [6.5.3](https://github.com/statnett/kafka-ops-julie/compare/v6.5.2...v6.5.3) (2026-09-11)
+
+
+### Bug Fixes
+
+* **deps:** update dependency com.google.cloud:libraries-bom to v26.88.1 ([#848](https://github.com/statnett/kafka-ops-julie/issues/848)) ([7e69b91](https://github.com/statnett/kafka-ops-julie/commit/7e69b911d33d69f9eaab51640219a842ed44a533))
+* **deps:** update dependency software.amazon.awssdk:bom to v2.54.14 ([#843](https://github.com/statnett/kafka-ops-julie/issues/843)) ([bc71940](https://github.com/statnett/kafka-ops-julie/commit/bc719401ee7bc28effa916ac21e42fbf47f8bada))
+* **deps:** update dependency software.amazon.awssdk:bom to v2.54.15 ([#847](https://github.com/statnett/kafka-ops-julie/issues/847)) ([6ae936f](https://github.com/statnett/kafka-ops-julie/commit/6ae936f5bff238edc37702fdd94e54585f76f7b6))
+* **deps:** update dependency software.amazon.awssdk:bom to v2.54.16 ([#849](https://github.com/statnett/kafka-ops-julie/issues/849)) ([8f11221](https://github.com/statnett/kafka-ops-julie/commit/8f11221cae9fe8863aa040dcff7e788e64de3c58))
+
 ## [6.5.2](https://github.com/statnett/kafka-ops-julie/compare/v6.5.1...v6.5.2) (2026-09-08)
 
 
